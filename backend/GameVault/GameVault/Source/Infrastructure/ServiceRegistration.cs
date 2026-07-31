@@ -1,9 +1,12 @@
-﻿using GameVault.Source.Domain.Entities;
+﻿using GameVault.Source.Application.Interfaces.Rawg;
+using GameVault.Source.Domain.Entities;
 using GameVault.Source.Domain.Settings;
 using GameVault.Source.Infrastructure.Contexts;
+using GameVault.Source.Infrastructure.ExternalServices.Rawg;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -12,7 +15,7 @@ namespace GameVault.Source.Infrastructure
     public static class ServiceRegistration
     {
 
-        public static void AddPersistenceInfrastucture( this IServiceCollection services, IConfiguration configuration)
+        public static void AddPersistenceInfrastucture(this IServiceCollection services, IConfiguration configuration)
         {
             #region Context
             ConfigureContex(services, configuration);
@@ -27,6 +30,14 @@ namespace GameVault.Source.Infrastructure
             ConfigureJwt(services, configuration);
             #endregion
 
+            #region Generic Configurations
+            GenericConfigurations(services, configuration);
+            #endregion
+
+            #region Services
+            ExternalServices(services);
+            #endregion
+
         }
 
 
@@ -36,7 +47,7 @@ namespace GameVault.Source.Infrastructure
             services.AddDbContext<GameVaultContext>(opt =>
             {
                 opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    m=>m.MigrationsAssembly(typeof(GameVaultContext).Assembly.FullName));
+                    m => m.MigrationsAssembly(typeof(GameVaultContext).Assembly.FullName));
 
             });
         }
@@ -61,7 +72,7 @@ namespace GameVault.Source.Infrastructure
 
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
-            if(jwtSettings is null)
+            if (jwtSettings is null)
             {
                 throw new InvalidOperationException("JwtSettings no está configurado.");
             }
@@ -94,6 +105,28 @@ namespace GameVault.Source.Infrastructure
 
         }
 
+        private static void GenericConfigurations(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<RawgSettings>(configuration.GetSection(RawgSettings.SectionName));
+
+
+        }
+
+        private static void ExternalServices(IServiceCollection services)
+        {
+            
+            services.AddHttpClient<IRawgApiClient, RawApiClient>(
+                (serviceProvider, client)=>
+                {
+                    var settings = serviceProvider
+                        .GetRequiredService<IOptions<RawgSettings>>().Value;
+
+                    client.BaseAddress = new Uri(settings.BaseUrl);
+                    client.Timeout = TimeSpan.FromSeconds(15);
+                
+                
+                });
+        }
 
     }
 }

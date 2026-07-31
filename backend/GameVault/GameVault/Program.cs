@@ -1,17 +1,31 @@
 using FixFlowApp.Source.Infrastructure.Seeds;
 using GameVault.Source.Application;
 using GameVault.Source.Infrastructure;
+using GameVault.Source.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Services
+//Application
 builder.Services.AddApplicationLayerForWebApi();
-//Contexts
+// Infrastructure y DbContext
 builder.Services.AddPersistenceInfrastucture(builder.Configuration);
 
+//ExceptionHandler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
-
-
+//Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularClient", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
@@ -29,12 +43,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
+
 app.UseHttpsRedirection();
+
+app.UseCors("AngularClient");
+
+
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 await app.Services.SeedIdentityAsync();
 await app.RunAsync();

@@ -313,6 +313,51 @@ namespace GameVault.Source.Infrastructure.Migrations
                     b.ToTable("Platforms", (string)null);
                 });
 
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("GameVault.Source.Domain.Entities.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -607,6 +652,17 @@ namespace GameVault.Source.Infrastructure.Migrations
                     b.Navigation("Platform");
                 });
 
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("GameVault.Source.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GameVault.Source.Domain.Entities.Review", b =>
                 {
                     b.HasOne("GameVault.Source.Domain.Entities.ApplicationUser", "ApplicationUser")
@@ -699,6 +755,8 @@ namespace GameVault.Source.Infrastructure.Migrations
             modelBuilder.Entity("GameVault.Source.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("GameList");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Reviews");
 

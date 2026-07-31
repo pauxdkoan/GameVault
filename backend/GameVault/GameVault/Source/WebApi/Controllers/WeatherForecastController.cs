@@ -1,8 +1,11 @@
+using GameVault.Source.Domain.Contants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameVault.Source.WebApi.Controllers
 {
     [ApiController]
+    [Authorize(Roles = Roles.Administrator)]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {

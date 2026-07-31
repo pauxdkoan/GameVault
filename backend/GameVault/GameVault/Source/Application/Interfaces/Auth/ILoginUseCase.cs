@@ -6,6 +6,6 @@ namespace GameVault.Source.Application.Interfaces.Auth
 {
     public interface ILoginUseCase
     {
-        Task<LoginResponse> ExecuteAsync(LoginRequest request);
+        Task<LoginResponseDto> ExecuteAsync(LoginRequestDto request);
     }
 }

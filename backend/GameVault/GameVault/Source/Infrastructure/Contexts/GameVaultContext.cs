@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
+
 
 namespace GameVault.Source.Infrastructure.Contexts
 {
@@ -19,7 +19,7 @@ namespace GameVault.Source.Infrastructure.Contexts
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserGame> UserGames { get; set; }
-
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,6 +44,7 @@ namespace GameVault.Source.Infrastructure.Contexts
             builder.Entity<Platform>().HasKey(e => e.Id);
             builder.Entity<Review>().HasKey(e => e.Id);
             builder.Entity<UserGame>().HasKey(e => e.Id);
+            builder.Entity<RefreshToken>().HasKey(e => e.Id);
 
 
             //Keys Compuestas
@@ -163,15 +164,33 @@ namespace GameVault.Source.Infrastructure.Contexts
 
 
 
+            builder.Entity<RefreshToken>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.RefreshTokens)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
 
 
             #endregion
 
             #region Property Configuration
+
+            builder.Entity<RefreshToken>().Property(x => x.TokenHash)
+                .IsRequired()
+                .HasMaxLength(128);
+
+
             #endregion
 
             #region Settings 
+            builder.Entity<RefreshToken>().HasIndex(x => x.TokenHash)
+                .IsUnique();
+
+            builder.Entity<Game>()
+            .HasIndex(x => x.ExternalId)
+            .IsUnique();
+
             #endregion
         }
 

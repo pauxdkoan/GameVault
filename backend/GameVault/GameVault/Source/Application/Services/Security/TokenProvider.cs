@@ -5,16 +5,17 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace GameVault.Source.Application.Services.Security
 {
-    public class JwtTokenGenerator : IJwtTokenGenerator
+    public class TokenProvider : ITokenProvider
     {
 
         private readonly JwtSettings _jwtSettings;
 
-        public JwtTokenGenerator(IOptions<JwtSettings> jwtOptions)
+        public TokenProvider(IOptions<JwtSettings> jwtOptions)
         {
             _jwtSettings = jwtOptions.Value;
         }
@@ -25,6 +26,7 @@ namespace GameVault.Source.Application.Services.Security
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Name, user.DisplayName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 
             };
 
@@ -47,6 +49,11 @@ namespace GameVault.Source.Application.Services.Security
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    
+        public string GenerateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
     }
 }
