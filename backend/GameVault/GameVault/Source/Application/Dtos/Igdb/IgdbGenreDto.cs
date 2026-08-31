@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace GameVault.Source.Application.Dtos.Rawg.Genre
+namespace GameVault.Source.Application.Dtos.Igdb
 {
-    public sealed class RawgGenreDto
+    public sealed class IgdbGenreDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }

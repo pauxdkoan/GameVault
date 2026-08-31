@@ -9,5 +9,7 @@
         public int PageSize { get; set; }
 
         public List<GameSummaryDto> Games { get; set; } = [];
+   
+
     }
 }

@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("108e804b-421b-4c74-8850-37b3f03ab890")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("GameVault")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf876a4fbcaf491a4a1094b6fdb7fbd5e5aa5283")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5860f75d6940883ff0f6e2eaa4a970607d3e6880")]
 [assembly: System.Reflection.AssemblyProductAttribute("GameVault")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GameVault")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

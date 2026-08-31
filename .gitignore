@@ -1,0 +1,6 @@
+# Visual Studio
+backend/GameVault/.vs/
+
+# .NET build files
+backend/GameVault/GameVault/bin/
+backend/GameVault/GameVault/obj/

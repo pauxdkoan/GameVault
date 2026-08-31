@@ -1,17 +1,17 @@
-﻿using GameVault.Source.Application.Dtos.Game;
-using GameVault.Source.Application.Dtos.Rawg.Game;
-using GameVault.Source.Application.Interfaces.Rawg;
+using GameVault.Source.Application.Dtos.Game;
+using GameVault.Source.Application.Interfaces.Igdb;
+using GameVault.Source.Application.Mappings;
 using MediatR;
 
 namespace GameVault.Source.Application.Feature.Games.Queries.GetGames
 {
     public sealed class GetGamesQueryHandler : IRequestHandler<GetGamesQuery, GamesPageDto>
     {
-        private readonly IRawgApiClient _rawgApiClient;
+        private readonly IIgdbApiClient _igdbApiClient;
 
-        public GetGamesQueryHandler(IRawgApiClient rawgApiClient)
+        public GetGamesQueryHandler(IIgdbApiClient igdbApiClient)
         {
-            _rawgApiClient = rawgApiClient;
+            _igdbApiClient = igdbApiClient;
         }
 
         public async Task<GamesPageDto> Handle(GetGamesQuery request, CancellationToken cancellationToken)
@@ -19,7 +19,7 @@ namespace GameVault.Source.Application.Feature.Games.Queries.GetGames
             var pageSize = Math.Clamp(request.PageSize, 1, 40);
             var page = Math.Max(request.Page, 1);
 
-            var response = await _rawgApiClient.GetGamesAsync(page, pageSize, cancellationToken);
+            var response = await _igdbApiClient.GetGamesAsync(page, pageSize, cancellationToken);
 
             return new GamesPageDto
             {
@@ -27,23 +27,9 @@ namespace GameVault.Source.Application.Feature.Games.Queries.GetGames
                 Page = page,
                 PageSize = pageSize,
                 Games = response.Results
-                .Select(game => new GameSummaryDto
-                {
-                    ExternalId = game.Id,
-                    Slug = game.Slug,
-                    Name = game.Name,
-                    Released = game.Released,
-                    BackgroundImage = game.BackgroundImage,
-                    Rating = game.Rating,
-                    Metacritic = game.Metacritic,
-
-                    Genres = game.Genres
-                        .Select(genre => genre.Name)
-                        .ToList()
-                })
-                .ToList()
+                    .Select(GameMapper.GameSummary)
+                    .ToList()
             };
-
         }
     }
 }

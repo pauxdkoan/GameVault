@@ -27,7 +27,6 @@ C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\Ga
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\GameVault.csproj.Up2Date
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\GameVault.dll
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\refint\GameVault.dll
@@ -180,3 +179,19 @@ C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\Ga
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\bin\Debug\net9.0\MediatR.dll
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\bin\Debug\net9.0\MediatR.Contracts.dll
 C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\appsettings.Development.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\appsettings.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\GameVault.staticwebassets.endpoints.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\GameVault.exe
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\GameVault.deps.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\GameVault.runtimeconfig.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\GameVault.dll
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\.codex-build\backend\GameVault.pdb
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\appsettings.Development.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\appsettings.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\GameVault.staticwebassets.endpoints.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\GameVault.deps.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\GameVault.runtimeconfig.json
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\GameVault.dll
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\.codex-build-check\GameVault.pdb
+C:\Users\paulo\OneDrive\Desktop\Datos Personales\Proyectos\Game-Vault\backend\GameVault\GameVault\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

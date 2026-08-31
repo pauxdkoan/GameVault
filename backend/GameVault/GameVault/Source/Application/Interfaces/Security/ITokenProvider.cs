@@ -1,4 +1,4 @@
-﻿using GameVault.Source.Domain.Entities;
+using GameVault.Source.Domain.Entities;
 
 namespace GameVault.Source.Application.Interfaces.Security
 {

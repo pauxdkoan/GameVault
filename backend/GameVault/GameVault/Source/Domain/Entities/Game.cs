@@ -5,7 +5,7 @@ namespace GameVault.Source.Domain.Entities
 {
     public class Game:BaseEntity
     {
-        // Identificador del juego en RAWG.
+        // Identificador del juego en el proveedor externo actual (IGDB para el MVP).
         public int ExternalId { get; set; }
 
         public string Slug { get; set; } = string.Empty;

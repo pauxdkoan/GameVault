@@ -1,8 +1,8 @@
-﻿using GameVault.Source.Application.Interfaces.Rawg;
+using GameVault.Source.Application.Interfaces.Igdb;
 using GameVault.Source.Domain.Entities;
 using GameVault.Source.Domain.Settings;
 using GameVault.Source.Infrastructure.Contexts;
-using GameVault.Source.Infrastructure.ExternalServices.Rawg;
+using GameVault.Source.Infrastructure.ExternalServices.Igdb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,33 +14,14 @@ namespace GameVault.Source.Infrastructure
 {
     public static class ServiceRegistration
     {
-
         public static void AddPersistenceInfrastucture(this IServiceCollection services, IConfiguration configuration)
         {
-            #region Context
             ConfigureContex(services, configuration);
-            #endregion
-
-            #region Identity
             ConfigureIdentity(services);
-
-            #endregion
-
-            #region JWT
             ConfigureJwt(services, configuration);
-            #endregion
-
-            #region Generic Configurations
             GenericConfigurations(services, configuration);
-            #endregion
-
-            #region Services
             ExternalServices(services);
-            #endregion
-
         }
-
-
 
         private static void ConfigureContex(IServiceCollection services, IConfiguration configuration)
         {
@@ -48,9 +29,9 @@ namespace GameVault.Source.Infrastructure
             {
                 opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     m => m.MigrationsAssembly(typeof(GameVaultContext).Assembly.FullName));
-
             });
         }
+
         private static void ConfigureIdentity(IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(opt =>
@@ -60,7 +41,6 @@ namespace GameVault.Source.Infrastructure
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireLowercase = true;
                 opt.Password.RequireNonAlphanumeric = true;
-
             })
             .AddEntityFrameworkStores<GameVaultContext>()
             .AddDefaultTokenProviders();
@@ -81,7 +61,6 @@ namespace GameVault.Source.Infrastructure
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
             })
             .AddJwtBearer(opt =>
             {
@@ -98,35 +77,32 @@ namespace GameVault.Source.Infrastructure
 
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-
-
                 };
             });
-
         }
 
         private static void GenericConfigurations(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<RawgSettings>(configuration.GetSection(RawgSettings.SectionName));
-
-
+            services.Configure<IgdbSettings>(configuration.GetSection(IgdbSettings.SectionName));
         }
 
         private static void ExternalServices(IServiceCollection services)
         {
-            
-            services.AddHttpClient<IRawgApiClient, RawApiClient>(
-                (serviceProvider, client)=>
-                {
-                    var settings = serviceProvider
-                        .GetRequiredService<IOptions<RawgSettings>>().Value;
+            services.AddMemoryCache();
 
-                    client.BaseAddress = new Uri(settings.BaseUrl);
-                    client.Timeout = TimeSpan.FromSeconds(15);
-                
-                
-                });
+            services.AddHttpClient<IIgdbAccessTokenProvider, IgdbAccessTokenProvider>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(15);
+            });
+
+            services.AddHttpClient<IIgdbApiClient, IgdbApiClient>((serviceProvider, client) =>
+            {
+                var settings = serviceProvider
+                    .GetRequiredService<IOptions<IgdbSettings>>().Value;
+
+                client.BaseAddress = new Uri(settings.BaseUrl);
+                client.Timeout = TimeSpan.FromSeconds(15);
+            });
         }
-
     }
 }

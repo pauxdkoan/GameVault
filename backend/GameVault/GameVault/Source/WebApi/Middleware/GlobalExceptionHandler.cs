@@ -13,6 +13,19 @@ public sealed class GlobalExceptionHandler(
         Exception exception,
         CancellationToken cancellationToken)
     {
+        if (exception is OperationCanceledException &&
+            httpContext.RequestAborted.IsCancellationRequested)
+        {
+            logger.LogInformation("La solicitud fue cancelada por el cliente.");
+
+            if (!httpContext.Response.HasStarted)
+            {
+                httpContext.Response.StatusCode = 499;
+            }
+
+            return true;
+        }
+
         logger.LogError(
             exception,
             "Unhandled exception occurred: {Message}",

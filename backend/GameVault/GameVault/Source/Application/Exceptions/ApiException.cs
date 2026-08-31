@@ -10,8 +10,9 @@ namespace GameVault.Source.Application.Exceptions
         public ApiException(
                string message,
                int statusCode,
-               IDictionary<string, string[]>? errors = null)
-               : base(message)
+               IDictionary<string, string[]>? errors = null,
+               Exception? innerException = null)
+               : base(message, innerException)
         {
             StatusCode = statusCode;
             Errors = errors;
