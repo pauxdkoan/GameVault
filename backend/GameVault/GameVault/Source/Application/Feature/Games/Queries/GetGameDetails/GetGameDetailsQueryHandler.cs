@@ -21,6 +21,13 @@ namespace GameVault.Source.Application.Feature.Games.Queries.GetGameDetails
  
             var response = await _igdbApiClient.GetGameByIdAsync(request.Id,cancellationToken);
 
+            if (response is null)
+            {
+                throw new ApiException(
+                    "No fue posible encontrar el videojuego solicitado.",
+                    StatusCodes.Status404NotFound);
+            }
+
             return GameMapper.GameDetails(response);
         }
     }

@@ -1,10 +1,15 @@
 using GameVault.Source.Application.Dtos.Igdb;
+using GameVault.Source.Application.Enums;
 
 namespace GameVault.Source.Application.Interfaces.Igdb
 {
     public interface IIgdbApiClient
     {
         Task<IgdbGamesResponse> GetGamesAsync(
+            string? search,
+            IReadOnlyCollection<int>? genreIds,
+            IReadOnlyCollection<int>? platformIds,
+            GameSort sort,
             int page,
             int pageSize,
             CancellationToken cancellationToken);

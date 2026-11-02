@@ -37,10 +37,7 @@ namespace GameVault.Source.Infrastructure
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(opt =>
             {
                 opt.Password.RequiredLength = 8;
-                opt.Password.RequireDigit = true;
-                opt.Password.RequireUppercase = true;
-                opt.Password.RequireLowercase = true;
-                opt.Password.RequireNonAlphanumeric = true;
+      
             })
             .AddEntityFrameworkStores<GameVaultContext>()
             .AddDefaultTokenProviders();
@@ -83,7 +80,17 @@ namespace GameVault.Source.Infrastructure
 
         private static void GenericConfigurations(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<IgdbSettings>(configuration.GetSection(IgdbSettings.SectionName));
+            services.AddOptions<IgdbSettings>()
+                .Bind(configuration.GetSection(IgdbSettings.SectionName))
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.BaseUrl),
+                    "IgdbSettings:BaseUrl no está configurado.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.TokenUrl),
+                    "IgdbSettings:TokenUrl no está configurado.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.ClientId),
+                    "IgdbSettings:ClientId no está configurado.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.ClientSecret),
+                    "IgdbSettings:ClientSecret no está configurado.")
+                .ValidateOnStart();
         }
 
         private static void ExternalServices(IServiceCollection services)
@@ -95,14 +102,25 @@ namespace GameVault.Source.Infrastructure
                 client.Timeout = TimeSpan.FromSeconds(15);
             });
 
-            services.AddHttpClient<IIgdbApiClient, IgdbApiClient>((serviceProvider, client) =>
+            services.AddHttpClient<IgdbRequestClient>((serviceProvider, client) =>
             {
                 var settings = serviceProvider
                     .GetRequiredService<IOptions<IgdbSettings>>().Value;
 
-                client.BaseAddress = new Uri(settings.BaseUrl);
+                client.BaseAddress = ToBaseAddress(settings.BaseUrl);
                 client.Timeout = TimeSpan.FromSeconds(15);
             });
+
+            services.AddScoped<IIgdbApiClient, IgdbApiClient>();
+        }
+
+        private static Uri ToBaseAddress(string baseUrl)
+        {
+            var normalizedUrl = baseUrl.EndsWith('/')
+                ? baseUrl
+                : $"{baseUrl}/";
+
+            return new Uri(normalizedUrl);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using GameVault.Source.Application.Enums;
 using GameVault.Source.Application.Feature.Games.Queries.GetGameDetails;
 using GameVault.Source.Application.Feature.Games.Queries.GetGames;
 using GameVault.Source.Application.Feature.Games.Queries.GetTrendingGames;
@@ -25,11 +26,21 @@ namespace GameVault.Source.WebApi.Controllers
         public async Task<IActionResult> GetGames(
             CancellationToken cancellationToken,
             [FromQuery] int page=1,
-            [FromQuery] int pageSize=20
-            
+            [FromQuery] int pageSize=20,
+            [FromQuery] string? search = null,
+            [FromQuery] int[]? genreIds = null,
+            [FromQuery] int[]? platformIds = null,
+            [FromQuery] GameSort sort = GameSort.Popular
+
             )
         {
-            var response = await _sender.Send(new GetGamesQuery(page, pageSize), cancellationToken);
+            var response = await _sender.Send(new GetGamesQuery(
+                Page:page, 
+                PageSize:pageSize, 
+                Search: search,
+                GenreIds: genreIds,
+                PlatformIds: platformIds,
+                Sort: sort ), cancellationToken);
 
             return Ok(response);
         }
@@ -55,7 +66,7 @@ namespace GameVault.Source.WebApi.Controllers
             [FromQuery] int pageSize = 20)
         {
             var response = await _sender.Send(new GetTrendingGamesQuery(page, pageSize), cancellationToken);
-            return Ok(response);
+           return Ok(response);
 
         }
 
@@ -84,6 +95,21 @@ namespace GameVault.Source.WebApi.Controllers
             return Ok(response);
 
         }
+
+        //private static int[]? NormalizeFilterIds(int[]? ids, int? singleId)
+        //{
+        //    int[] selectedIds = ids is { Length: > 0 }
+        //        ? ids
+        //        : singleId.HasValue
+        //            ? new[] { singleId.Value }
+        //            : Array.Empty<int>();
+
+        //    var normalizedIds = selectedIds
+        //        .Distinct()
+        //        .ToArray();
+
+        //    return normalizedIds.Length > 0 ? normalizedIds : null;
+        //}
 
 
 

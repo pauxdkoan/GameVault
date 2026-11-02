@@ -96,6 +96,26 @@
         "Name": "pageSize",
         "Type": "System.Int32",
         "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "genreIds",
+        "Type": "System.Int32[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "platformIds",
+        "Type": "System.Int32[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "sort",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

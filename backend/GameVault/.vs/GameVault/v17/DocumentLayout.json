@@ -3,8 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\dtos\\igdb\\adttionaldtos\\igdbplatformdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\dtos\\igdb\\adttionaldtos\\igdbplatformdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbrequestclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbrequestclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbgamequerybuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbgamequerybuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\webapi\\middleware\\globalexceptionhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\webapi\\middleware\\globalexceptionhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\behaviors\\validationbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\behaviors\\validationbehavior.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\infrastructure\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\infrastructure\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\mappings\\gamemapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,40 +47,20 @@
       "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\dtos\\game\\gamedetailsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\dtos\\game\\gamespagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\dtos\\game\\gamespagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbaccesstokenprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\infrastructure\\externalservices\\igdb\\igdbaccesstokenprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\feature\\games\\queries\\getupcominggames\\getupcominggamesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\feature\\games\\queries\\getupcominggames\\getupcominggamesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\webapi\\controllers\\gamescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\webapi\\controllers\\gamescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\feature\\games\\queries\\getgamedetails\\getgamedetailsqueryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\feature\\games\\queries\\getgamedetails\\getgamedetailsqueryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\feature\\games\\queries\\getgamedetails\\getgamedetailsqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\feature\\games\\queries\\getgamedetails\\getgamedetailsqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\feature\\games\\queries\\getgamedetails\\getgamedetailsquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\feature\\games\\queries\\getgamedetails\\getgamedetailsquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\dtos\\game\\additionaldtos\\relatedgamedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\dtos\\game\\additionaldtos\\relatedgamedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\feature\\games\\queries\\searchgame\\searchgamesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\feature\\games\\queries\\searchgame\\searchgamesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\dtos\\igdb\\igdbgamedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\dtos\\igdb\\igdbgamedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\feature\\games\\queries\\getgames\\getgamesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\feature\\games\\queries\\getgames\\getgamesqueryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|c:\\users\\paulo\\onedrive\\desktop\\datos personales\\proyectos\\game-vault\\backend\\gamevault\\gamevault\\source\\application\\dtos\\igdb\\adttionaldtos\\igdbplatformfamilydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{794A9C32-F64F-48EC-81A3-856C0F8C1125}|GameVault\\GameVault.csproj|solutionrelative:gamevault\\source\\application\\dtos\\igdb\\adttionaldtos\\igdbplatformfamilydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -61,8 +69,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 254,
-          "SelectedChildIndex": 8,
+          "DockedWidth": 384,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -70,160 +78,191 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
+              "Title": "ValidationBehavior.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Behaviors\\ValidationBehavior.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Behaviors\\ValidationBehavior.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Behaviors\\ValidationBehavior.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Behaviors\\ValidationBehavior.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-08T17:41:54.794Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ServiceRegistration.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\ServiceRegistration.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\ServiceRegistration.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\ServiceRegistration.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\ServiceRegistration.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-08T17:43:28.98Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ServiceRegistration.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ServiceRegistration.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Infrastructure\\ServiceRegistration.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ServiceRegistration.cs",
+              "RelativeToolTip": "GameVault\\Source\\Infrastructure\\ServiceRegistration.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-08T17:43:24.821Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GlobalExceptionHandler.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\WebApi\\Middleware\\GlobalExceptionHandler.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\WebApi\\Middleware\\GlobalExceptionHandler.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\WebApi\\Middleware\\GlobalExceptionHandler.cs",
+              "RelativeToolTip": "GameVault\\Source\\WebApi\\Middleware\\GlobalExceptionHandler.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAowEcAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-08T17:33:17.861Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Program.cs",
+              "RelativeDocumentMoniker": "GameVault\\Program.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Program.cs",
+              "RelativeToolTip": "GameVault\\Program.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAAAA0AAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-08T17:33:25.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "GameSummaryDto.cs",
               "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\GameSummaryDto.cs",
               "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Game\\GameSummaryDto.cs",
               "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\GameSummaryDto.cs",
               "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Game\\GameSummaryDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAMwCEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T21:46:54.04Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IgdbAccessTokenProvider.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbAccessTokenProvider.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbAccessTokenProvider.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbAccessTokenProvider.cs",
-              "RelativeToolTip": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbAccessTokenProvider.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAMwF8AAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T19:13:59.446Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "GameMapper.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T21:46:38.722Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "GetUpcomingGamesQueryHandler.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetUpcomingGames\\GetUpcomingGamesQueryHandler.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetUpcomingGames\\GetUpcomingGamesQueryHandler.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetUpcomingGames\\GetUpcomingGamesQueryHandler.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetUpcomingGames\\GetUpcomingGamesQueryHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T19:13:17.123Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "GetGameDetailsQueryValidator.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryValidator.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryValidator.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryValidator.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryValidator.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T19:11:26.234Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "GamesController.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\WebApi\\Controllers\\GamesController.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\WebApi\\Controllers\\GamesController.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\WebApi\\Controllers\\GamesController.cs",
-              "RelativeToolTip": "GameVault\\Source\\WebApi\\Controllers\\GamesController.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAQwFMAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T19:09:01.695Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "SearchGamesQuery.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\SearchGame\\SearchGamesQuery.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\SearchGame\\SearchGamesQuery.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\SearchGame\\SearchGamesQuery.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\SearchGame\\SearchGamesQuery.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T18:59:09.374Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "IgdbApiClient.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbApiClient.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbApiClient.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbApiClient.cs",
-              "RelativeToolTip": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbApiClient.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPcAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T18:46:12.184Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GamesPageDto.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\GamesPageDto.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Game\\GamesPageDto.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\GamesPageDto.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Game\\GamesPageDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T18:37:49.34Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "GetGameDetailsQueryHandler.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAiwAkAAABoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T18:34:43.956Z"
+              "WhenOpened": "2026-09-17T17:50:55.899Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "GetGameDetailsQuery.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQuery.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQuery.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQuery.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQuery.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T18:34:11.87Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "GetGamesQueryHandler.cs",
-              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGames\\GetGamesQueryHandler.cs",
-              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGames\\GetGamesQueryHandler.cs",
-              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGames\\GetGamesQueryHandler.cs",
-              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGames\\GetGamesQueryHandler.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAACEAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T18:33:33.694Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "GameDetailsDto.cs",
               "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\GameDetailsDto.cs",
               "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Game\\GameDetailsDto.cs",
               "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\GameDetailsDto.cs",
               "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Game\\GameDetailsDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAgwA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T16:49:38.412Z"
+              "WhenOpened": "2026-09-10T18:17:55.358Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IgdbGameQueryBuilder.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbGameQueryBuilder.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbGameQueryBuilder.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbGameQueryBuilder.cs",
+              "RelativeToolTip": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbGameQueryBuilder.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAgwA0AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-07T16:54:14.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IgdbRequestClient.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbRequestClient.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbRequestClient.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbRequestClient.cs",
+              "RelativeToolTip": "GameVault\\Source\\Infrastructure\\ExternalServices\\Igdb\\IgdbRequestClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T15:09:22.265Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GetGameDetailsQueryHandler.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Feature\\Games\\Queries\\GetGameDetails\\GetGameDetailsQueryHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-07T16:26:08.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GameMapper.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Mappings\\GameMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-02T22:11:23.276Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 124,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IgdbPlatformFamilyDto.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformFamilyDto.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformFamilyDto.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformFamilyDto.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformFamilyDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-18T17:13:00.832Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IgdbPlatformDto.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformDto.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformDto.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformDto.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Igdb\\AdttionalDtos\\IgdbPlatformDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-18T17:12:10.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "IgdbGameDto.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Igdb\\IgdbGameDto.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Igdb\\IgdbGameDto.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Igdb\\IgdbGameDto.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Igdb\\IgdbGameDto.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAIwC4AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T17:06:43.541Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "RelatedGameDto.cs",
+              "DocumentMoniker": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\AdditionalDtos\\RelatedGameDto.cs",
+              "RelativeDocumentMoniker": "GameVault\\Source\\Application\\Dtos\\Game\\AdditionalDtos\\RelatedGameDto.cs",
+              "ToolTip": "C:\\Users\\paulo\\OneDrive\\Desktop\\Datos Personales\\Proyectos\\Game-Vault\\backend\\GameVault\\GameVault\\Source\\Application\\Dtos\\Game\\AdditionalDtos\\RelatedGameDto.cs",
+              "RelativeToolTip": "GameVault\\Source\\Application\\Dtos\\Game\\AdditionalDtos\\RelatedGameDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAwAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T15:23:12.097Z"
             }
           ]
         }

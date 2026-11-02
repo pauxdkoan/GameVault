@@ -1,8 +1,8 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace GameVault.Source.Application.Dtos.Igdb
+namespace GameVault.Source.Application.Dtos.Igdb.AdttionalDtos
 {
-    public sealed class IgdbImageDto
+    public sealed class IgdbLogoDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }

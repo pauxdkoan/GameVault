@@ -60,7 +60,7 @@ namespace GameVault.Source.Application.Feature.Auth.Queries.Login
             {
                 throw new UnauthorizedAccessException("Credenciales inválidas.");
             }
-
+            
             if (!user.IsActive)
             {
                 throw new UnauthorizedAccessException("El usuario está inactivo");

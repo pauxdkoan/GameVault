@@ -19,7 +19,14 @@ namespace GameVault.Source.Application.Feature.Games.Queries.GetGames
             var pageSize = Math.Clamp(request.PageSize, 1, 40);
             var page = Math.Max(request.Page, 1);
 
-            var response = await _igdbApiClient.GetGamesAsync(page, pageSize, cancellationToken);
+            var response = await _igdbApiClient.GetGamesAsync(
+                request.Search,
+                request.GenreIds,
+                request.PlatformIds,
+                request.Sort,
+                page,
+                pageSize,
+                cancellationToken);
 
             return new GamesPageDto
             {

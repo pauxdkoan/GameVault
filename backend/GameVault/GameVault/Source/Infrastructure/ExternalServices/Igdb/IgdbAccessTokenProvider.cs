@@ -35,8 +35,6 @@ namespace GameVault.Source.Infrastructure.ExternalServices.Igdb
                 return cachedToken;
             }
 
-            ValidateSettings();
-
             using var content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 ["client_id"] = _settings.ClientId,
@@ -67,24 +65,6 @@ namespace GameVault.Source.Infrastructure.ExternalServices.Igdb
             _memoryCache.Set(CacheKey, tokenResponse.AccessToken, cacheDuration);
 
             return tokenResponse.AccessToken;
-        }
-
-        private void ValidateSettings()
-        {
-            if (string.IsNullOrWhiteSpace(_settings.TokenUrl))
-            {
-                throw new InvalidOperationException("IgdbSettings:TokenUrl no está configurado.");
-            }
-
-            if (string.IsNullOrWhiteSpace(_settings.ClientId))
-            {
-                throw new InvalidOperationException("IgdbSettings:ClientId no está configurado.");
-            }
-
-            if (string.IsNullOrWhiteSpace(_settings.ClientSecret))
-            {
-                throw new InvalidOperationException("IgdbSettings:ClientSecret no está configurado.");
-            }
         }
 
         private async Task<HttpResponseMessage> PostTokenAsync(

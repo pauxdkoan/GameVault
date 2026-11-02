@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace GameVault.Source.Application.Dtos.Igdb
+namespace GameVault.Source.Application.Dtos.Igdb.AdttionalDtos
 {
-    public sealed class IgdbGenreDto
+    public sealed class IgdbVideoDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -10,7 +10,7 @@ namespace GameVault.Source.Application.Dtos.Igdb
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("slug")]
-        public string Slug { get; set; } = string.Empty;
+        [JsonPropertyName("video_id")]
+        public string VideoId { get; set; } = string.Empty;
     }
 }
