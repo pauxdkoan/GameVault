@@ -1,0 +1,121 @@
+<div class="flex flex-col gap-8">
+  <app-auth-form-header
+    eyebrow="Únete a la comunidad"
+    title="Crea tu cuenta"
+    subtitle="Guarda tus juegos, registra tu progreso y comparte reseñas. Es gratis."
+  />
+
+  <app-form-alert [messages]="apiErrors()" />
+
+  <form
+    class="flex flex-col gap-5"
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    novalidate
+  >
+    <div class="grid gap-5 sm:grid-cols-2">
+      <app-form-field label="Nombre" inputId="register-name" [error]="fieldError('name')">
+        <input
+          id="register-name"
+          class="vault-input"
+          type="text"
+          autocomplete="name"
+          placeholder="Tu nombre"
+          formControlName="name"
+          [attr.aria-invalid]="!!fieldError('name')"
+        />
+      </app-form-field>
+
+      <app-form-field
+        label="Usuario"
+        inputId="register-username"
+        [error]="fieldError('userName')"
+      >
+        <input
+          id="register-username"
+          class="vault-input"
+          type="text"
+          autocomplete="username"
+          placeholder="gamer123"
+          formControlName="userName"
+          [attr.aria-invalid]="!!fieldError('userName')"
+        />
+      </app-form-field>
+    </div>
+
+    <app-form-field label="Email" inputId="register-email" [error]="fieldError('email')">
+      <input
+        id="register-email"
+        class="vault-input"
+        type="email"
+        autocomplete="email"
+        placeholder="tu@email.com"
+        formControlName="email"
+        [attr.aria-invalid]="!!fieldError('email')"
+      />
+    </app-form-field>
+
+    <app-form-field
+      label="Contraseña"
+      inputId="register-password"
+      hint="Mínimo 8 caracteres."
+      [error]="fieldError('password')"
+    >
+      <input
+        #passwordInput
+        id="register-password"
+        class="vault-input pr-12"
+        type="password"
+        autocomplete="new-password"
+        placeholder="••••••••"
+        formControlName="password"
+        [attr.aria-invalid]="!!fieldError('password')"
+      />
+      <app-password-toggle [target]="passwordInput" />
+    </app-form-field>
+
+    <app-form-field
+      label="Confirmar contraseña"
+      inputId="register-confirm"
+      [error]="fieldError('confirmPassword')"
+    >
+      <input
+        #confirmInput
+        id="register-confirm"
+        class="vault-input pr-12"
+        type="password"
+        autocomplete="new-password"
+        placeholder="••••••••"
+        formControlName="confirmPassword"
+        [attr.aria-invalid]="!!fieldError('confirmPassword')"
+      />
+      <app-password-toggle [target]="confirmInput" />
+    </app-form-field>
+
+    <button
+      vaultButton
+      size="lg"
+      type="submit"
+      class="mt-2"
+      [fullWidth]="true"
+      [disabled]="isLoading()"
+    >
+      @if (isLoading()) {
+        <span class="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>
+        Creando cuenta...
+      } @else {
+        Crear cuenta
+        <span aria-hidden="true">→</span>
+      }
+    </button>
+  </form>
+
+  <p class="text-center text-sm text-vault-muted">
+    ¿Ya tienes cuenta?
+    <a
+      class="font-semibold text-vault-cyan transition hover:text-vault-cyan-soft"
+      routerLink="/auth/login"
+      >Inicia sesión</a
+    >
+  </p>
+</div>

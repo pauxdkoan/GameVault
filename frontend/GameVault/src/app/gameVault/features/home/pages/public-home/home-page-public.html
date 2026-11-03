@@ -1,0 +1,49 @@
+<div class="min-h-screen bg-vault-bg text-vault-text">
+  <app-hero-section [slides]="content().heroSlides" [loading]="isLoading()" />
+
+  <div class="vault-container flex flex-col gap-24 pb-24 lg:gap-32">
+    <!-- Secciones con datos de la API -->
+    @if (isLoading()) {
+      <section aria-busy="true" aria-label="Cargando juegos">
+        <div class="h-8 w-64 animate-pulse rounded-lg bg-vault-surface"></div>
+        <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          @for (card of skeletonCards; track card) {
+            <div class="aspect-[2/3] animate-pulse rounded-xl bg-vault-surface"></div>
+          }
+        </div>
+      </section>
+    } @else if (status() === 'error') {
+      <div class="vault-card flex flex-col items-center gap-4 border-vault-danger/25 p-10 text-center">
+        <p class="font-display text-xl font-bold text-vault-text">No pudimos cargar los juegos.</p>
+        <p class="text-sm text-vault-muted">Revisa que la API esté levantada y vuelve a intentarlo.</p>
+        <button
+          class="rounded-xl border border-vault-border px-4 py-2 text-sm font-semibold text-vault-text transition hover:border-vault-cyan/50 cursor-pointer"
+          type="button"
+          (click)="retryLoad()"
+        >
+          Reintentar
+        </button>
+      </div>
+    } @else {
+      @if (content().trendingGames.length > 0) {
+        <app-home-game-section
+          sectionId="trending"
+          title="Tendencias esta semana"
+          subtitle="Descubre los juegos que están llamando la atención de la comunidad."
+          [games]="content().trendingGames"
+        />
+      }
+
+      @if (content().upcomingGames.length > 0) {
+        <app-home-upcoming-list [games]="content().upcomingGames" />
+      }
+    }
+
+    <!-- Secciones informativas: se ven siempre -->
+    <app-home-features />
+    <app-home-library-preview [games]="content().trendingGames" />
+    <app-home-community />
+    <app-home-player-lists [games]="content().discoverGames" />
+    <app-home-cta />
+  </div>
+</div>

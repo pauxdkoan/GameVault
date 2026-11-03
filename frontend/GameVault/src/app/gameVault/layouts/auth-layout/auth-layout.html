@@ -1,0 +1,41 @@
+<div class="relative min-h-dvh overflow-hidden bg-vault-bg">
+  <!-- Brillos de fondo -->
+  <div
+    class="pointer-events-none absolute -left-40 -top-40 size-[32rem] rounded-full bg-vault-cyan/10 blur-3xl"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-40 left-1/4 size-[28rem] rounded-full bg-vault-violet/10 blur-3xl"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+    <!-- Columna del formulario -->
+    <div class="flex flex-col px-5 py-6 sm:px-10 lg:px-14 xl:px-20">
+      <div class="flex items-center justify-between">
+        <app-brand-logo />
+        <a
+          class="inline-flex items-center gap-1.5 text-sm font-medium text-vault-muted transition hover:text-vault-text"
+          routerLink="/gamevault/home"
+        >
+          <span aria-hidden="true">←</span> Volver al inicio
+        </a>
+      </div>
+
+      <main class="flex flex-1 items-center justify-center py-10">
+        <div class="w-full max-w-md">
+          <router-outlet />
+        </div>
+      </main>
+
+      <p class="text-center text-xs text-vault-subtle lg:text-left">
+        © {{ currentYear }} GameVault · Proyecto de portafolio
+      </p>
+    </div>
+
+    <!-- Panel decorativo (oculto en móvil y tablet) -->
+    <aside class="sticky top-0 hidden h-dvh p-4 lg:block">
+      <app-auth-showcase />
+    </aside>
+  </div>
+</div>

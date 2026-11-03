@@ -1,0 +1,56 @@
+<div class="showcase relative h-full overflow-hidden rounded-3xl border border-vault-border bg-vault-bg-soft">
+  <!-- Mural de portadas -->
+  <div class="showcase-wall" aria-hidden="true">
+    @for (column of columns(); track $index; let columnIndex = $index) {
+      <div
+        class="showcase-column"
+        [class.showcase-column--reverse]="columnIndex % 2 === 1"
+      >
+        <!-- La lista se repite dos veces para que el desplazamiento sea infinito -->
+        @for (copy of [0, 1]; track copy) {
+          @if (hasCovers()) {
+            @for (game of column; track game.id) {
+              <img
+                class="showcase-cover"
+                [src]="game.cover"
+                [alt]="''"
+                loading="lazy"
+              />
+            }
+          } @else {
+            @for (item of placeholders; track item) {
+              <div
+                class="showcase-cover showcase-cover--placeholder"
+                [style.--hue]="(columnIndex * 60 + item * 25) % 360"
+              ></div>
+            }
+          }
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Capas de color para que el texto se lea bien -->
+  <div class="showcase-glow" aria-hidden="true"></div>
+  <div class="showcase-fade" aria-hidden="true"></div>
+
+  <!-- Mensaje -->
+  <div class="absolute inset-x-0 bottom-0 p-8 xl:p-10">
+    <div class="vault-glass rounded-2xl p-6">
+      <p class="font-display text-2xl font-bold leading-tight text-vault-text xl:text-3xl">
+        Tu universo de videojuegos,
+        <span class="text-vault-gradient">en un solo lugar.</span>
+      </p>
+      <ul class="mt-5 flex flex-col gap-2.5">
+        @for (item of highlights; track item) {
+          <li class="flex items-center gap-3 text-sm text-vault-muted">
+            <span class="grid size-5 place-items-center rounded-full bg-vault-cyan/15 text-vault-cyan" aria-hidden="true">
+              <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10" /></svg>
+            </span>
+            {{ item }}
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>

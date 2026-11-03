@@ -1,0 +1,43 @@
+<section id="community" class="scroll-mt-24">
+  <app-section-header
+    title="Descubre lo que juega la comunidad"
+    subtitle="Actividad reciente, reseñas y listas creadas por otros jugadores."
+  />
+
+  <div class="mt-8 grid gap-4 md:grid-cols-2">
+    @for (activity of activities; track activity.id; let index = $index) {
+      <article class="vault-card p-5 transition hover:border-vault-cyan/30">
+        <div class="flex items-center gap-3">
+          <span class="grid size-10 shrink-0 place-items-center rounded-full text-sm font-bold" [class]="avatarClasses(index)" aria-hidden="true">
+            {{ activity.initials }}
+          </span>
+          <div class="min-w-0">
+            <p class="text-sm text-vault-muted">
+              <span class="font-semibold text-vault-text">{{ activity.userName }}</span>
+              {{ activity.action }}
+              <span class="font-semibold text-vault-cyan">{{ activity.target }}</span>
+            </p>
+            <p class="text-xs text-vault-subtle">{{ activity.timeAgo }}</p>
+          </div>
+        </div>
+
+        @if (activity.quote) {
+          <blockquote class="mt-4 border-l-2 border-vault-violet/50 pl-4 text-sm italic leading-6 text-vault-muted">
+            “{{ activity.quote }}”
+          </blockquote>
+        }
+
+        <div class="mt-4 flex items-center gap-5 text-xs text-vault-subtle">
+          <span class="flex items-center gap-1.5">
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+            {{ activity.likes }}
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12Z" /></svg>
+            {{ activity.comments }}
+          </span>
+        </div>
+      </article>
+    }
+  </div>
+</section>

@@ -1,0 +1,313 @@
+<div class="min-h-screen bg-vault-bg text-zinc-100">
+  @if (isLoading()) {
+    <section class="px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div
+          class="h-[27rem] animate-pulse rounded-lg border border-white/10 bg-white/[0.06]"
+        ></div>
+        <div class="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <div class="space-y-4">
+            <div class="h-36 animate-pulse rounded-lg bg-white/[0.06]"></div>
+            <div class="h-64 animate-pulse rounded-lg bg-white/[0.06]"></div>
+          </div>
+          <div class="h-96 animate-pulse rounded-lg bg-white/[0.06]"></div>
+        </div>
+      </div>
+    </section>
+  } @else if (status() === "error") {
+    <section class="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl">
+        <div
+          class="rounded-lg border border-rose-300/20 bg-rose-300/10 p-8 text-center shadow-2xl shadow-black/30"
+        >
+          <p class="text-2xl font-black text-white">
+            No pude cargar los detalles del juego.
+          </p>
+          <p class="mt-3 text-sm leading-6 text-rose-100/75">
+            {{ displayErrorMessage() }}
+          </p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <button
+              class="rounded-md border border-rose-200/35 px-4 py-2 text-sm font-semibold text-rose-50 transition hover:bg-rose-200/10"
+              type="button"
+              (click)="retryLoad()"
+            >
+              Reintentar
+            </button>
+            <a
+              class="rounded-md bg-vault-cyan px-4 py-2 text-sm font-black text-slate-950 transition hover:bg-vault-cyan"
+              [routerLink]="['/gamevault/games']"
+            >
+              Volver al catalogo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  } @else if (gameDetails(); as game) {
+    <section
+      class="relative min-h-[26rem] overflow-hidden border-b border-vault-cyan/15 bg-cover bg-center px-4 pb-12 pt-28 sm:px-6 lg:px-8"
+      [style.background-image]="heroBackgroundImage()"
+    >
+      <div class="relative mx-auto max-w-7xl">
+        <nav class="text-xs font-semibold text-vault-muted" aria-label="Ruta">
+          <a
+            class="rounded-md bg-black/20 px-2 py-1 transition hover:text-vault-cyan-soft"
+            [routerLink]="['/gamevault/home']"
+          >
+            Home
+          </a>
+          <span class="mx-2 text-vault-muted">/</span>
+          <a
+            class="rounded-md bg-black/20 px-2 py-1 transition hover:text-vault-cyan-soft"
+            [routerLink]="['/gamevault/games']"
+          >
+            Juegos
+          </a>
+          <span class="mx-2 text-vault-muted">/</span>
+          <span class="rounded-md bg-black/20 px-2 py-1 text-white">{{
+            game.name
+          }}</span>
+        </nav>
+
+        <div
+          class="mt-9 grid items-end gap-7 lg:grid-cols-[9.5rem_minmax(0,1fr)]"
+        >
+          <div
+            class="relative aspect-[2/3] w-36 overflow-hidden rounded-lg border border-vault-cyan/35 bg-vault-surface shadow-2xl shadow-black/45 sm:w-44 lg:w-full"
+          >
+            @if (game.coverImage) {
+              <img
+                class="h-full w-full object-cover"
+                [src]="game.coverImage"
+                [alt]="game.name"
+              />
+            } @else {
+              <div class="grid h-full place-items-center bg-white/[0.04] p-4">
+                <span class="text-5xl font-black text-vault-muted">
+                  {{ game.name.charAt(0) }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <div class="max-w-4xl pb-1">
+            <p
+              class="text-xs font-black uppercase tracking-[0.18em] text-vault-cyan-soft/75"
+            >
+              {{ primaryDeveloper() }} · {{ releaseYear() }}
+            </p>
+            <h1
+              class="mt-3 max-w-4xl text-5xl font-black uppercase leading-none text-white sm:text-6xl lg:text-7xl"
+            >
+              {{ game.name }}
+            </h1>
+
+            <div class="mt-5 flex flex-wrap gap-2">
+              @for (genre of genreChips(); track genre) {
+                <span
+                  class="rounded-md border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-bold text-vault-muted shadow-lg shadow-black/20"
+                >
+                  {{ genre }}
+                </span>
+              } @empty {
+                <span
+                  class="rounded-md border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-bold text-vault-muted"
+                >
+                  Sin genero
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sticky top-16 z-30 border-b border-white/10 bg-vault-bg/95 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-7xl gap-7 overflow-x-auto">
+        <button
+          class="min-h-14 border-b-2 border-vault-cyan px-1 text-sm font-black text-vault-cyan-soft"
+          type="button"
+        >
+          Overview
+        </button>
+        <button
+          class="min-h-14 px-1 text-sm font-bold text-vault-muted"
+          type="button"
+          disabled
+        >
+          Reviews
+        </button>
+        <button
+          class="min-h-14 px-1 text-sm font-bold text-vault-muted"
+          type="button"
+          disabled
+        >
+          Media
+        </button>
+      </div>
+    </div>
+
+    <section class="px-4 py-9 sm:px-6 lg:px-8">
+      <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div class="min-w-0 space-y-10">
+          <section id="overview" class="scroll-mt-32">
+            <h2 class="text-2xl font-black uppercase leading-none text-white">
+              About
+            </h2>
+            <div class="mt-4 space-y-5 text-sm leading-7 text-vault-muted">
+              @for (paragraph of aboutParagraphs(); track paragraph) {
+                <p>{{ paragraph }}</p>
+              }
+            </div>
+
+            @if (detailChips().length > 0) {
+              <div class="mt-6 flex flex-wrap gap-2">
+                @for (chip of detailChips(); track chip) {
+                  <span
+                    class="rounded-md border border-white/10 bg-white/[0.07] px-3 py-1.5 text-xs font-semibold text-vault-muted"
+                  >
+                    {{ chip }}
+                  </span>
+                }
+              </div>
+            }
+          </section>
+
+          <app-game-details-media
+            [gameName]="game.name"
+            [screenshots]="game.screenshots"
+            [videos]="game.videos"
+          />
+
+          <section class="scroll-mt-32">
+            <div
+              class="rounded-lg border border-white/10 bg-vault-surface p-5 shadow-xl shadow-black/20"
+            >
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h2 class="text-2xl font-black uppercase leading-none text-white">
+                    Comentarios de la comunidad
+                  </h2>
+                  <p class="mt-2 max-w-2xl text-sm leading-6 text-vault-muted">
+                    Esta seccion queda preparada visualmente y se activara cuando
+                    esten listos login y comentarios en backend.
+                  </p>
+                </div>
+                <span
+                  class="inline-flex w-fit items-center gap-2 rounded-md border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs font-black uppercase text-amber-100"
+                >
+                  <fa-icon [icon]="icons.comments" />
+                  Deshabilitado
+                </span>
+              </div>
+
+              <div
+                class="mt-5 rounded-lg border border-dashed border-white/15 bg-white/[0.03] p-4"
+              >
+                <textarea
+                  class="min-h-28 w-full resize-none rounded-md border border-white/10 bg-black/20 p-4 text-sm text-vault-muted outline-none placeholder:text-vault-muted"
+                  placeholder="Comparte tu opinion cuando los comentarios esten disponibles."
+                  disabled
+                ></textarea>
+                <div class="mt-3 flex justify-end">
+                  <button
+                    class="rounded-md bg-vault-cyan px-4 py-2 text-sm font-black text-slate-950 opacity-45"
+                    type="button"
+                    disabled
+                  >
+                    Publicar comentario
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="space-y-5 lg:sticky lg:top-36 lg:self-start">
+          <section
+            class="rounded-lg border border-white/10 bg-vault-surface p-5 shadow-xl shadow-black/25"
+          >
+            <h2 class="text-sm font-black uppercase text-white">
+              Ficha del juego
+            </h2>
+            <div class="mt-4 grid gap-3">
+              @for (fact of quickFacts(); track fact.label) {
+                <div
+                  class="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] p-3"
+                >
+                  <span
+                    class="grid size-9 shrink-0 place-items-center rounded-md bg-vault-cyan/10 text-vault-cyan-soft"
+                    aria-hidden="true"
+                  >
+                    <fa-icon [icon]="fact.icon" />
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block text-xs font-semibold text-vault-muted">
+                      {{ fact.label }}
+                    </span>
+                    <span class="block truncate text-sm font-black text-white">
+                      {{ fact.value }}
+                    </span>
+                  </span>
+                </div>
+              }
+            </div>
+          </section>
+
+          <section
+            class="rounded-lg border border-white/10 bg-vault-surface p-5 shadow-xl shadow-black/25"
+          >
+            <h2 class="text-sm font-black uppercase text-white">Where to play</h2>
+            @if (visiblePlatformBadges().length > 0) {
+              <div class="mt-4 flex flex-wrap gap-2">
+                @for (platform of visiblePlatformBadges(); track platform.key) {
+                  <span
+                    class="grid size-11 place-items-center rounded-md border text-base shadow-lg shadow-black/20"
+                    [ngClass]="platform.toneClass"
+                    [title]="platform.title"
+                    [attr.aria-label]="platform.label"
+                  >
+                    <fa-icon [icon]="platform.icon" />
+                  </span>
+                }
+              </div>
+            } @else {
+              <p class="mt-3 text-sm text-vault-muted">
+                Plataformas por confirmar.
+              </p>
+            }
+
+            @if (playLinks().length > 0) {
+              <div class="mt-5 grid gap-2">
+                @for (link of playLinks(); track link.url) {
+                  <a
+                    class="flex items-center justify-between gap-3 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-semibold text-vault-muted transition hover:border-vault-cyan/35 hover:text-white"
+                    [href]="link.url"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span class="truncate">{{ link.label }}</span>
+                    <fa-icon
+                      class="shrink-0 text-xs text-vault-cyan-soft"
+                      [icon]="icons.arrowUpRight"
+                    />
+                  </a>
+                }
+              </div>
+            }
+          </section>
+
+          <app-game-discover-more
+            [similarGames]="game.similarGames"
+            [dlcs]="game.dlcs"
+            [expansions]="game.expansions"
+            [expandedGames]="game.expandedGames"
+          />
+
+          <app-game-companies [companies]="game.companies" />
+        </aside>
+      </div>
+    </section>
+  }
+</div>

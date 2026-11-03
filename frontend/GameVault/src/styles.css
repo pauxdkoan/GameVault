@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* =========================================================
+   GAMEVAULT · SISTEMA DE DISEÑO
+   ---------------------------------------------------------
+   Todo lo que se define en @theme se convierte en clases de
+   Tailwind. Ejemplo: --color-vault-surface  ->  bg-vault-surface,
+   text-vault-surface, border-vault-surface...
+   Si quieres cambiar el aspecto de toda la app, empieza aquí.
+   ========================================================= */
+
+@theme {
+  /* Tipografías: Inter para texto, Space Grotesk para títulos */
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, sans-serif;
+
+  /* Fondos (de más oscuro a más claro) */
+  --color-vault-bg: #060a13;
+  --color-vault-bg-soft: #0a101d;
+  --color-vault-surface: #0e1524;
+  --color-vault-surface-hover: #131c2f;
+  --color-vault-border: #1c2638;
+
+  /* Texto */
+  --color-vault-text: #f4f6fb;
+  --color-vault-muted: #8b95a9;
+  --color-vault-subtle: #5d6679;
+
+  /* Acentos de marca: cian + violeta (como el diseño de referencia) */
+  --color-vault-cyan: #22d3ee;
+  --color-vault-cyan-soft: #67e8f9;
+  --color-vault-violet: #a78bfa;
+  --color-vault-violet-strong: #8b5cf6;
+
+  /* Estados */
+  --color-vault-success: #34d399;
+  --color-vault-warning: #fbbf24;
+  --color-vault-danger: #fb7185;
+
+  /* Sombras */
+  --shadow-vault-glow: 0 0 40px -8px rgb(34 211 238 / 0.35);
+  --shadow-vault-card: 0 20px 45px -20px rgb(0 0 0 / 0.7);
+}
+
+/* =========================================================
+   UTILIDADES PROPIAS
+   Clases reutilizables que agrupan varias reglas.
+   Se usan como cualquier clase de Tailwind: class="vault-card"
+   ========================================================= */
+
+/* Degradado de marca (botón principal, insignias) */
+@utility bg-vault-gradient {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-vault-cyan),
+    var(--color-vault-violet)
+  );
+}
+
+/* Texto con degradado (ej: "en un solo lugar") */
+@utility text-vault-gradient {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-vault-cyan),
+    var(--color-vault-violet)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Tarjeta / superficie estándar */
+@utility vault-card {
+  border-radius: 1rem;
+  border: 1px solid var(--color-vault-border);
+  background-color: var(--color-vault-surface);
+  box-shadow: var(--shadow-vault-card);
+}
+
+/* Efecto cristal (paneles encima de imágenes) */
+@utility vault-glass {
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background-color: rgb(10 16 29 / 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Contenedor centrado con márgenes laterales responsive */
+@utility vault-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+/* =========================================================
+   ESTILOS BASE
+   ========================================================= */
+
+:root {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  background: var(--color-vault-bg);
+  color: var(--color-vault-text);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--color-vault-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+a {
+  font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: rgb(34 211 238 / 0.35);
+  color: white;
+}
+
+.public-page-shell {
+  min-height: 100vh;
+  padding-top: 5rem;
+}
+
+/* Respeta a quien prefiere menos animaciones (accesibilidad) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Campo de texto estándar (inputs de formularios) */
+@utility vault-input {
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-vault-border);
+  background-color: var(--color-vault-bg-soft);
+  padding-inline: 1rem;
+  color: var(--color-vault-text);
+  font-size: 0.9rem;
+  outline: none;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms,
+    background-color 150ms;
+
+  &::placeholder {
+    color: var(--color-vault-subtle);
+  }
+
+  &:hover {
+    border-color: #2a3650;
+  }
+
+  &:focus {
+    border-color: var(--color-vault-cyan);
+    background-color: var(--color-vault-surface);
+    box-shadow: 0 0 0 3px rgb(34 211 238 / 0.15);
+  }
+
+  &[aria-invalid="true"] {
+    border-color: var(--color-vault-danger);
+    box-shadow: 0 0 0 3px rgb(251 113 133 / 0.12);
+  }
+}

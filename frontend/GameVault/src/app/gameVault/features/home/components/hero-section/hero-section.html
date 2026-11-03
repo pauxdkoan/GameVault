@@ -1,0 +1,55 @@
+<section id="top" class="relative isolate overflow-hidden pb-20 pt-32 sm:pt-36 lg:pb-28">
+  <!-- Fondo: imagen del juego destacado muy difuminada + brillos de marca -->
+  @if (backgroundImage(); as image) {
+    <img
+      class="absolute inset-0 -z-20 h-full w-full scale-110 object-cover opacity-25 blur-2xl"
+      [src]="image"
+      alt=""
+      aria-hidden="true"
+    />
+  }
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-vault-bg/40 via-vault-bg/80 to-vault-bg" aria-hidden="true"></div>
+  <div class="absolute -left-32 top-10 -z-10 size-96 rounded-full bg-vault-cyan/15 blur-3xl" aria-hidden="true"></div>
+  <div class="absolute -right-20 top-1/4 -z-10 size-96 rounded-full bg-vault-violet/15 blur-3xl" aria-hidden="true"></div>
+
+  <div class="vault-container grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,28rem)]">
+    <!-- Texto -->
+    <div class="min-w-0">
+      <span class="inline-flex items-center gap-2 rounded-full border border-vault-border bg-vault-surface/70 px-3 py-1 text-xs font-medium text-vault-muted">
+        <span class="size-1.5 animate-pulse rounded-full bg-vault-success" aria-hidden="true"></span>
+        Nueva temporada de lanzamientos
+      </span>
+
+      <h1 class="mt-6 max-w-2xl font-display text-4xl font-bold leading-[1.05] text-vault-text sm:text-5xl lg:text-6xl">
+        Tu universo de videojuegos,
+        <span class="text-vault-gradient">en un solo lugar</span>
+      </h1>
+
+      <p class="mt-6 max-w-xl text-base leading-7 text-vault-muted sm:text-lg">
+        Descubre nuevos juegos, organiza tu biblioteca, registra tu progreso y
+        comparte tu experiencia con una comunidad de jugadores.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a vaultButton size="lg" [routerLink]="['/gamevault/games']">
+          Explorar juegos <span aria-hidden="true">→</span>
+        </a>
+        <a vaultButton size="lg" variant="secondary" routerLink="/auth/register">
+          Crear mi biblioteca
+        </a>
+      </div>
+
+      <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+        @for (item of highlights; track item) {
+          <li class="flex items-center gap-2 text-sm text-vault-muted">
+            <svg class="size-4 text-vault-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>
+            {{ item }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- Juego del momento -->
+    <app-home-hero-carousel class="block min-w-0" [slides]="slides()" [loading]="loading()" />
+  </div>
+</section>

@@ -1,0 +1,59 @@
+@if (sections().length > 0) {
+  <section
+    class="rounded-lg border border-white/10 bg-vault-surface p-4 shadow-xl shadow-black/25"
+  >
+    <div>
+      <p class="text-xs font-black uppercase text-vault-cyan-soft/65">Discover more</p>
+    </div>
+
+    <div class="mt-5 space-y-6">
+      @for (section of sections(); track section.title) {
+        <div>
+          <div class="mb-3">
+            <h3 class="text-sm font-black text-white">
+              {{ section.title }}
+            </h3>
+
+            <p class="mt-1 text-xs leading-5 text-vault-muted">
+              {{ section.subtitle }}
+            </p>
+          </div>
+
+          <swiper-container
+            class="block pb-4"
+            slides-per-view="auto"
+            space-between="12"
+            free-mode="true"
+            loop="true"
+            grab-cursor="true"
+            speed="450"
+          >
+            @for (game of section.games; track game.id) {
+              <swiper-slide class="w-24">
+                <app-game-card
+                  [game]="game"
+                  variant="compact"
+                  previewMode="external"
+                  (previewOpen)="showGamePreview(game, $event)"
+                  (previewClose)="scheduleClosePreview()"
+                />
+              </swiper-slide>
+            }
+          </swiper-container>
+        </div>
+      }
+    </div>
+
+    @if (activePreview(); as preview) {
+      <div
+        class="fixed z-[100] w-80"
+        [style.top.px]="preview.top"
+        [style.left.px]="preview.left"
+        (mouseenter)="cancelClosePreview()"
+        (mouseleave)="scheduleClosePreview()"
+      >
+        <app-game-card-preview [game]="preview.game" variant="compact" />
+      </div>
+    }
+  </section>
+}

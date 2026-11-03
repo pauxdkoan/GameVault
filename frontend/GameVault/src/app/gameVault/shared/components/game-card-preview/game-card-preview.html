@@ -1,0 +1,138 @@
+<div
+  class="overflow-hidden rounded-lg border border-vault-cyan/30 bg-vault-surface shadow-2xl shadow-black/60"
+>
+  <div class="relative aspect-video overflow-hidden bg-black">
+    @if (hasPreviewMedia() && !previewImageFailed()) {
+      <swiper-container
+        class="block h-full w-full min-w-0"
+        slides-per-view="1"
+        speed="500"
+        grab-cursor="true"
+        [pagination]="previewSlideCount() > 1"
+        [navigation]="previewSlideCount() > 1"
+        style="
+          --swiper-theme-color: #67e8f9;
+          --swiper-navigation-size: 1rem;
+          --swiper-pagination-bullet-size: 0.42rem;
+        "
+      >
+        @if (trailerEmbedUrl(); as embedUrl) {
+          <swiper-slide>
+            <iframe
+              class="h-full w-full"
+              [src]="embedUrl"
+              [title]="game().name + ' trailer'"
+              allow="autoplay; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </swiper-slide>
+        }
+
+        @for (imageUrl of previewImages(); track imageUrl) {
+          <swiper-slide>
+            <img
+              class="h-full w-full object-cover"
+              [src]="imageUrl"
+              [alt]="game().name"
+              loading="lazy"
+              (error)="markPreviewImageAsFailed()"
+            />
+          </swiper-slide>
+        }
+      </swiper-container>
+    } @else {
+      <div class="grid h-full place-items-center bg-white/[0.03]">
+        <span class="text-5xl font-black text-vault-muted">
+          {{ game().name.charAt(0) }}
+        </span>
+      </div>
+    }
+
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-vault-surface via-vault-surface/10 to-transparent"
+    ></div>
+  </div>
+
+  <div class="space-y-3 p-3">
+    <div class="flex items-start gap-3">
+      <div
+        class="grid shrink-0 place-items-center rounded-full border-4 border-emerald-300 bg-emerald-300/10 text-center shadow-lg shadow-emerald-950/35"
+        [class.size-11]="isCompact()"
+        [class.size-12]="!isCompact()"
+        aria-label="Rating"
+      >
+        <span
+          class="font-black leading-none text-emerald-200"
+          [class.text-xs]="isCompact()"
+          [class.text-sm]="!isCompact()"
+        >
+          {{ ratingLabel() }}
+        </span>
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <h4
+          class="line-clamp-2 font-black leading-snug text-white"
+          [class.text-sm]="isCompact()"
+          [class.text-base]="!isCompact()"
+        >
+          {{ game().name }}
+        </h4>
+
+        <div class="mt-2 flex flex-wrap gap-2">
+          @for (genre of genreBadges(); track genre) {
+            <span
+              class="max-w-28 truncate rounded-md bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-vault-muted"
+              [title]="genre"
+            >
+              {{ genre }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <p
+      class="line-clamp-3 text-xs italic text-vault-muted"
+      [class.leading-5]="isCompact()"
+      [class.leading-5]="!isCompact()"
+    >
+      {{ summaryPreview() }}
+    </p>
+
+    <div
+      class="flex items-center justify-between gap-3 border-t border-white/10 pt-3"
+    >
+      <div class="flex min-w-0 items-center gap-2">
+        @for (platform of platformBadges(); track platform.key) {
+          <span
+            class="grid size-8 shrink-0 place-items-center rounded-md border text-[0.6rem] font-black leading-none shadow-lg shadow-black/20"
+            [ngClass]="platform.toneClass"
+            [title]="platform.title"
+            [attr.aria-label]="platform.label"
+          >
+            <fa-icon [icon]="platform.icon" [fixedWidth]="true" size="lg" />
+          </span>
+        }
+
+        @if (extraPlatformCount() > 0) {
+          <span
+            class="grid size-8 shrink-0 place-items-center rounded-md border border-white/10 bg-white/[0.06] text-[0.65rem] font-black text-vault-muted"
+            [title]="'+' + extraPlatformCount() + ' plataformas'"
+          >
+            +{{ extraPlatformCount() }}
+          </span>
+        }
+      </div>
+
+      <a
+        class="inline-flex shrink-0 items-center justify-center gap-1 text-xs font-black text-vault-cyan-soft transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-cyan"
+        [routerLink]="['/gamevault/gamesdetails', game().id]"
+        [attr.aria-label]="'Ver detalles de ' + game().name"
+      >
+        <small>Detalles</small>
+        <span aria-hidden="true">-&gt;</span>
+      </a>
+    </div>
+  </div>
+</div>

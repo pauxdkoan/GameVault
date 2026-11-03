@@ -1,0 +1,41 @@
+<section id="lists" class="scroll-mt-24">
+  <app-section-header
+    title="Listas creadas por jugadores"
+    subtitle="Colecciones curadas por la comunidad para encontrar tu próximo juego."
+  />
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    @for (list of lists(); track list.id; let listIndex = $index) {
+      <article class="vault-card group p-5 transition duration-300 hover:-translate-y-1 hover:border-vault-violet/40">
+        <!-- Portadas apiladas -->
+        <div class="flex h-28 items-end">
+          @for (cover of list.covers; track $index; let i = $index) {
+            <div
+              class="h-28 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-vault-surface shadow-lg shadow-black/40 transition duration-300"
+              [class.-ml-6]="i > 0"
+              [class.group-hover:-ml-3]="i > 0"
+              [style.z-index]="list.covers.length - i"
+            >
+              @if (cover) {
+                <img class="h-full w-full object-cover" [src]="cover" alt="" loading="lazy" />
+              } @else {
+                <div
+                  class="h-full w-full"
+                  [style.background]="'linear-gradient(150deg, hsl(' + ((listIndex * 70 + i * 30) % 360) + ' 70% 45% / .6), hsl(' + ((listIndex * 70 + i * 30 + 60) % 360) + ' 70% 25% / .5))'"
+                ></div>
+              }
+            </div>
+          }
+        </div>
+
+        <h3 class="mt-5 font-display text-base font-bold text-vault-text">{{ list.title }}</h3>
+        <p class="mt-1 text-xs text-vault-subtle">por {{ list.author }} · {{ list.gameCount }} juegos</p>
+
+        <div class="mt-4 flex items-center justify-between border-t border-vault-border pt-4 text-xs">
+          <span class="text-vault-muted">{{ list.followers }} seguidores</span>
+          <span class="font-semibold text-vault-cyan">Explorar lista →</span>
+        </div>
+      </article>
+    }
+  </div>
+</section>

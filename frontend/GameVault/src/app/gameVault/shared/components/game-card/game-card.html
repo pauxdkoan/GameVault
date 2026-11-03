@@ -1,0 +1,75 @@
+<article
+  class="group relative h-full outline-none"
+  tabindex="0"
+  (mouseenter)="openPreview($event)"
+  (mouseleave)="closePreview()"
+  (focusin)="openPreview($event)"
+  (focusout)="closePreview()"
+>
+  <!-- Cover -->
+
+  <div
+    class="relative aspect-[2/3] overflow-hidden rounded-lg border border-white/10 bg-vault-surface shadow-xl shadow-black/25 transition duration-300 group-hover:-translate-y-1 group-hover:border-vault-cyan/45 group-hover:shadow-cyan-950/35 group-focus-within:-translate-y-1 group-focus-within:border-vault-cyan/45 group-focus-within:shadow-cyan-950/35"
+  >
+    @if (game().coverImageUrl && !hasImageError()) {
+      <img
+        class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        [src]="game().coverImageUrl"
+        [alt]="game().name"
+        loading="lazy"
+        (error)="markImageAsFailed()"
+      />
+    } @else {
+      <div
+        class="grid h-full place-items-center bg-white/[0.04] p-6 text-center"
+      >
+        <span class="text-5xl font-black text-vault-muted">
+          {{ game().name.charAt(0) }}
+        </span>
+      </div>
+    }
+
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"
+    ></div>
+
+    <div
+      class="absolute right-2 top-2 rounded-md bg-vault-gradient px-2 py-0.5 text-[0.65rem] font-bold text-vault-bg shadow-lg shadow-black/35"
+    >
+      {{ ratingLabel() }}
+    </div>
+
+    <div
+      class="absolute left-3 right-3"
+      [class.bottom-2]="isCompact()"
+      [class.bottom-3]="!isCompact()"
+    >
+      <h3
+        class="font-black leading-tight text-white"
+        [class.line-clamp-2]="isCompact()"
+        [class.text-xs]="isCompact()"
+        [class.line-clamp-3]="!isCompact()"
+        [class.text-base]="!isCompact()"
+      >
+        {{ game().name }}
+      </h3>
+      <p
+        class="mt-1 line-clamp-1 text-[0.65rem] font-semibold text-vault-muted"
+      >
+        {{ game().releaseLabel }}
+      </p>
+    </div>
+  </div>
+  @if (activePreviewPosition(); as previewPosition) {
+    <div
+      class="fixed z-[100]"
+      [style.top.px]="previewPosition.top"
+      [style.left.px]="previewPosition.left"
+      [style.width.px]="previewWidth()"
+      (mouseenter)="cancelClosePreview()"
+      (mouseleave)="closePreview()"
+    >
+      <app-game-card-preview [game]="game()" [variant]="variant()" />
+    </div>
+  }
+</article>

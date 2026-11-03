@@ -1,0 +1,91 @@
+<div class="grid gap-5">
+  <form
+    class="flex min-h-12 overflow-hidden rounded-lg border border-white/10 bg-vault-bg-soft"
+    (submit)="applySearch($event)"
+  >
+    <label class="sr-only" for="game-search">Buscar juego</label>
+    <div class="flex flex-1 items-center gap-3 px-4">
+      <fa-icon class="text-vault-muted" [icon]="searchIcon" />
+      <input
+        id="game-search"
+        class="h-full w-full bg-transparent text-sm font-medium text-white outline-none placeholder:text-vault-muted"
+        type="search"
+        placeholder="Buscar juegos por nombre..."
+        [value]="search()"
+        (input)="onSearchInput($event)"
+      />
+    </div>
+    <button
+      class="flex min-w-32 items-center justify-center gap-2 bg-vault-gradient px-5 text-sm font-bold text-vault-bg transition hover:brightness-110"
+      type="submit"
+    >
+      Buscar
+      <fa-icon [icon]="arrowIcon" />
+    </button>
+  </form>
+
+  <div
+    class="-mx-4 flex flex-wrap items-center gap-2 border-y border-white/10 px-4 py-3 sm:mx-0 sm:px-0"
+  >
+    @for (group of filterGroups; track group.title) {
+      <div class="relative">
+        <button
+          class="flex min-h-10 items-center gap-2 rounded-md border border-white/10 bg-vault-bg-soft px-3 text-sm font-bold text-white transition hover:border-vault-cyan/35"
+          type="button"
+          (click)="toggleFilterGroup(group)"
+        >
+          {{ group.title }}
+          @if (selectedCount(group) > 0 && group.key !== "sort") {
+            <span class="text-xs text-vault-cyan-soft/70">
+              {{ selectedCount(group) }}
+            </span>
+          }
+          <fa-icon
+            class="text-xs text-vault-muted transition"
+            [class.rotate-180]="isGroupOpen(group)"
+            [icon]="chevronIcon"
+          />
+        </button>
+
+        @if (isGroupOpen(group)) {
+          <div
+            class="absolute left-0 z-20 mt-2 grid min-w-56 gap-1 rounded-lg border border-white/10 bg-vault-bg-soft p-2 shadow-2xl shadow-black/40"
+          >
+            @for (option of group.options; track option.label) {
+              <button
+                [class]="
+                  isActiveOption(group, option)
+                    ? 'flex w-full items-center justify-between gap-4 rounded-md bg-vault-cyan px-3 py-2 text-left text-sm font-bold text-slate-950'
+                    : 'flex w-full items-center justify-between gap-4 rounded-md px-3 py-2 text-left text-sm font-semibold text-vault-muted transition hover:bg-white/[0.06] hover:text-white'
+                "
+                type="button"
+                (click)="selectOption(group, option)"
+              >
+                <span>{{ option.label }}</span>
+                @if (isActiveOption(group, option)) {
+                  <fa-icon [icon]="checkIcon" />
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @for (chip of selectedChips(); track chip.key + "-" + chip.label) {
+      <span
+        class="flex min-h-10 items-center gap-3 rounded-md bg-vault-cyan px-3 text-sm font-bold text-slate-950"
+      >
+        {{ chip.label }}
+        <button
+          class="grid size-5 place-items-center rounded-sm text-sm leading-none transition hover:bg-slate-950/10"
+          type="button"
+          (click)="removeChip(chip)"
+          [attr.aria-label]="'Quitar ' + chip.label"
+        >
+          <fa-icon [icon]="removeIcon" />
+        </button>
+      </span>
+    }
+  </div>
+</div>
