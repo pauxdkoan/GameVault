@@ -10,7 +10,6 @@ import { take } from 'rxjs';
 import { HeroSectionComponent } from '../../components/hero-section/hero-section';
 import { HomeGameSectionComponent } from '../../components/home-game-section/home-game-section';
 import { HomeUpcomingList } from '../../components/home-upcoming-list/home-upcoming-list';
-import { HomeFeatures } from '../../components/home-features/home-features';
 import { HomeLibraryPreview } from '../../components/home-library-preview/home-library-preview';
 import { HomeCommunity } from '../../components/home-community/home-community';
 import { HomePlayerLists } from '../../components/home-player-lists/home-player-lists';
@@ -24,7 +23,6 @@ const EMPTY_HOME_CONTENT: HomeContent = {
   heroSlides: [],
   trendingGames: [],
   upcomingGames: [],
-  discoverGames: [],
 };
 
 /**
@@ -44,7 +42,6 @@ const EMPTY_HOME_CONTENT: HomeContent = {
     HeroSectionComponent,
     HomeGameSectionComponent,
     HomeUpcomingList,
-    HomeFeatures,
     HomeLibraryPreview,
     HomeCommunity,
     HomePlayerLists,

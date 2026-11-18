@@ -6,8 +6,9 @@ export interface LoginRequest {
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  accessTokenExpiresAt: Date;
-  user: User;
+  /** Fecha ISO en la que caduca el access token. */
+  accessTokenExpiresAt: string;
+  user: SessionUser;
 }
 
 /** Portada que se muestra en el panel decorativo de login/registro. */
@@ -17,12 +18,15 @@ export interface ShowcaseCover {
   cover: string;
 }
 
-interface User {
+/** Usuario de la sesión (UserDto del backend). */
+export interface SessionUser {
+  id: string;
+  email: string;
   userName: string;
   displayName: string;
-  bio: null;
-  avatarUrl: null;
-  bannerUrl: null;
-  country: null;
+  bio: string | null;
+  avatarUrl: string | null;
+  bannerUrl: string | null;
+  country: string | null;
   isActive: boolean;
 }

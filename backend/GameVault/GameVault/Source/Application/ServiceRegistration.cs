@@ -1,4 +1,6 @@
 ﻿using GameVault.Source.Application.Behaviors;
+using GameVault.Source.Application.Interfaces.Games;
+using GameVault.Source.Application.Services.Games;
 using GameVault.Source.Application.Interfaces.Auth;
 using GameVault.Source.Application.Interfaces.Security;
 using GameVault.Source.Application.Services.Security;
@@ -20,6 +22,7 @@ namespace GameVault.Source.Application
         private static void GenericServices(IServiceCollection services)
         {
             services.AddTransient<ITokenProvider, TokenProvider>();
+            services.AddScoped<IGameSyncService, GameSyncService>();
        
         }
 

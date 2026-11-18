@@ -28,7 +28,7 @@ namespace GameVault.Source.Application.Feature.Games.Queries.GetUpcomingGames
                 Page = page,
                 PageSize = pageSize,
                 Games = response.Results
-                    .Select(GameMapper.GameSummary)
+                    .Select(GameMapper.GameCard)
                     .ToList()
             };
         }

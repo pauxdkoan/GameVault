@@ -1,54 +1,121 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { LoginRequest, LoginResponse } from '../models/login.interfaces';
-import { catchError, Observable, throwError } from 'rxjs';
-import { enviroment } from '../../../../../environments/enviroment';
+import {
+  catchError,
+  finalize,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  tap,
+  throwError,
+} from 'rxjs';
+import { environment } from '../../../../../environments/environment';
+import { AuthSessionService } from '../../../core/services/auth-session.service';
+import {
+  LoginRequest,
+  LoginResponse,
+  SessionUser,
+} from '../models/login.interfaces';
 import {
   RegisterRequest,
   RegisterResponse,
 } from '../models/register.interfaces';
 
-const API_URL = enviroment.gameVaultUrl;
+const API_URL = environment.gameVaultUrl;
 
-/** Mensaje cuando la API no responde o el error no trae detalle. */
-const GENERIC_ERROR = 'No pudimos conectar con el servidor. Inténtalo de nuevo.';
+/** Rutas de auth que nunca deben llevar el access token ni reintentarse. */
+export const PUBLIC_AUTH_URLS = [
+  `${API_URL}/auth/login`,
+  `${API_URL}/auth/register`,
+  `${API_URL}/auth/refresh-tokens`,
+  `${API_URL}/auth/logout`,
+];
 
+/**
+ * Peticiones HTTP de autenticación.
+ * Guarda el resultado en AuthSessionService; no toca localStorage directamente.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
+  private readonly session = inject(AuthSessionService);
+
+  /** Refresh en curso: si llegan varios 401 a la vez, todos esperan al mismo. */
+  private refreshInFlight$: Observable<string> | null = null;
 
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${API_URL}/auth/login`, loginRequest)
-      .pipe(catchError((error) => throwError(() => this.toMessages(error))));
+      .pipe(tap((response) => this.session.start(response)));
   }
 
   register(registerRequest: RegisterRequest): Observable<RegisterResponse> {
-    return this.http
-      .post<RegisterResponse>(`${API_URL}/auth/register`, registerRequest)
-      .pipe(catchError((error) => throwError(() => this.toMessages(error))));
+    // Si falla, error.interceptor.ts ya convierte el error en ApiError con sus mensajes.
+    return this.http.post<RegisterResponse>(`${API_URL}/auth/register`, registerRequest);
   }
 
   /**
-   * Convierte cualquier error HTTP en una lista de textos para la vista.
-   *
-   * La API devuelve { errors: { Campo: ["mensaje", ...] } } o
-   * { errors: ["mensaje"] }. Si no viene nada (API caída, CORS...)
-   * devolvemos un mensaje genérico en vez de romper.
+   * Pide un access token nuevo con el refresh token.
+   * Devuelve el access token nuevo. Si falla, cierra la sesión local.
    */
-  private toMessages(error: HttpErrorResponse): string[] {
-    const apiErrors = error.error?.errors;
-
-    if (!apiErrors) {
-      return [error.error?.message ?? GENERIC_ERROR];
+  refreshAccessToken(): Observable<string> {
+    if (this.refreshInFlight$) {
+      return this.refreshInFlight$;
     }
 
-    const messages = Object.values(apiErrors)
-      .flat()
-      .filter((message): message is string => typeof message === 'string');
+    const refreshToken = this.session.refreshToken();
 
-    return messages.length > 0 ? messages : [GENERIC_ERROR];
+    if (!refreshToken) {
+      this.session.clear();
+      return throwError(() => new Error('Sin refresh token'));
+    }
+
+    this.refreshInFlight$ = this.http
+      .post<LoginResponse>(`${API_URL}/auth/refresh-tokens`, { refreshToken })
+      .pipe(
+        tap((response) => this.session.start(response)),
+        map((response) => response.accessToken),
+        catchError((error) => {
+          this.session.clear();
+          return throwError(() => error);
+        }),
+        finalize(() => (this.refreshInFlight$ = null)),
+        shareReplay(1),
+      );
+
+    return this.refreshInFlight$;
+  }
+
+  /** Recarga los datos del usuario desde el backend (GET /auth/me). */
+  loadCurrentUser(): Observable<SessionUser | null> {
+    if (!this.session.isLoggedIn()) {
+      return of(null);
+    }
+
+    return this.http.get<SessionUser>(`${API_URL}/auth/me`).pipe(
+      tap((user) => this.session.updateUser(user)),
+      // Si falla, el interceptor ya intentó renovar; seguimos sin romper la app.
+      catchError(() => of(null)),
+    );
+  }
+
+  /**
+   * Cierra la sesión. Se borra la sesión local SIEMPRE,
+   * aunque el backend no responda.
+   */
+  logout(): Observable<void> {
+    const refreshToken = this.session.refreshToken();
+    this.session.clear();
+
+    if (!refreshToken) {
+      return of(undefined);
+    }
+
+    return this.http
+      .post<void>(`${API_URL}/auth/logout`, { refreshToken })
+      .pipe(catchError(() => of(undefined)));
   }
 }

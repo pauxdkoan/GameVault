@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
@@ -9,6 +9,7 @@ import { FormAlert } from '../../components/form-alert/form-alert';
 import { PasswordToggle } from '../../components/password-toggle/password-toggle';
 import { FormField } from '../../../../shared/ui/form-field/form-field';
 import { VaultButton } from '../../../../shared/ui/button/vault-button';
+import { errorMessages } from '../../../../core/http/api-error';
 
 @Component({
   selector: 'app-login-page',
@@ -26,6 +27,7 @@ import { VaultButton } from '../../../../shared/ui/button/vault-button';
 export class LoginPage {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
 
   protected readonly isLoading = signal(false);
@@ -62,11 +64,13 @@ export class LoginPage {
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/gamevault']);
+        // Vuelve a la página que pidió el login (authGuard) o al home.
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        this.router.navigateByUrl(returnUrl?.startsWith('/') ? returnUrl : '/gamevault/home');
       },
-      error: (messages: string[]) => {
+      error: (error: unknown) => {
         this.isLoading.set(false);
-        this.apiErrors.set(messages);
+        this.apiErrors.set(errorMessages(error));
       },
     });
   }

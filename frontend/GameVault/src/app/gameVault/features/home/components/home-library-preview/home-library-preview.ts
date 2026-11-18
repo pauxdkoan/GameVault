@@ -1,19 +1,22 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import { RouterLink } from '@angular/router';
 import { GameCard } from '../../../../shared/models/game-card.model';
 import { VaultButton } from '../../../../shared/ui/button/vault-button';
+import { LIBRARY_STATUSES } from '../../../library/models/library.models';
 
-/** Estados de ejemplo para la vista previa de la biblioteca. */
+/** Estados de ejemplo para las tres portadas de muestra. */
 const PREVIEW_STATES = [
-  { label: 'Jugando', progress: 64, bar: 'bg-vault-gradient', fallbackName: 'Nova Requiem' },
-  { label: 'Completado', progress: 100, bar: 'bg-vault-violet', fallbackName: 'Ashes of Tomorrow' },
-  { label: 'Pendiente', progress: 12, bar: 'bg-vault-cyan', fallbackName: 'Lumen Hollow' },
+  { label: 'Jugando', progress: 64, dotClass: 'bg-vault-accent', fallbackName: 'Nova Requiem' },
+  { label: 'Completado', progress: 100, dotClass: 'bg-vault-success', fallbackName: 'Ashes of Tomorrow' },
+  { label: 'Pendiente', progress: 0, dotClass: 'bg-vault-warning', fallbackName: 'Lumen Hollow' },
 ];
 
 /**
- * Sección "Tu biblioteca. Tus reglas.": texto a la izquierda y
- * una maqueta de la biblioteca a la derecha con 3 juegos reales.
- * Los estados y el progreso son de ejemplo hasta que exista la biblioteca.
+ * Sección "Cada juego, en su estante": texto a la izquierda y tres portadas
+ * reales (tendencias) con un estado de ejemplo a la derecha.
+ * Los estados y el progreso son de ejemplo y la sección lo dice en pantalla.
+ * Con sesión, el botón lleva a la biblioteca real (/gamevault/library).
  */
 @Component({
   selector: 'app-home-library-preview',
@@ -22,16 +25,12 @@ const PREVIEW_STATES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeLibraryPreview {
+  protected readonly session = inject(AuthSessionService);
+
   readonly games = input.required<GameCard[]>();
 
-  protected readonly tabs = ['Todos', 'Jugando', 'Pendientes', 'Completados'];
-
-  protected readonly benefits = [
-    'Estados personalizados',
-    'Seguimiento de progreso',
-    'Valoraciones personales',
-    'Listas y colecciones',
-  ];
+  /** Los seis estados reales de la biblioteca (mismos textos y colores que en /library). */
+  protected readonly statuses = LIBRARY_STATUSES;
 
   /**
    * Une cada estado de ejemplo con un juego real.
@@ -39,15 +38,15 @@ export class HomeLibraryPreview {
    */
   protected readonly items = computed(() =>
     PREVIEW_STATES.map((state, index) => {
-      const game = this.games()[index];
+      // Se saltan los 3 primeros para no repetir las portadas de la fila de tendencias.
+      const game = this.games()[index + 3] ?? this.games()[index];
       return {
         id: game?.id ?? state.fallbackName,
         name: game?.name ?? state.fallbackName,
         cover: game?.coverImageUrl ?? null,
-        rating: game?.rating ?? 0,
         label: state.label,
         progress: state.progress,
-        bar: state.bar,
+        dotClass: state.dotClass,
       };
     }),
   );

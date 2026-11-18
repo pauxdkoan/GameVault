@@ -1,8 +1,11 @@
 using GameVault.Source.Application.Dtos.Auth;
 using GameVault.Source.Application.Feature.Auth.Commands.RegisterUser;
 using GameVault.Source.Application.Feature.Auth.Commands.RevokeRefreshToken;
+using GameVault.Source.Application.Feature.Auth.Queries.GetCurrentUser;
 using GameVault.Source.Application.Feature.Auth.Queries.Login;
+using GameVault.Source.WebApi.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameVault.Source.WebApi.Controllers
@@ -45,14 +48,26 @@ namespace GameVault.Source.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("refresh-tokens/{id}")]
-        public async Task<IActionResult> RevokeRefreshToken(
-            Guid id,
+        /// <summary>Usuario de la sesión actual. Requiere el access token.</summary>
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> Me(CancellationToken cancellationToken)
+        {
+            var response = await _sender.Send(new GetCurrentUserQuery(User.GetUserId()), cancellationToken);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Cierra la sesión revocando el refresh token.
+        /// No exige access token: así funciona aunque este ya haya caducado.
+        /// </summary>
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(
+            [FromBody] RevokeRefreshTokenCommand command,
             CancellationToken cancellationToken)
         {
-            var success = await _sender.Send(new RevokeRefreshTokenCommand(id), cancellationToken);
-
-            return success ? NoContent() : BadRequest();
+            await _sender.Send(command, cancellationToken);
+            return NoContent();
         }
     }
 }

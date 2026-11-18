@@ -1,49 +1,39 @@
 <section id="upcoming" class="scroll-mt-24">
-  <app-section-header
-    title="Próximos lanzamientos"
-    subtitle="Sigue los estrenos que no quieres dejar pasar."
-  />
+  <app-section-header title="Próximos lanzamientos" subtitle="Lo que sale en las próximas semanas." />
 
-  <div class="mt-8 flex flex-col gap-4">
-    @for (row of rows(); track row.game.id) {
-      <article class="vault-card group flex flex-col overflow-hidden transition hover:border-vault-cyan/40 sm:flex-row">
-        <div class="relative aspect-video shrink-0 overflow-hidden sm:aspect-auto sm:w-64">
-          @if (row.game.screenshotUrl) {
-            <img
-              class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-              [src]="row.game.screenshotUrl"
-              [alt]="row.game.name"
-              loading="lazy"
-            />
-          } @else {
-            <div class="h-full min-h-32 w-full bg-gradient-to-br from-vault-cyan/25 to-vault-violet/25"></div>
-          }
-          <div class="absolute inset-0 bg-gradient-to-r from-transparent to-vault-surface/60 max-sm:hidden"></div>
-        </div>
+  <ol class="mt-8 border-t border-vault-border">
+    @for (game of rows(); track game.id) {
+      <li class="border-b border-vault-border">
+        <a
+          class="group grid grid-cols-[4.5rem_3.5rem_minmax(0,1fr)_auto] items-center gap-4 py-4 transition hover:bg-vault-surface sm:grid-cols-[8rem_4rem_minmax(0,1fr)_auto] sm:gap-6 sm:px-3"
+          [routerLink]="['/gamevault/gamesdetails', game.id]"
+        >
+          <time class="font-display text-xl font-extrabold uppercase leading-tight text-vault-accent sm:text-2xl">
+            {{ game.releaseLabel }}
+          </time>
 
-        <div class="flex flex-1 flex-col justify-center gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <div class="min-w-0">
-            <p class="text-xs font-semibold uppercase tracking-wider" [class]="row.label.classes">
-              {{ row.label.text }}
-            </p>
-            <h3 class="mt-1.5 truncate font-display text-lg font-bold text-vault-text">{{ row.game.name }}</h3>
-            @if (row.game.genres.length > 0) {
-              <p class="mt-1 truncate text-sm text-vault-muted">{{ row.game.genres.slice(0, 2).join(' / ') }}</p>
+          <span class="block aspect-[2/3] overflow-hidden rounded-md border border-vault-border bg-vault-surface">
+            @if (game.coverImageUrl) {
+              <img class="h-full w-full object-cover" [src]="game.coverImageUrl" [alt]="game.name" loading="lazy" />
+            } @else {
+              <span class="grid h-full place-items-center font-display text-xl font-black uppercase text-vault-subtle">
+                {{ game.name.charAt(0) }}
+              </span>
             }
-            <p class="mt-3 flex items-center gap-2 text-sm text-vault-cyan-soft">
-              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></svg>
-              {{ row.game.releaseLabel }}
-            </p>
-          </div>
+          </span>
 
-          <a
-            class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-vault-border px-4 py-2.5 text-sm font-semibold text-vault-text transition hover:border-vault-cyan/50 hover:text-vault-cyan"
-            [routerLink]="['/gamevault/gamesdetails', row.game.id]"
-          >
-            Ver detalles <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </article>
+          <span class="min-w-0">
+            <span class="block truncate text-lg font-semibold text-vault-text transition group-hover:text-vault-accent">
+              {{ game.name }}
+            </span>
+            @if (game.genres.length > 0) {
+              <span class="block truncate text-sm text-vault-muted">{{ game.genres.slice(0, 2).join(' · ') }}</span>
+            }
+          </span>
+
+          <app-icon name="arrow-right" class="size-5 text-vault-subtle transition group-hover:translate-x-1 group-hover:text-vault-accent" />
+        </a>
+      </li>
     }
-  </div>
+  </ol>
 </section>

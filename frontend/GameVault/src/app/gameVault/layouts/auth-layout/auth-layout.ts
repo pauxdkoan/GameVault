@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { BrandLogo } from '../../shared/ui/brand-logo/brand-logo';
 import { AuthShowcase } from '../../features/auth/components/auth-showcase/auth-showcase';
+import { Icon } from '../../shared/ui/icon/icon';
 
 /**
  * Layout de las pantallas de autenticación.
@@ -14,7 +15,7 @@ import { AuthShowcase } from '../../features/auth/components/auth-showcase/auth-
  */
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, RouterLink, BrandLogo, AuthShowcase],
+  imports: [RouterOutlet, RouterLink, BrandLogo, AuthShowcase, Icon],
   templateUrl: './auth-layout.html',
 })
 export class AuthLayout {

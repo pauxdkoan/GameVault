@@ -11,9 +11,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div class="max-w-2xl">
-        <h2
-          class="font-display text-2xl font-bold text-vault-text sm:text-3xl"
-        >
+        <h2 class="text-3xl text-vault-text sm:text-4xl">
           {{ title() }}
         </h2>
         @if (subtitle()) {
@@ -25,7 +23,7 @@ import { RouterLink } from '@angular/router';
 
       @if (linkLabel() && linkRoute()) {
         <a
-          class="group inline-flex items-center gap-1.5 text-sm font-semibold text-vault-cyan transition hover:text-vault-cyan-soft"
+          class="group inline-flex items-center gap-1.5 text-sm font-semibold text-vault-accent transition hover:text-vault-accent-soft"
           [routerLink]="linkRoute()"
         >
           {{ linkLabel() }}

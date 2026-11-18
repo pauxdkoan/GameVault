@@ -12,14 +12,9 @@ import {
   signal,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faChevronLeft,
-  faChevronRight,
-  faCirclePlay,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { Icon } from '../../../../shared/ui/icon/icon';
 import { Video } from '../../models/games.interfaces';
+import { ensureSwiperRegistered } from '../../../../shared/utils/swiper';
 
 interface SwiperElement extends HTMLElement {
   swiper?: {
@@ -33,12 +28,16 @@ interface SwiperElement extends HTMLElement {
 
 @Component({
   selector: 'app-game-details-media',
-  imports: [FontAwesomeModule],
+  imports: [Icon],
   templateUrl: './game-details-media.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameDetailsMediaComponent implements AfterViewInit {
+  constructor() {
+    ensureSwiperRegistered();
+  }
+
   readonly gameName = input.required<string>();
   readonly screenshots = input<string[]>([]);
   readonly videos = input<Video[]>([]);
@@ -48,12 +47,6 @@ export class GameDetailsMediaComponent implements AfterViewInit {
 
   private readonly sanitizer = inject(DomSanitizer);
 
-  protected readonly icons = {
-    close: faXmark,
-    next: faChevronRight,
-    play: faCirclePlay,
-    previous: faChevronLeft,
-  };
   protected readonly selectedImageIndex = signal<number | null>(null);
   protected readonly selectedVideo = signal<Video | null>(null);
   protected readonly canScrollImagesPrevious = signal(false);
@@ -137,6 +130,11 @@ export class GameDetailsMediaComponent implements AfterViewInit {
     window.setTimeout(() => this.updateScrollControls(scroller, target), 350);
   }
 
+  /**
+   * Activa o desactiva las flechas ‹ › según la posición del carrusel.
+   * Ojo: no enlazarlo al evento (swiperprogress). swiper.update() vuelve a emitir
+   * "progress", así que se llamaría a sí mismo sin fin (Maximum call stack size exceeded).
+   */
   protected updateScrollControls(
     scroller: HTMLElement | undefined,
     target: 'images' | 'videos',

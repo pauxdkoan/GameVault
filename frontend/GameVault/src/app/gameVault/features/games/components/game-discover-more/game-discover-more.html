@@ -1,20 +1,11 @@
 @if (sections().length > 0) {
-  <section
-    class="rounded-lg border border-white/10 bg-vault-surface p-4 shadow-xl shadow-black/25"
-  >
-    <div>
-      <p class="text-xs font-black uppercase text-vault-cyan-soft/65">Discover more</p>
-    </div>
-
-    <div class="mt-5 space-y-6">
+  <section class="vault-card p-5">
+    <div class="space-y-6">
       @for (section of sections(); track section.title) {
         <div>
           <div class="mb-3">
-            <h3 class="text-sm font-black text-white">
-              {{ section.title }}
-            </h3>
-
-            <p class="mt-1 text-xs leading-5 text-vault-muted">
+            <h2 class="text-2xl text-vault-text">{{ section.title }}</h2>
+            <p class="mt-1 text-sm text-vault-muted">
               {{ section.subtitle }}
             </p>
           </div>

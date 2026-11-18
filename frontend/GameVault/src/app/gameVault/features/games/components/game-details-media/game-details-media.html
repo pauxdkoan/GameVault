@@ -1,37 +1,31 @@
 <section id="media" class="scroll-mt-32">
-  <div class="flex items-end justify-between gap-4">
-    <div>
-      <h2 class="text-2xl font-black uppercase leading-none text-white">
-        Media
-      </h2>
-      <p class="mt-2 text-sm text-vault-muted">
-        Capturas y videos principales disponibles para este juego.
-      </p>
-    </div>
-  </div>
+  <h2 class="text-3xl text-vault-text sm:text-4xl">Capturas y vídeos</h2>
 
   @if (hasMedia()) {
     @if (visibleScreenshots().length > 0) {
       <div class="mt-6">
-        <div class="mb-2 flex justify-end gap-1.5">
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <h3 class="text-sm font-semibold text-vault-muted">Capturas <span class="tabular-nums">({{ visibleScreenshots().length }})</span></h3>
+          <div class="flex gap-2">
           <button
-            class="grid size-7 place-items-center rounded-md border border-white/10 bg-white/[0.06] text-[0.7rem] text-vault-muted transition hover:border-vault-cyan/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-white/10 disabled:hover:text-vault-muted"
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
             type="button"
             aria-label="Ver capturas anteriores"
             [disabled]="!canScrollImagesPrevious()"
             (click)="scrollRow(imageScroller, -1, 'images')"
           >
-            <fa-icon [icon]="icons.previous" />
+            <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" />
           </button>
           <button
-            class="grid size-7 place-items-center rounded-md border border-white/10 bg-white/[0.06] text-[0.7rem] text-vault-muted transition hover:border-vault-cyan/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-white/10 disabled:hover:text-vault-muted"
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
             type="button"
             aria-label="Ver capturas siguientes"
             [disabled]="!canScrollImagesNext()"
             (click)="scrollRow(imageScroller, 1, 'images')"
           >
-            <fa-icon [icon]="icons.next" />
+            <app-icon name="chevron-right" class="size-4" [strokeWidth]="2.5" />
           </button>
+          </div>
         </div>
         <swiper-container
           #imageScroller
@@ -43,7 +37,6 @@
           speed="450"
           (swiperinit)="updateScrollControls(imageScroller, 'images')"
           (swiperslidechange)="updateScrollControls(imageScroller, 'images')"
-          (swiperprogress)="updateScrollControls(imageScroller, 'images')"
           (swipertouchend)="updateScrollControls(imageScroller, 'images')"
         >
           @for (
@@ -53,19 +46,16 @@
           ) {
             <swiper-slide class="w-48 sm:w-56 lg:w-64">
               <button
-                class="group relative aspect-video w-full overflow-hidden rounded-md border border-white/10 bg-vault-surface shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-vault-cyan/35"
+                class="group relative aspect-video w-full overflow-hidden rounded-md border border-vault-border bg-vault-surface transition hover:border-vault-accent/60 active:scale-[0.98]"
                 type="button"
                 (click)="openImageViewer(index)"
               >
                 <img
-                  class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  class="h-full w-full object-cover"
                   [src]="screenshot"
-                  [alt]="gameName() + ' screenshot'"
+                  [alt]="'Captura de ' + gameName()"
                   loading="lazy"
                 />
-                <span
-                  class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80"
-                ></span>
               </button>
             </swiper-slide>
           }
@@ -74,26 +64,29 @@
     }
 
     @if (visibleVideos().length > 0) {
-      <div class="mt-7">
-        <div class="mb-2 flex justify-end gap-1.5">
+      <div class="mt-8">
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <h3 class="text-sm font-semibold text-vault-muted">Vídeos <span class="tabular-nums">({{ visibleVideos().length }})</span></h3>
+          <div class="flex gap-2">
           <button
-            class="grid size-7 place-items-center rounded-md border border-white/10 bg-white/[0.06] text-[0.7rem] text-vault-muted transition hover:border-vault-cyan/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-white/10 disabled:hover:text-vault-muted"
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
             type="button"
             aria-label="Ver videos anteriores"
             [disabled]="!canScrollVideosPrevious()"
             (click)="scrollRow(videoScroller, -1, 'videos')"
           >
-            <fa-icon [icon]="icons.previous" />
+            <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" />
           </button>
           <button
-            class="grid size-7 place-items-center rounded-md border border-white/10 bg-white/[0.06] text-[0.7rem] text-vault-muted transition hover:border-vault-cyan/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-white/10 disabled:hover:text-vault-muted"
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
             type="button"
             aria-label="Ver videos siguientes"
             [disabled]="!canScrollVideosNext()"
             (click)="scrollRow(videoScroller, 1, 'videos')"
           >
-            <fa-icon [icon]="icons.next" />
+            <app-icon name="chevron-right" class="size-4" [strokeWidth]="2.5" />
           </button>
+          </div>
         </div>
         <swiper-container
           #videoScroller
@@ -105,35 +98,34 @@
           speed="450"
           (swiperinit)="updateScrollControls(videoScroller, 'videos')"
           (swiperslidechange)="updateScrollControls(videoScroller, 'videos')"
-          (swiperprogress)="updateScrollControls(videoScroller, 'videos')"
           (swipertouchend)="updateScrollControls(videoScroller, 'videos')"
         >
           @for (video of visibleVideos(); track video.url || video.embedUrl) {
             <swiper-slide class="w-48 sm:w-56 lg:w-64">
               <button
-                class="group relative aspect-video w-full overflow-hidden rounded-md border border-white/10 bg-vault-surface shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-vault-cyan/35"
+                class="group relative aspect-video w-full overflow-hidden rounded-md border border-vault-border bg-vault-surface transition hover:border-vault-accent/60 active:scale-[0.98]"
                 type="button"
                 (click)="openVideoViewer(video)"
               >
                 <img
-                  class="h-full w-full object-cover opacity-75 transition duration-500 group-hover:scale-105 group-hover:opacity-95"
+                  class="h-full w-full object-cover opacity-80 transition group-hover:opacity-100"
                   [src]="video.thumbnailUrl"
                   [alt]="video.name || 'Video'"
                   loading="lazy"
                 />
                 <span class="absolute inset-0 bg-black/35"></span>
                 <span
-                  class="absolute inset-0 grid place-items-center text-white"
+                  class="absolute inset-0 grid place-items-center text-vault-text"
                   aria-hidden="true"
                 >
                   <span
-                    class="grid size-9 place-items-center rounded-full bg-white/20 text-xl shadow-xl shadow-black/30 backdrop-blur"
+                    class="grid size-11 place-items-center rounded-full bg-vault-accent text-vault-bg"
                   >
-                    <fa-icon [icon]="icons.play" />
+                    <app-icon name="play" class="size-5" />
                   </span>
                 </span>
                 <span
-                  class="absolute bottom-2 left-2 right-2 line-clamp-1 text-xs font-black text-white"
+                  class="absolute bottom-2 left-2 right-2 line-clamp-1 text-left text-sm font-semibold text-vault-text"
                 >
                   {{ video.name || "Trailer" }}
                 </span>
@@ -145,54 +137,54 @@
     }
   } @else {
     <div
-      class="mt-6 rounded-lg border border-white/10 bg-white/[0.04] p-8 text-center text-sm text-vault-muted"
+      class="mt-6 rounded-lg border border-dashed border-vault-border p-8 text-center text-sm text-vault-muted"
     >
-      No hay media disponible por ahora.
+      Este juego todavía no tiene capturas ni vídeos en IGDB.
     </div>
   }
 </section>
 
 @if (selectedImage(); as image) {
   <div
-    class="fixed inset-0 z-[80] grid place-items-center bg-black/90 px-4 py-8 backdrop-blur-md"
+    class="fixed inset-0 z-[80] grid place-items-center bg-vault-bg/95 px-4 py-8"
     role="dialog"
     aria-modal="true"
     aria-label="Visor de capturas"
   >
     <button
-      class="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/10 text-xl text-white transition hover:bg-white/20"
+      class="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
       type="button"
       aria-label="Cerrar imagen"
       (click)="closeImageViewer()"
     >
-      <fa-icon [icon]="icons.close" />
+      <app-icon name="x" class="size-5" />
     </button>
 
     <button
-      class="absolute left-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-xl text-white transition hover:bg-white/20"
+      class="absolute left-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
       type="button"
       aria-label="Imagen anterior"
       (click)="showPreviousImage()"
     >
-      <fa-icon [icon]="icons.previous" />
+      <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" />
     </button>
 
     <img
-      class="max-h-[78vh] w-full max-w-6xl rounded-lg object-contain shadow-2xl shadow-black"
+      class="max-h-[78vh] w-full max-w-6xl rounded-lg object-contain"
       [src]="image"
-      [alt]="gameName() + ' screenshot ampliada'"
+      [alt]="'Captura de ' + gameName() + ' ampliada'"
     />
 
     <button
-      class="absolute right-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-xl text-white transition hover:bg-white/20"
+      class="absolute right-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
       type="button"
       aria-label="Imagen siguiente"
       (click)="showNextImage()"
     >
-      <fa-icon [icon]="icons.next" />
+      <app-icon name="chevron-right" class="size-4" [strokeWidth]="2.5" />
     </button>
 
-    <p class="absolute bottom-6 text-sm font-black text-white/80">
+    <p class="absolute bottom-6 text-sm font-semibold tabular-nums text-vault-muted">
       {{ selectedImageCounter() }}
     </p>
   </div>
@@ -200,23 +192,23 @@
 
 @if (selectedVideo(); as video) {
   <div
-    class="fixed inset-0 z-[80] grid place-items-center bg-black/90 px-4 py-8 backdrop-blur-md"
+    class="fixed inset-0 z-[80] grid place-items-center bg-vault-bg/95 px-4 py-8"
     role="dialog"
     aria-modal="true"
     aria-label="Reproductor de video"
   >
     <button
-      class="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/10 text-xl text-white transition hover:bg-white/20"
+      class="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
       type="button"
       aria-label="Cerrar video"
       (click)="closeVideoViewer()"
     >
-      <fa-icon [icon]="icons.close" />
+      <app-icon name="x" class="size-5" />
     </button>
 
     <div class="w-full max-w-5xl">
       <div
-        class="relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-black shadow-2xl shadow-black"
+        class="relative aspect-video overflow-hidden rounded-lg border border-vault-border bg-black"
       >
         @if (selectedVideoEmbedUrl(); as embedUrl) {
           <iframe
@@ -236,7 +228,7 @@
           ></iframe>
         }
       </div>
-      <p class="mt-4 text-center text-sm font-black text-white/80">
+      <p class="mt-4 text-center text-sm font-semibold tabular-nums text-vault-muted">
         {{ video.name || "Video" }}
       </p>
     </div>

@@ -1,18 +1,14 @@
-﻿using GameVault.Source.Application.Dtos.Auth;
-using GameVault.Source.Application.Dtos.User;
-using MediatR;
-using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
 
 namespace GameVault.Source.Application.Feature.Auth.Queries.Login
 {
+    /// <summary>
+    /// Renueva la sesión con un refresh token válido.
+    /// Devuelve la misma respuesta que el login, así el frontend la trata igual.
+    /// </summary>
     public sealed record LoginWithRefreshTokenQuery(
 
         string RefreshToken
 
-        ) : IRequest<Response>;
-   
-    public sealed record Response( 
-
-        string AccessToken, string RefrehToken
-     );
+        ) : IRequest<LoginResponse>;
 }

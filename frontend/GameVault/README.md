@@ -1,59 +1,29 @@
-# GameVault
+# GameVault · frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.4.
+Angular 20 + Tailwind CSS 4. Las instrucciones completas (backend, base de datos, secretos) están en el [README principal](../../README.md).
 
-## Development server
+## Comandos
+| Comando | Qué hace |
+|---|---|
+| `npm start` | Servidor de desarrollo en `http://localhost:4200` |
+| `npm run build` | Compilación de producción en `dist/` |
+| `npm test -- --watch=false` | Pruebas unitarias (Jasmine + Karma) |
 
-To start a local development server, run:
+La URL de la API está en `src/environments/environment.ts` (por defecto `https://localhost:7299/api`).
 
-```bash
-ng serve
-```
+## Organización (`src/app/gameVault/`)
+- `core/`: sesión (`AuthSessionService`), interceptores HTTP, guards y `ApiError`.
+- `shared/`: piezas reutilizables.
+  - `ui/`: botón, icono, estrellas, avatar, insignia de plataforma, cabeceras.
+  - `components/`: header, footer, tarjetas de juego.
+  - `mappers/`, `models/` y `utils/`.
+- `features/<área>/`: `models/` (tipos de la API), `services/` (HTTP), `components/` y `pages/` (una por ruta).
+- `layouts/`: layout público y layout de login y registro.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Cada página se carga solo cuando se visita (`loadComponent` en `app.routes.ts`).
 
-## Code scaffolding
+## Iconos
+- Iconos de interfaz: `<app-icon name="heart" class="size-4" />`. Todos están en `shared/ui/icon/icons.ts`.
+- Logotipos de plataformas: `<app-platform-badge family="PlayStation" />`. Usa Font Awesome y se configura en `shared/ui/platform-badge/platform-families.ts`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Todos los cambios del rediseño están explicados en [`docs/CAMBIOS.md`](docs/CAMBIOS.md).

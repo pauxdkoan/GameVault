@@ -1,84 +1,69 @@
-<div class="relative">
-  <!-- Halo detrás de la tarjeta -->
-  <div class="absolute -inset-3 -z-10 rounded-[2rem] bg-vault-gradient opacity-20 blur-2xl" aria-hidden="true"></div>
-
+<div>
   @if (loading()) {
-    <div class="aspect-[4/5] animate-pulse rounded-3xl border border-vault-border bg-vault-surface"></div>
+    <div class="aspect-[2/3] animate-pulse rounded-xl border border-vault-border bg-vault-surface"></div>
   } @else if (slides().length > 0) {
     <swiper-container
-      class="block overflow-hidden rounded-3xl border border-white/10 bg-vault-surface shadow-vault-card"
+      class="block"
       slides-per-view="1"
-      speed="650"
+      speed="500"
       effect="fade"
-      autoplay-delay="4500"
+      autoplay-delay="5000"
       autoplay-disable-on-interaction="false"
       [loop]="slides().length > 1"
       [pagination]="slides().length > 1"
-      style="--swiper-theme-color: #22d3ee; --swiper-pagination-bullet-inactive-color: #ffffff; --swiper-pagination-top: 1.1rem; --swiper-pagination-bottom: auto"
+      style="--swiper-theme-color: #c6f135; --swiper-pagination-bullet-inactive-color: #a3a9b0; --swiper-pagination-bottom: 0"
     >
       @for (slide of slides(); track slide.id) {
-        <swiper-slide>
-          <article class="group relative aspect-[4/5] overflow-hidden">
-            @if (slide.backgroundImageUrl && !hasImageFailed(slide.id)) {
-              <img
-                class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                [src]="slide.backgroundImageUrl"
-                [alt]="slide.name"
-                loading="eager"
-                (error)="markImageAsFailed(slide.id)"
-              />
-            } @else {
-              <div class="h-full w-full bg-gradient-to-br from-vault-cyan/30 via-vault-surface to-vault-violet/30"></div>
-            }
-
-            <div class="absolute inset-0 bg-gradient-to-t from-vault-bg via-vault-bg/20 to-transparent"></div>
-
-            <!-- Información en cristal -->
-            <div class="vault-glass absolute inset-x-4 bottom-4 rounded-2xl p-5">
-              <span class="mb-3 inline-block rounded-full bg-vault-gradient px-2.5 py-0.5 text-[0.7rem] font-semibold text-vault-bg">
-                Juego del momento
-              </span>
-              <div class="flex items-start justify-between gap-3">
-                <h2 class="line-clamp-2 font-display text-xl font-bold leading-tight text-vault-text">
-                  {{ slide.name }}
-                </h2>
-                @if (slide.rating) {
-                  <span class="flex shrink-0 items-center gap-1 text-sm font-semibold text-vault-success">
-                    <span aria-hidden="true">★</span> {{ slide.rating.toFixed(1) }}
-                  </span>
-                }
-              </div>
-
-              @if (slide.genres.length > 0) {
-                <div class="mt-3 flex flex-wrap gap-1.5">
-                  @for (genre of slide.genres.slice(0, 3); track genre) {
-                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-xs text-vault-muted">{{ genre }}</span>
-                  }
+        <swiper-slide class="pb-8">
+          <!-- La portada en grande y la información DEBAJO, sin taparla -->
+          <article class="group">
+            <a
+              class="relative block aspect-[2/3] overflow-hidden rounded-xl border border-vault-border bg-vault-surface transition hover:border-vault-accent"
+              [routerLink]="slide.externalId ? ['/gamevault/gamesdetails', slide.externalId] : null"
+              [attr.aria-label]="'Ver la ficha de ' + slide.name"
+            >
+              @if ((slide.coverImageUrl || slide.backgroundImageUrl) && !hasImageFailed(slide.id)) {
+                <img
+                  class="h-full w-full object-cover"
+                  [src]="slide.coverImageUrl ?? slide.backgroundImageUrl"
+                  [alt]="slide.name"
+                  loading="eager"
+                  (error)="markImageAsFailed(slide.id)"
+                />
+              } @else {
+                <div class="grid h-full place-items-center bg-vault-surface-hover">
+                  <span class="font-display text-7xl font-black uppercase text-vault-subtle">{{ slide.name.charAt(0) }}</span>
                 </div>
               }
+              <span class="absolute left-3 top-3 rounded-md bg-vault-accent px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-vault-bg">
+                Juego del momento
+              </span>
+            </a>
 
-              <div class="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
-                <span class="text-xs text-vault-subtle">{{ slide.releaseDateLabel ?? 'Fecha por confirmar' }}</span>
-                @if (slide.externalId) {
-                  <a
-                    class="inline-flex items-center gap-1 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-vault-text transition hover:border-vault-cyan/50 hover:text-vault-cyan"
-                    [routerLink]="['/gamevault/gamesdetails', slide.externalId]"
-                  >
-                    Ver detalles <span aria-hidden="true">→</span>
-                  </a>
-                }
+            <div class="mt-4 flex items-start justify-between gap-4">
+              <div class="min-w-0">
+                <h2 class="line-clamp-2 text-3xl text-vault-text">{{ slide.name }}</h2>
+                <p class="mt-1 text-sm text-vault-muted">
+                  {{ slide.genres.slice(0, 2).join(' · ') || 'Género por confirmar' }}
+                  · {{ slide.releaseDateLabel ?? 'Fecha por confirmar' }}
+                </p>
               </div>
+              @if (slide.rating) {
+                <span class="shrink-0 text-right">
+                  <span class="block font-display text-3xl font-extrabold leading-none tabular-nums text-vault-accent">
+                    {{ ratingLabel(slide.rating) }}
+                  </span>
+                  <span class="text-xs text-vault-subtle">IGDB /10</span>
+                </span>
+              }
             </div>
           </article>
         </swiper-slide>
       }
     </swiper-container>
   } @else {
-    <div class="grid aspect-[4/5] place-items-center rounded-3xl border border-vault-border bg-vault-surface p-8 text-center">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-vault-cyan">Catálogo en preparación</p>
-        <p class="mt-3 font-display text-lg font-bold text-vault-text">Pronto tendremos juegos destacados.</p>
-      </div>
+    <div class="grid aspect-[2/3] place-items-center rounded-xl border border-vault-border bg-vault-surface p-8 text-center">
+      <p class="text-lg font-semibold text-vault-text">Pronto tendremos juegos destacados.</p>
     </div>
   }
 </div>

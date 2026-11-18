@@ -1,14 +1,4 @@
 <div class="relative min-h-dvh overflow-hidden bg-vault-bg">
-  <!-- Brillos de fondo -->
-  <div
-    class="pointer-events-none absolute -left-40 -top-40 size-[32rem] rounded-full bg-vault-cyan/10 blur-3xl"
-    aria-hidden="true"
-  ></div>
-  <div
-    class="pointer-events-none absolute -bottom-40 left-1/4 size-[28rem] rounded-full bg-vault-violet/10 blur-3xl"
-    aria-hidden="true"
-  ></div>
-
   <div class="relative grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
     <!-- Columna del formulario -->
     <div class="flex flex-col px-5 py-6 sm:px-10 lg:px-14 xl:px-20">
@@ -18,7 +8,7 @@
           class="inline-flex items-center gap-1.5 text-sm font-medium text-vault-muted transition hover:text-vault-text"
           routerLink="/gamevault/home"
         >
-          <span aria-hidden="true">←</span> Volver al inicio
+          <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" /> Volver al inicio
         </a>
       </div>
 
@@ -28,7 +18,7 @@
         </div>
       </main>
 
-      <p class="text-center text-xs text-vault-subtle lg:text-left">
+      <p class="text-center text-sm text-vault-subtle lg:text-left">
         © {{ currentYear }} GameVault · Proyecto de portafolio
       </p>
     </div>

@@ -1,0 +1,17 @@
+<section class="vault-card p-5">
+  <h2 class="text-2xl text-vault-text">Dónde jugar</h2>
+  @if (platformBadges().length > 0) {
+    <div class="mt-4 flex flex-wrap gap-2">
+      @for (badge of platformBadges(); track badge.family) {
+        <app-platform-badge [family]="badge.family" [title]="badge.title" size="lg" />
+      }
+    </div>
+  } @else {
+    <p class="mt-3 text-sm text-vault-muted">
+      Plataformas por confirmar.
+    </p>
+  }
+
+  <!-- Enlaces a tiendas y webs ocultos hasta revisar los datos en el backend.
+       Para volver a mostrarlos, copia de nuevo el bloque que aparece en docs/CAMBIOS.md (sección "Ajustes del 17 de noviembre"). -->
+</section>

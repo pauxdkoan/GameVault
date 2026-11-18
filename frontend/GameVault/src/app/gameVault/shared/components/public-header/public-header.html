@@ -11,14 +11,14 @@
       aria-label="Navegación principal"
     >
       <a
-        class="rounded-lg px-3 py-2 text-vault-muted transition hover:bg-white/5 hover:text-vault-text"
+        class="rounded-md px-3 py-2 text-vault-muted transition hover:bg-vault-surface-hover hover:text-vault-text"
         routerLink="/gamevault/home"
         >Inicio</a
       >
 
       <div class="relative">
         <button
-          class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-vault-muted transition hover:bg-white/5 hover:text-vault-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-cyan cursor-pointer"
+          class="flex items-center gap-1.5 rounded-md px-3 py-2 text-vault-muted transition hover:bg-vault-surface-hover hover:text-vault-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent cursor-pointer"
           type="button"
           [attr.aria-controls]="exploreMenuId"
           [attr.aria-expanded]="isExploreOpen()"
@@ -26,29 +26,23 @@
           (click)="toggleExploreMenu()"
         >
           Explorar
-          <svg
+          <app-icon
+            name="chevron-down"
             class="size-3.5 transition"
-            [ngClass]="isExploreOpen() ? 'rotate-180' : ''"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            aria-hidden="true"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
+            [class.rotate-180]="isExploreOpen()"
+            [strokeWidth]="2.5"
+          />
         </button>
 
         @if (isExploreOpen()) {
           <div
-            class="vault-card absolute left-0 top-12 w-80 p-2"
+            class="vault-popover absolute left-0 top-12 w-80 rounded-xl p-2"
             [id]="exploreMenuId"
             role="menu"
           >
             @for (item of exploreItems; track item.label) {
               <a
-                class="block rounded-xl px-3 py-3 outline-none transition hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-vault-cyan"
+                class="block rounded-md px-3 py-3 outline-none transition hover:bg-vault-surface-hover focus-visible:ring-2 focus-visible:ring-vault-accent"
                 [routerLink]="[item.route]"
                 [fragment]="item.fragment"
                 role="menuitem"
@@ -64,7 +58,7 @@
 
       @for (item of navItems; track item.label) {
         <a
-          class="rounded-lg px-3 py-2 text-vault-muted transition hover:bg-white/5 hover:text-vault-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-cyan"
+          class="rounded-md px-3 py-2 text-vault-muted transition hover:bg-vault-surface-hover hover:text-vault-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent"
           [routerLink]="[item.route]"
           [fragment]="item.fragment"
           (click)="closeExploreMenu()"
@@ -78,12 +72,9 @@
     <div class="hidden items-center gap-2 md:flex">
       <!-- Buscador visual: se activará cuando exista la búsqueda global -->
       <label
-        class="hidden h-9 w-52 items-center gap-2 rounded-xl border border-vault-border bg-vault-surface/60 px-3 text-xs text-vault-subtle lg:flex"
+        class="hidden h-9 w-52 items-center gap-2 rounded-md border border-vault-border bg-vault-surface px-3 text-sm text-vault-subtle lg:flex"
       >
-        <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
+        <app-icon name="search" class="size-4 shrink-0" />
         <input
           class="w-full bg-transparent text-vault-text outline-none placeholder:text-vault-subtle disabled:cursor-not-allowed"
           type="search"
@@ -92,13 +83,65 @@
           disabled
         />
       </label>
-      <a vaultButton variant="ghost" size="sm" routerLink="/auth/login">Iniciar sesión</a>
-      <a vaultButton size="sm" routerLink="/auth/register">Crear cuenta</a>
+      @if (session.isLoggedIn()) {
+        <!-- Menú de usuario -->
+        <div class="relative">
+          <button
+            class="flex items-center gap-2 rounded-md border border-vault-border bg-vault-surface py-1 pl-1 pr-3 text-sm text-vault-text transition hover:border-vault-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent cursor-pointer"
+            type="button"
+            aria-haspopup="menu"
+            [attr.aria-controls]="userMenuId"
+            [attr.aria-expanded]="isUserMenuOpen()"
+            (click)="toggleUserMenu()"
+          >
+            <span class="grid size-8 shrink-0 place-items-center overflow-hidden rounded-full bg-vault-accent text-xs font-bold text-vault-bg" aria-hidden="true">
+          @if (session.user()?.avatarUrl; as avatar) {
+            <img class="h-full w-full object-cover" [src]="avatar" alt="" />
+          } @else {
+            {{ session.initials() }}
+          }
+        </span>
+            <span class="max-w-32 truncate font-medium">{{ session.user()?.displayName || session.user()?.userName }}</span>
+          </button>
+
+          @if (isUserMenuOpen()) {
+            <div class="vault-popover absolute right-0 top-12 w-60 rounded-xl p-2" [id]="userMenuId" role="menu">
+              <div class="border-b border-vault-border px-3 pb-3 pt-1">
+                <p class="truncate text-sm font-semibold text-vault-text">{{ session.user()?.displayName }}</p>
+                <p class="truncate text-xs text-vault-muted">{{ session.user()?.email }}</p>
+              </div>
+              <div class="py-1">
+                @for (item of userMenuItems(); track item.label) {
+                  <a
+                    class="block rounded-md px-3 py-2 text-sm text-vault-muted transition hover:bg-vault-surface-hover hover:text-vault-text"
+                    role="menuitem"
+                    [routerLink]="item.route"
+                    (click)="closeHeaderMenus()"
+                  >
+                    {{ item.label }}
+                  </a>
+                }
+              </div>
+              <button
+                class="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-vault-danger transition hover:bg-vault-danger/10 cursor-pointer"
+                type="button"
+                role="menuitem"
+                (click)="logout()"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a vaultButton variant="ghost" size="sm" routerLink="/auth/login">Iniciar sesión</a>
+        <a vaultButton size="sm" routerLink="/auth/register">Crear cuenta</a>
+      }
     </div>
 
     <!-- Botón hamburguesa (móvil) -->
     <button
-      class="grid size-10 place-items-center rounded-xl border border-vault-border bg-vault-surface text-vault-text transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-cyan md:hidden cursor-pointer"
+      class="grid size-10 place-items-center rounded-md border border-vault-border bg-vault-surface text-vault-text transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent md:hidden cursor-pointer"
       type="button"
       [attr.aria-label]="isMenuOpen() ? 'Cerrar menú' : 'Abrir menú'"
       [attr.aria-controls]="mobileMenuId"
@@ -116,14 +159,14 @@
   <!-- Menú móvil -->
   @if (isMenuOpen()) {
     <div
-      class="border-t border-vault-border bg-vault-bg/95 px-4 py-4 shadow-2xl shadow-black/60 backdrop-blur-xl md:hidden"
+      class="border-t border-vault-border bg-vault-bg px-4 py-4 md:hidden"
       [id]="mobileMenuId"
     >
       <nav class="grid gap-1 text-sm" aria-label="Navegación móvil">
-        <a class="rounded-xl px-4 py-3 font-medium text-vault-text hover:bg-white/5" routerLink="/gamevault/home" (click)="closeHeaderMenus()">Inicio</a>
+        <a class="rounded-md px-4 py-3 font-medium text-vault-text hover:bg-vault-surface-hover" routerLink="/gamevault/home" (click)="closeHeaderMenus()">Inicio</a>
         @for (item of navItems; track item.label) {
           <a
-            class="rounded-xl px-4 py-3 font-medium text-vault-text hover:bg-white/5"
+            class="rounded-md px-4 py-3 font-medium text-vault-text hover:bg-vault-surface-hover"
             [routerLink]="[item.route]"
             [fragment]="item.fragment"
             (click)="closeHeaderMenus()"
@@ -135,7 +178,7 @@
         <p class="mt-3 px-4 text-xs font-semibold uppercase tracking-wider text-vault-subtle">Explorar</p>
         @for (item of exploreItems; track item.label) {
           <a
-            class="rounded-xl px-4 py-2.5 hover:bg-white/5"
+            class="rounded-md px-4 py-2.5 hover:bg-vault-surface-hover"
             [routerLink]="[item.route]"
             [fragment]="item.fragment"
             (click)="closeHeaderMenus()"
@@ -146,10 +189,34 @@
         }
       </nav>
 
-      <div class="mt-4 grid grid-cols-2 gap-3">
-        <a vaultButton variant="secondary" routerLink="/auth/login" (click)="closeHeaderMenus()">Iniciar sesión</a>
-        <a vaultButton routerLink="/auth/register" (click)="closeHeaderMenus()">Crear cuenta</a>
-      </div>
+      @if (session.isLoggedIn()) {
+        <div class="mt-4 flex items-center justify-between gap-3 rounded-lg border border-vault-border bg-vault-surface p-3">
+          <div class="flex min-w-0 items-center gap-3">
+            <span class="grid size-8 shrink-0 place-items-center overflow-hidden rounded-full bg-vault-accent text-xs font-bold text-vault-bg" aria-hidden="true">
+          @if (session.user()?.avatarUrl; as avatar) {
+            <img class="h-full w-full object-cover" [src]="avatar" alt="" />
+          } @else {
+            {{ session.initials() }}
+          }
+        </span>
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-vault-text">{{ session.user()?.displayName }}</p>
+              <p class="truncate text-xs text-vault-muted">{{ session.user()?.email }}</p>
+            </div>
+          </div>
+          <button class="shrink-0 text-sm font-medium text-vault-danger cursor-pointer" type="button" (click)="logout()">Salir</button>
+        </div>
+        <nav class="mt-2 grid grid-cols-2 gap-1 text-sm" aria-label="Mi cuenta">
+          @for (item of userMenuItems(); track item.label) {
+            <a class="rounded-md px-4 py-2.5 font-medium text-vault-text hover:bg-vault-surface-hover" [routerLink]="item.route" (click)="closeHeaderMenus()">{{ item.label }}</a>
+          }
+        </nav>
+      } @else {
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <a vaultButton variant="secondary" routerLink="/auth/login" (click)="closeHeaderMenus()">Iniciar sesión</a>
+          <a vaultButton routerLink="/auth/register" (click)="closeHeaderMenus()">Crear cuenta</a>
+        </div>
+      }
     </div>
   }
 </header>

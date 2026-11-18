@@ -39,16 +39,6 @@ namespace GameVault.Source.Application.Feature.Auth.Queries.Login
 
         public async Task<LoginResponse> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
-            var users = await _userManager.Users.Select(u => new
-            {
-                u.Id,
-                u.Email,
-                u.NormalizedEmail,
-                u.UserName,
-                u.NormalizedUserName
-            }).ToListAsync();
-
-
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user is null)
             {
@@ -68,10 +58,12 @@ namespace GameVault.Source.Application.Feature.Auth.Queries.Login
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = _jwtTokenGenerator.GenerateToken(user, roles);
+            // Al cliente se le entrega el token en claro; en la base de datos solo su hash.
+            var plainRefreshToken = _jwtTokenGenerator.GenerateRefreshToken();
             var refreshToken = new RefreshToken
             {
                 Id = Guid.NewGuid(),
-                TokenHash = _jwtTokenGenerator.GenerateRefreshToken(),
+                TokenHash = _jwtTokenGenerator.HashToken(plainRefreshToken),
                 UserId = user.Id,
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays),
@@ -79,13 +71,13 @@ namespace GameVault.Source.Application.Feature.Auth.Queries.Login
                 
             };
 
-             _context.RefreshTokens.Add(refreshToken);
-            await _context.SaveChangesAsync();
+            _context.RefreshTokens.Add(refreshToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             return new LoginResponse
             (
               token,
-              refreshToken.TokenHash,
+              plainRefreshToken,
               DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
               _mapper.Map<UserDto>(user)
 

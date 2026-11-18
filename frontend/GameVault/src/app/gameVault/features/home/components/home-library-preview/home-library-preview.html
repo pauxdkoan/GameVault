@@ -1,77 +1,59 @@
 <section id="library" class="scroll-mt-24">
-  <div class="grid items-center gap-12 lg:grid-cols-2">
+  <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
     <!-- Texto -->
-    <div>
-      <h2 class="font-display text-3xl font-bold text-vault-text sm:text-4xl">
-        Tu biblioteca. <span class="text-vault-gradient">Tus reglas.</span>
-      </h2>
-      <p class="mt-4 max-w-lg leading-7 text-vault-muted">
-        Organiza todos tus juegos y mantén el control de lo que quieres jugar,
-        lo que estás jugando y lo que ya completaste.
+    <div class="min-w-0">
+      <h2 class="text-4xl text-vault-text sm:text-5xl">Cada juego, en su estante</h2>
+      <p class="mt-4 max-w-lg text-lg leading-8 text-vault-muted">
+        Marca cada juego con un estado, apunta las horas y el progreso, y ponle tu nota cuando lo termines.
       </p>
 
-      <ul class="mt-6 grid max-w-lg gap-3 sm:grid-cols-2">
-        @for (benefit of benefits; track benefit) {
-          <li class="flex items-center gap-2.5 text-sm text-vault-text">
-            <span class="grid size-5 place-items-center rounded-full bg-vault-cyan/15 text-vault-cyan" aria-hidden="true">
-              <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10" /></svg>
-            </span>
-            {{ benefit }}
+      <ul class="mt-6 flex max-w-lg flex-wrap gap-2" aria-label="Estados disponibles">
+        @for (status of statuses; track status.value) {
+          <li class="inline-flex items-center gap-2 rounded-md border border-vault-border px-2.5 py-1 text-sm text-vault-text">
+            <span class="size-2 rounded-full" [class]="status.dotClass" aria-hidden="true"></span>
+            {{ status.label }}
           </li>
         }
       </ul>
 
-      <a vaultButton class="mt-8" routerLink="/auth/register">
-        Crear mi biblioteca gratis <span aria-hidden="true">→</span>
-      </a>
+      @if (session.isLoggedIn()) {
+        <a vaultButton class="mt-8" routerLink="/gamevault/library">
+          Ir a mi biblioteca <span aria-hidden="true">→</span>
+        </a>
+      } @else {
+        <a vaultButton class="mt-8" routerLink="/auth/register">
+          Crear mi biblioteca <span aria-hidden="true">→</span>
+        </a>
+      }
     </div>
 
-    <!-- Maqueta de la biblioteca -->
-    <div class="relative">
-      <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-vault-cyan/10 blur-3xl" aria-hidden="true"></div>
-
-      <div class="vault-card border-vault-cyan/20 p-5" aria-label="Vista previa de la biblioteca" role="img">
-        <div class="flex items-center gap-3">
-          <div class="flex h-10 flex-1 items-center gap-2 rounded-xl border border-vault-border bg-vault-bg-soft px-3 text-sm text-vault-subtle">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.35-4.35" /></svg>
-            Buscar en mi biblioteca
-          </div>
-          <div class="flex h-10 items-center rounded-xl border border-vault-border px-3 text-sm text-vault-muted">Filtros</div>
-        </div>
-
-        <div class="mt-4 flex gap-2 overflow-x-auto">
-          @for (tab of tabs; track tab) {
-            <span
-              class="shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium"
-              [class]="tab === 'Jugando' ? 'bg-vault-cyan/15 text-vault-cyan' : 'text-vault-muted'"
-            >{{ tab }}</span>
-          }
-        </div>
-
-        <ul class="mt-4 flex flex-col gap-3">
-          @for (item of items(); track item.id) {
-            <li class="flex items-center gap-4 rounded-xl border border-vault-border bg-vault-bg-soft p-3">
+    <!-- Ejemplo: tres portadas reales con un estado de ejemplo encima -->
+    <figure class="min-w-0">
+      <ul class="grid grid-cols-3 gap-3 sm:gap-4">
+        @for (item of items(); track item.id) {
+          <li class="min-w-0">
+            <div class="relative aspect-[2/3] overflow-hidden rounded-lg border border-vault-border bg-vault-surface">
               @if (item.cover) {
-                <img class="h-14 w-11 shrink-0 rounded-lg object-cover" [src]="item.cover" [alt]="item.name" loading="lazy" />
+                <img class="h-full w-full object-cover" [src]="item.cover" [alt]="item.name" loading="lazy" />
               } @else {
-                <div class="h-14 w-11 shrink-0 rounded-lg bg-gradient-to-br from-vault-cyan/30 to-vault-violet/30"></div>
+                <div class="grid h-full place-items-center bg-vault-surface-hover">
+                  <span class="font-display text-4xl font-black uppercase text-vault-subtle">{{ item.name.charAt(0) }}</span>
+                </div>
               }
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center justify-between gap-3">
-                  <p class="truncate text-sm font-semibold text-vault-text">{{ item.name }}</p>
-                  @if (item.rating > 0) {
-                    <span class="shrink-0 text-xs font-semibold text-vault-success">★ {{ item.rating.toFixed(1) }}</span>
-                  }
-                </div>
-                <p class="text-xs text-vault-muted">{{ item.label }}</p>
-                <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/5">
-                  <div class="h-full rounded-full" [class]="item.bar" [style.width.%]="item.progress"></div>
-                </div>
+              <!-- Barra de progreso pegada al borde inferior de la portada -->
+              <div class="absolute inset-x-0 bottom-0 h-1.5 bg-vault-bg/80">
+                <div class="h-full bg-vault-accent" [style.width.%]="item.progress"></div>
               </div>
-            </li>
-          }
-        </ul>
-      </div>
-    </div>
+            </div>
+            <p class="mt-2 truncate text-sm font-semibold text-vault-text">{{ item.name }}</p>
+            <p class="flex items-center gap-1.5 text-sm text-vault-muted">
+              <span class="size-2 shrink-0 rounded-full" [class]="item.dotClass" aria-hidden="true"></span>
+              {{ item.label }} · <span class="tabular-nums">{{ item.progress }} %</span>
+            </p>
+          </li>
+        }
+      </ul>
+      <figcaption class="mt-4 text-sm text-vault-subtle">Ejemplo con juegos en tendencia. Tu biblioteca empieza vacía.</figcaption>
+    </figure>
   </div>
 </section>

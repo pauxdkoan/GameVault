@@ -1,37 +1,34 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { GameCard } from '../../../../shared/models/game-card.model';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { VaultButton } from '../../../../shared/ui/button/vault-button';
 import { SectionHeader } from '../../../../shared/ui/section-header/section-header';
-import { PLAYER_LISTS } from '../../data/home-sample-data';
-
-/** Cuántas portadas se muestran apiladas en cada lista. */
-const COVERS_PER_LIST = 3;
+import { ListCard } from '../../../lists/components/list-card/list-card';
+import { GameListSummary } from '../../../lists/models/list.models';
+import { ListsService } from '../../../lists/services/lists.service';
 
 /**
- * "Listas creadas por jugadores".
- * Los títulos son de ejemplo; las portadas salen de juegos reales
- * para que la sección tenga vida mientras no exista el backend de listas.
+ * "Listas creadas por jugadores": las últimas listas públicas con juegos (GET /api/lists).
+ * Reutiliza la misma tarjeta que "Mis listas" y el perfil.
  */
 @Component({
   selector: 'app-home-player-lists',
-  imports: [SectionHeader],
+  imports: [SectionHeader, ListCard, RouterLink, VaultButton],
   templateUrl: './home-player-lists.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomePlayerLists {
-  /** Juegos de donde sacar portadas. */
-  readonly games = input<GameCard[]>([]);
+export class HomePlayerLists implements OnInit {
+  private readonly listsService = inject(ListsService);
 
-  protected readonly lists = computed(() => {
-    const covers = this.games()
-      .map((game) => game.coverImageUrl)
-      .filter((cover): cover is string => !!cover);
+  protected readonly lists = signal<GameListSummary[]>([]);
+  protected readonly status = signal<'loading' | 'ready' | 'error'>('loading');
 
-    return PLAYER_LISTS.map((list, listIndex) => ({
-      ...list,
-      // Cada lista toma 3 portadas distintas: 0-2, 3-5, 6-8...
-      covers: Array.from({ length: COVERS_PER_LIST }, (_, i) =>
-        covers.length > 0 ? covers[(listIndex * COVERS_PER_LIST + i) % covers.length] : null,
-      ),
-    }));
-  });
+  ngOnInit(): void {
+    this.listsService.getPublicLists(1, 6).subscribe({
+      next: (page) => {
+        this.lists.set(page.items);
+        this.status.set('ready');
+      },
+      error: () => this.status.set('error'),
+    });
+  }
 }

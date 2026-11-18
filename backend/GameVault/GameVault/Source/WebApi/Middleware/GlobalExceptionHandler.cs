@@ -55,6 +55,10 @@ public sealed class GlobalExceptionHandler(
                 }
         };
 
+        // Datos comunes a todos los errores: qué ruta falló y un id para buscarlo en los logs.
+        problemDetails.Instance = httpContext.Request.Path;
+        problemDetails.Extensions["traceId"] = httpContext.TraceIdentifier;
+
         httpContext.Response.StatusCode =
             problemDetails.Status
             ?? StatusCodes.Status500InternalServerError;

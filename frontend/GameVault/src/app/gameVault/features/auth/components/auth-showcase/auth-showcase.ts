@@ -40,11 +40,6 @@ export class AuthShowcase implements OnInit {
   /** Bloques de relleno cuando no hay portadas (6 por columna). */
   protected readonly placeholders = Array.from({ length: 6 }, (_, i) => i);
 
-  protected readonly highlights = [
-    'Descubre miles de juegos',
-    'Organiza tu biblioteca',
-    'Comparte reseñas con la comunidad',
-  ];
 
   ngOnInit(): void {
     this.gameService.getGames({ page: 1, pageSize: COVERS_TO_LOAD }).subscribe({

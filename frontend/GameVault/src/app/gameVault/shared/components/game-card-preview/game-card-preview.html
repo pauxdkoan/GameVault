@@ -1,5 +1,5 @@
 <div
-  class="overflow-hidden rounded-lg border border-vault-cyan/30 bg-vault-surface shadow-2xl shadow-black/60"
+  class="vault-popover overflow-hidden rounded-xl"
 >
   <div class="relative aspect-video overflow-hidden bg-black">
     @if (hasPreviewMedia() && !previewImageFailed()) {
@@ -11,7 +11,7 @@
         [pagination]="previewSlideCount() > 1"
         [navigation]="previewSlideCount() > 1"
         style="
-          --swiper-theme-color: #67e8f9;
+          --swiper-theme-color: #c6f135;
           --swiper-navigation-size: 1rem;
           --swiper-pagination-bullet-size: 0.42rem;
         "
@@ -41,28 +41,26 @@
         }
       </swiper-container>
     } @else {
-      <div class="grid h-full place-items-center bg-white/[0.03]">
-        <span class="text-5xl font-black text-vault-muted">
+      <div class="grid h-full place-items-center bg-vault-surface-hover">
+        <span class="font-display text-5xl font-black uppercase text-vault-subtle">
           {{ game().name.charAt(0) }}
         </span>
       </div>
     }
 
-    <div
-      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-vault-surface via-vault-surface/10 to-transparent"
-    ></div>
+    
   </div>
 
   <div class="space-y-3 p-3">
     <div class="flex items-start gap-3">
       <div
-        class="grid shrink-0 place-items-center rounded-full border-4 border-emerald-300 bg-emerald-300/10 text-center shadow-lg shadow-emerald-950/35"
+        class="grid shrink-0 place-items-center rounded-md border border-vault-border-strong bg-vault-bg text-center"
         [class.size-11]="isCompact()"
         [class.size-12]="!isCompact()"
-        aria-label="Rating"
+        [attr.aria-label]="'Nota IGDB ' + ratingLabel() + ' sobre 10'"
       >
         <span
-          class="font-black leading-none text-emerald-200"
+          class="font-display font-extrabold leading-none tabular-nums text-vault-accent"
           [class.text-xs]="isCompact()"
           [class.text-sm]="!isCompact()"
         >
@@ -72,7 +70,7 @@
 
       <div class="min-w-0 flex-1">
         <h4
-          class="line-clamp-2 font-black leading-snug text-white"
+          class="line-clamp-2 font-bold leading-snug text-vault-text"
           [class.text-sm]="isCompact()"
           [class.text-base]="!isCompact()"
         >
@@ -82,7 +80,7 @@
         <div class="mt-2 flex flex-wrap gap-2">
           @for (genre of genreBadges(); track genre) {
             <span
-              class="max-w-28 truncate rounded-md bg-white/10 px-2 py-1 text-[0.68rem] font-semibold text-vault-muted"
+              class="max-w-28 truncate rounded-md border border-vault-border px-2 py-0.5 text-xs font-semibold text-vault-muted"
               [title]="genre"
             >
               {{ genre }}
@@ -93,7 +91,7 @@
     </div>
 
     <p
-      class="line-clamp-3 text-xs italic text-vault-muted"
+      class="line-clamp-3 text-sm text-vault-muted"
       [class.leading-5]="isCompact()"
       [class.leading-5]="!isCompact()"
     >
@@ -101,23 +99,18 @@
     </p>
 
     <div
-      class="flex items-center justify-between gap-3 border-t border-white/10 pt-3"
+      class="flex items-center justify-between gap-3 border-t border-vault-border pt-3"
     >
       <div class="flex min-w-0 items-center gap-2">
-        @for (platform of platformBadges(); track platform.key) {
-          <span
-            class="grid size-8 shrink-0 place-items-center rounded-md border text-[0.6rem] font-black leading-none shadow-lg shadow-black/20"
-            [ngClass]="platform.toneClass"
-            [title]="platform.title"
-            [attr.aria-label]="platform.label"
-          >
-            <fa-icon [icon]="platform.icon" [fixedWidth]="true" size="lg" />
-          </span>
+        @for (family of platformBadges(); track family) {
+          <app-platform-badge [family]="family" />
+        } @empty {
+          <span class="text-xs text-vault-subtle">Plataforma por confirmar</span>
         }
 
         @if (extraPlatformCount() > 0) {
           <span
-            class="grid size-8 shrink-0 place-items-center rounded-md border border-white/10 bg-white/[0.06] text-[0.65rem] font-black text-vault-muted"
+            class="grid size-8 shrink-0 place-items-center rounded-md border border-vault-border text-xs font-bold text-vault-muted"
             [title]="'+' + extraPlatformCount() + ' plataformas'"
           >
             +{{ extraPlatformCount() }}
@@ -126,12 +119,12 @@
       </div>
 
       <a
-        class="inline-flex shrink-0 items-center justify-center gap-1 text-xs font-black text-vault-cyan-soft transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-cyan"
+        class="inline-flex shrink-0 items-center justify-center gap-1 rounded-md text-sm font-bold text-vault-accent transition hover:text-vault-accent-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent"
         [routerLink]="['/gamevault/gamesdetails', game().id]"
         [attr.aria-label]="'Ver detalles de ' + game().name"
       >
-        <small>Detalles</small>
-        <span aria-hidden="true">-&gt;</span>
+        Detalles
+        <span aria-hidden="true">→</span>
       </a>
     </div>
   </div>

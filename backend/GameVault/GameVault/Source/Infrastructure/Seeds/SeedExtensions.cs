@@ -15,8 +15,9 @@ namespace FixFlowApp.Source.Infrastructure.Seeds
             {
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+                var configuration = services.GetRequiredService<IConfiguration>();
 
-                await IdentitySeeder.SeedAsync(userManager, roleManager);
+                await IdentitySeeder.SeedAsync(userManager, roleManager, configuration);
             }
             catch (Exception)
             {

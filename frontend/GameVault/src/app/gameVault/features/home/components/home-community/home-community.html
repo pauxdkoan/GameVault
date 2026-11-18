@@ -1,43 +1,84 @@
 <section id="community" class="scroll-mt-24">
   <app-section-header
-    title="Descubre lo que juega la comunidad"
-    subtitle="Actividad reciente, reseñas y listas creadas por otros jugadores."
+    title="Lo último de la comunidad"
+    subtitle="Reseñas y listas nuevas de otros jugadores."
   />
 
-  <div class="mt-8 grid gap-4 md:grid-cols-2">
-    @for (activity of activities; track activity.id; let index = $index) {
-      <article class="vault-card p-5 transition hover:border-vault-cyan/30">
-        <div class="flex items-center gap-3">
-          <span class="grid size-10 shrink-0 place-items-center rounded-full text-sm font-bold" [class]="avatarClasses(index)" aria-hidden="true">
-            {{ activity.initials }}
-          </span>
-          <div class="min-w-0">
-            <p class="text-sm text-vault-muted">
-              <span class="font-semibold text-vault-text">{{ activity.userName }}</span>
-              {{ activity.action }}
-              <span class="font-semibold text-vault-cyan">{{ activity.target }}</span>
-            </p>
-            <p class="text-xs text-vault-subtle">{{ activity.timeAgo }}</p>
+  @if (status() === 'loading') {
+    <div class="mt-8 flex max-w-3xl flex-col gap-3" aria-hidden="true">
+      @for (placeholder of [1, 2, 3]; track placeholder) {
+        <div class="h-28 animate-pulse rounded-lg bg-vault-surface"></div>
+      }
+    </div>
+  } @else if (status() === 'error') {
+    <p class="mt-8 rounded-xl border border-vault-border px-5 py-8 text-center text-sm text-vault-subtle">
+      No pude cargar la actividad de la comunidad ahora mismo.
+    </p>
+  } @else {
+    <!-- Línea de tiempo: una columna, portada a la izquierda, separadores en vez de tarjetas -->
+    <ol class="mt-8 max-w-3xl border-t border-vault-border">
+      @for (activity of activities(); track $index) {
+        <li class="flex gap-4 border-b border-vault-border py-5">
+          @if (activity.type === 'Review' && activity.gameCoverImage && activity.gameExternalId) {
+            <a class="block h-20 w-14 shrink-0 overflow-hidden rounded-md border border-vault-border bg-vault-surface sm:h-24 sm:w-16" [routerLink]="['/gamevault/gamesdetails', activity.gameExternalId]">
+              <img class="h-full w-full object-cover" [src]="activity.gameCoverImage" [alt]="activity.gameName" loading="lazy" />
+            </a>
+          } @else {
+            <span class="grid h-20 w-14 shrink-0 place-items-center rounded-md border border-vault-border bg-vault-surface text-vault-subtle sm:h-24 sm:w-16" aria-hidden="true">
+              <app-icon [name]="activity.type === 'ListCreated' ? 'list-plus' : 'gamepad'" class="size-6" />
+            </span>
+          }
+
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-3">
+              <a [routerLink]="['/gamevault/u', activity.user.userName]" [attr.aria-label]="activity.user.displayName">
+                <app-user-avatar [name]="activity.user.displayName" [avatarUrl]="activity.user.avatarUrl" [size]="32" />
+              </a>
+              <div class="min-w-0">
+                <p class="text-vault-muted">
+                  <a class="font-semibold text-vault-text hover:text-vault-accent" [routerLink]="['/gamevault/u', activity.user.userName]">{{ activity.user.displayName }}</a>
+                  {{ actionLabel(activity) }}
+                  @if (activity.type === 'ListCreated') {
+                    <a class="font-semibold text-vault-accent hover:text-vault-accent-soft" [routerLink]="['/gamevault/lists', activity.listId]">{{ activity.listName }}</a>
+                  } @else {
+                    <a class="font-semibold text-vault-accent hover:text-vault-accent-soft" [routerLink]="['/gamevault/gamesdetails', activity.gameExternalId]">{{ activity.gameName }}</a>
+                  }
+                </p>
+                <p class="text-sm text-vault-subtle">{{ timeAgo(activity.occurredAt) }}</p>
+              </div>
+            </div>
+
+            @if (activity.type === 'Review') {
+              @if (activity.rating) {
+                <div class="mt-3"><app-rating-stars [value]="activity.rating" [size]="14" /></div>
+              }
+              @if (activity.excerpt) {
+                <p class="mt-2 leading-7 text-vault-text">“{{ activity.excerpt }}”</p>
+              }
+              <div class="mt-3 flex items-center gap-5 text-sm text-vault-subtle">
+                <span class="flex items-center gap-1.5">
+                  <app-icon name="heart" class="size-4" />
+                  <span class="tabular-nums">{{ activity.likeCount ?? 0 }}</span>
+                  <span class="sr-only">me gusta</span>
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <app-icon name="comment" class="size-4" />
+                  <span class="tabular-nums">{{ activity.commentCount ?? 0 }}</span>
+                  <span class="sr-only">comentarios</span>
+                </span>
+              </div>
+            } @else if (activity.type === 'ListCreated') {
+              <p class="mt-2 text-sm text-vault-muted">{{ activity.listGameCount ?? 0 }} juegos en la lista</p>
+            }
           </div>
-        </div>
-
-        @if (activity.quote) {
-          <blockquote class="mt-4 border-l-2 border-vault-violet/50 pl-4 text-sm italic leading-6 text-vault-muted">
-            “{{ activity.quote }}”
-          </blockquote>
-        }
-
-        <div class="mt-4 flex items-center gap-5 text-xs text-vault-subtle">
-          <span class="flex items-center gap-1.5">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-            {{ activity.likes }}
-          </span>
-          <span class="flex items-center gap-1.5">
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12Z" /></svg>
-            {{ activity.comments }}
-          </span>
-        </div>
-      </article>
-    }
-  </div>
+        </li>
+      } @empty {
+        <li class="border-b border-vault-border px-2 py-12 text-center">
+          <p class="text-lg font-semibold text-vault-text">Aquí aparecerá la actividad de la comunidad</p>
+          <p class="mt-2 text-sm text-vault-muted">Escribe la primera reseña o completa un juego de tu biblioteca.</p>
+          <a class="mt-5" vaultButton variant="secondary" routerLink="/gamevault/games">Buscar un juego</a>
+        </li>
+      }
+    </ol>
+  }
 </section>

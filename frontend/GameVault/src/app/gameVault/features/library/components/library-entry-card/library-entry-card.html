@@ -1,0 +1,90 @@
+@let item = entry();
+<article class="vault-card flex gap-4 p-4">
+  <a class="block aspect-[2/3] w-24 shrink-0 self-start overflow-hidden rounded-md border border-vault-border bg-vault-surface-hover transition hover:border-vault-accent" [routerLink]="['/gamevault/gamesdetails', item.game.externalId]">
+    <!-- Si la portada falla se muestra la inicial, nunca el texto alternativo suelto -->
+    @if (item.game.coverImage && !coverFailed()) {
+      <img class="h-full w-full object-cover" [src]="item.game.coverImage" [alt]="item.game.name" loading="lazy" (error)="coverFailed.set(true)" />
+    } @else {
+      <span class="grid h-full place-items-center font-display text-3xl font-black uppercase text-vault-subtle">{{ item.game.name.charAt(0) }}</span>
+    }
+  </a>
+
+  <div class="min-w-0 flex-1">
+    <a class="line-clamp-2 text-lg font-semibold leading-snug text-vault-text hover:text-vault-accent" [routerLink]="['/gamevault/gamesdetails', item.game.externalId]">
+      {{ item.game.name }}
+    </a>
+
+    @if (!isEditing()) {
+      <p class="mt-1.5 flex items-center gap-2 text-sm text-vault-muted">
+        <span class="size-2 rounded-full" [class]="statusDotClass(item.status)" aria-hidden="true"></span>
+        {{ statusLabel(item.status) }}
+        @if (item.hoursPlayed) {
+          <span class="tabular-nums text-vault-subtle">· {{ item.hoursPlayed }} h</span>
+        }
+      </p>
+
+      <div class="mt-3">
+        <div class="flex justify-between text-sm text-vault-subtle">
+          <span>Progreso</span>
+          <span class="tabular-nums">{{ item.progressPercentage }} %</span>
+        </div>
+        <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-vault-bg-soft" role="progressbar" [attr.aria-valuenow]="item.progressPercentage" aria-valuemin="0" aria-valuemax="100">
+          <div class="h-full rounded-full bg-vault-accent" [style.width.%]="item.progressPercentage"></div>
+        </div>
+      </div>
+
+      <div class="mt-3 flex items-center justify-between gap-2">
+        @if (item.personalRating) {
+          <app-rating-stars [value]="item.personalRating" [size]="14" />
+        } @else {
+          <span class="text-sm text-vault-subtle">Sin nota</span>
+        }
+        <button class="h-9 rounded-md border border-vault-border-strong px-3 text-sm font-semibold text-vault-text transition hover:border-vault-accent/60 active:scale-[0.98] cursor-pointer" type="button" (click)="startEdit()">Editar</button>
+      </div>
+    } @else {
+      <div class="mt-3 space-y-3 text-sm">
+        <label class="block">
+          <span class="text-sm text-vault-muted">Estado</span>
+          <select class="vault-input mt-1 !py-2" [value]="status()" (change)="status.set($any($event.target).value)">
+            @for (option of statuses; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+
+        @if (status() !== 'Completed') {
+          <label class="block">
+            <span class="flex justify-between text-sm text-vault-muted">Progreso <span>{{ progress() }} %</span></span>
+            <input class="mt-1 w-full accent-vault-accent" type="range" min="0" max="100" step="5" [value]="progress()" (input)="progress.set(numberValue($event) ?? 0)" />
+          </label>
+        }
+
+        <div class="flex flex-wrap items-end gap-4">
+          <div>
+            <span class="text-sm text-vault-muted">Mi nota</span>
+            <div class="mt-1 flex items-center gap-2">
+              <app-rating-stars [value]="rating() ?? 0" [editable]="true" [size]="18" (valueChange)="rating.set($event)" />
+              @if (rating()) {
+                <button class="text-xs text-vault-subtle hover:text-vault-text cursor-pointer" type="button" (click)="rating.set(null)">Quitar</button>
+              }
+            </div>
+          </div>
+          <label class="w-24">
+            <span class="text-sm text-vault-muted">Horas</span>
+            <input class="vault-input mt-1 !py-2" type="number" min="0" max="100000" [value]="hours() ?? ''" (input)="hours.set(numberValue($event))" />
+          </label>
+        </div>
+
+        @if (error()) {
+          <p class="text-xs text-vault-danger" role="alert">{{ error() }}</p>
+        }
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button vaultButton size="sm" type="button" [disabled]="isSaving()" (click)="save()">{{ isSaving() ? 'Guardando...' : 'Guardar' }}</button>
+          <button vaultButton variant="ghost" size="sm" type="button" (click)="isEditing.set(false)">Cancelar</button>
+          <button class="ml-auto text-sm font-semibold text-vault-danger hover:underline cursor-pointer" type="button" [disabled]="isSaving()" (click)="remove()">Quitar</button>
+        </div>
+      </div>
+    }
+  </div>
+</article>

@@ -1,0 +1,45 @@
+<div class="min-h-screen bg-vault-bg pb-20 pt-28">
+  <div class="vault-container max-w-3xl space-y-8">
+    <app-page-header title="Ajustes del perfil" subtitle="Así te verán los demás en tus reseñas, listas y en tu perfil público.">
+      @if (session.user(); as user) {
+        <a vaultButton variant="secondary" size="sm" [routerLink]="['/gamevault/u', user.userName]">Ver mi perfil</a>
+      }
+    </app-page-header>
+
+    <form class="vault-card space-y-5 p-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="flex items-center gap-4">
+        <app-user-avatar [name]="form.controls.displayName.value || '?'" [avatarUrl]="form.controls.avatarUrl.valid ? form.controls.avatarUrl.value : null" [size]="64" />
+        <p class="text-sm text-vault-muted">Vista previa del avatar. Si no pones una imagen se usan tus iniciales.</p>
+      </div>
+
+      <app-form-field label="Nombre visible" inputId="displayName" [error]="fieldError('displayName')">
+        <input id="displayName" class="vault-input" type="text" formControlName="displayName" maxlength="50" />
+      </app-form-field>
+
+      <app-form-field label="Biografía" inputId="bio" [error]="fieldError('bio')" [hint]="form.controls.bio.value.length + '/300'">
+        <textarea id="bio" class="vault-input min-h-24 resize-y" formControlName="bio" maxlength="300" placeholder="Qué juegas, qué te gusta..."></textarea>
+      </app-form-field>
+
+      <app-form-field label="País" inputId="country" [error]="fieldError('country')">
+        <input id="country" class="vault-input" type="text" formControlName="country" maxlength="60" />
+      </app-form-field>
+
+      <app-form-field label="URL del avatar" inputId="avatarUrl" [error]="fieldError('avatarUrl')" hint="Enlace a una imagen (https://...).">
+        <input id="avatarUrl" class="vault-input" type="url" formControlName="avatarUrl" placeholder="https://" />
+      </app-form-field>
+
+      <app-form-field label="URL de la portada" inputId="bannerUrl" [error]="fieldError('bannerUrl')" hint="Imagen ancha que aparece arriba en tu perfil.">
+        <input id="bannerUrl" class="vault-input" type="url" formControlName="bannerUrl" placeholder="https://" />
+      </app-form-field>
+
+      @for (message of errors(); track message) {
+        <p class="text-sm text-vault-danger" role="alert">{{ message }}</p>
+      }
+      @if (saved()) {
+        <p class="text-sm text-vault-success" role="status">Perfil guardado.</p>
+      }
+
+      <button vaultButton type="submit" [disabled]="isSaving()">{{ isSaving() ? 'Guardando...' : 'Guardar cambios' }}</button>
+    </form>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 @GameVault_HostAddress = http://localhost:5257
 
-GET {{GameVault_HostAddress}}/weatherforecast/
+GET {{GameVault_HostAddress}}/api/games/trending
 Accept: application/json
 
 ###

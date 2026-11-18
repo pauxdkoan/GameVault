@@ -15,6 +15,7 @@ import { FormAlert } from '../../components/form-alert/form-alert';
 import { PasswordToggle } from '../../components/password-toggle/password-toggle';
 import { FormField } from '../../../../shared/ui/form-field/form-field';
 import { VaultButton } from '../../../../shared/ui/button/vault-button';
+import { errorMessages } from '../../../../core/http/api-error';
 
 type RegisterField =
   | 'name'
@@ -120,9 +121,9 @@ export class RegisterPage {
         // Tras registrarse, lo mandamos a iniciar sesión
         this.router.navigate(['/auth/login']);
       },
-      error: (messages: string[]) => {
+      error: (error: unknown) => {
         this.isLoading.set(false);
-        this.apiErrors.set(messages);
+        this.apiErrors.set(errorMessages(error));
       },
     });
   }

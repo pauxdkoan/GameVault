@@ -1,0 +1,51 @@
+<div class="relative inline-block">
+  <button
+    class="inline-flex h-11 items-center gap-2 rounded-md border border-vault-border-strong bg-vault-bg/70 px-4 text-sm font-semibold text-vault-text transition hover:border-vault-accent/60 active:scale-[0.98] cursor-pointer"
+    type="button"
+    aria-haspopup="menu"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggle()"
+  >
+    <app-icon name="list-plus" class="size-4" />
+    Añadir a una lista
+  </button>
+
+  @if (isOpen()) {
+    <!-- En móvil se alinea a la derecha del botón para no salirse de la pantalla -->
+    <div class="vault-popover absolute right-0 z-40 mt-2 w-64 rounded-xl p-1.5 sm:left-0 sm:right-auto" role="menu">
+      @if (lists(); as myLists) {
+        @for (list of myLists; track list.id) {
+          <button
+            class="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm text-vault-muted transition hover:bg-vault-surface-hover hover:text-vault-text cursor-pointer disabled:opacity-50"
+            type="button"
+            role="menuitem"
+            [disabled]="busyListId() === list.id"
+            (click)="add(list)"
+          >
+            <span class="truncate">{{ list.name }}</span>
+            <span class="shrink-0 text-xs text-vault-subtle">{{ list.gameCount }}</span>
+          </button>
+        } @empty {
+          <p class="px-3 py-2 text-sm text-vault-muted">Todavía no tienes listas.</p>
+        }
+        <div class="my-1 border-t border-vault-border"></div>
+        <a
+          class="block rounded-lg px-3 py-2 text-sm font-semibold text-vault-accent transition hover:bg-vault-surface-hover"
+          role="menuitem"
+          routerLink="/gamevault/lists"
+          [queryParams]="{ nueva: 1 }"
+        >
+          + Crear una lista nueva
+        </a>
+      } @else {
+        <p class="px-3 py-2 text-sm text-vault-muted">Cargando tus listas...</p>
+      }
+    </div>
+  }
+
+  @if (message(); as msg) {
+    <p class="mt-2 text-xs" [class.text-vault-danger]="msg.isError" [class.text-vault-success]="!msg.isError" role="status">
+      {{ msg.text }}
+    </p>
+  }
+</div>

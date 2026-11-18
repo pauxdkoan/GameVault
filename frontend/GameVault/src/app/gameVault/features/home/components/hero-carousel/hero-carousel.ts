@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HomeHeroSlide } from '../../models/home-content.model';
+import { ensureSwiperRegistered } from '../../../../shared/utils/swiper';
+import { igdbRatingLabel } from '../../../../shared/utils/rating';
 
 @Component({
   selector: 'app-home-hero-carousel',
@@ -16,6 +18,10 @@ import { HomeHeroSlide } from '../../models/home-content.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeHeroCarouselComponent {
+  constructor() {
+    ensureSwiperRegistered();
+  }
+
   readonly slides = input.required<HomeHeroSlide[]>();
   readonly loading = input(false);
 
@@ -27,6 +33,11 @@ export class HomeHeroCarouselComponent {
       nextFailedImages.add(slideId);
       return nextFailedImages;
     });
+  }
+
+  /** Nota de IGDB mostrada sobre 10. */
+  protected ratingLabel(rating: number | null): string {
+    return igdbRatingLabel(rating);
   }
 
   protected hasImageFailed(slideId: string): boolean {

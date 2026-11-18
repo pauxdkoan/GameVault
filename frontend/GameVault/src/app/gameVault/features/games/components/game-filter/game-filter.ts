@@ -2,18 +2,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   output,
   signal,
 } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of } from 'rxjs';
+import { Icon } from '../../../../shared/ui/icon/icon';
 import {
-  faArrowRight,
-  faCheck,
-  faChevronDown,
-  faMagnifyingGlass,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
-import { GameFilters, GameSort } from '../../models/games.interfaces';
+  GameFilters,
+  GameFiltersResponse,
+  GameSort,
+} from '../../models/games.interfaces';
+import { GameService } from '../../services/games.service';
 
 type FilterKey = 'genreIds' | 'platformIds' | 'sort';
 type ChipKey = FilterKey | 'search';
@@ -37,57 +38,33 @@ interface FilterChip {
 
 @Component({
   selector: 'app-game-filter',
-  imports: [FontAwesomeModule],
+  imports: [Icon],
   templateUrl: './game-filter.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameFilter {
   readonly filtersChange = output<GameFilters>();
 
-  protected readonly searchIcon = faMagnifyingGlass;
-  protected readonly arrowIcon = faArrowRight;
-  protected readonly chevronIcon = faChevronDown;
-  protected readonly checkIcon = faCheck;
-  protected readonly removeIcon = faXmark;
 
   protected readonly search = signal('');
   protected readonly activeFilters = signal<GameFilters>({ sort: 'Popular' });
   protected readonly openGroup = signal<FilterKey | null>(null);
   protected readonly selectedChips = computed(() => this.buildSelectedChips());
 
-  protected readonly filterGroups: FilterGroup[] = [
-    {
-      title: 'Plataforma',
-      key: 'platformIds',
-      options: [
-        { label: 'PC', value: 6 },
-        { label: 'PlayStation 5', value: 167 },
-        { label: 'Xbox Series', value: 169 },
-        { label: 'Nintendo Switch', value: 130 },
-        { label: 'Android', value: 34 },
-      ],
-    },
-    {
-      title: 'Genero',
-      key: 'genreIds',
-      options: [
-        { label: 'Aventura', value: 31 },
-        { label: 'RPG', value: 12 },
-        { label: 'Indie', value: 32 },
-        { label: 'Estrategia', value: 15 },
-        { label: 'Shooter', value: 5 },
-      ],
-    },
-    {
-      title: 'Orden',
-      key: 'sort',
-      options: [
-        { label: 'Popularidad', value: 'Popular' },
-        { label: 'Rating', value: 'Rating' },
-        { label: 'Lanzamiento', value: 'ReleaseDate' },
-      ],
-    },
-  ];
+  /**
+   * Grupos de filtros. Las opciones vienen de GET /api/games/filters
+   * (antes los ids de IGDB estaban escritos a mano aquí).
+   * Si la petición falla, se muestran sin opciones en vez de romper el catálogo.
+   */
+  protected readonly filterGroups = toSignal(
+    inject(GameService)
+      .getFilters()
+      .pipe(
+        map((filters) => this.toFilterGroups(filters)),
+        catchError(() => of<FilterGroup[]>([])),
+      ),
+    { initialValue: [] as FilterGroup[] },
+  );
 
   protected onSearchInput(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -187,12 +164,12 @@ export class GameFilter {
     if (filters.search) {
       chips.push({
         key: 'search',
-        label: `Busqueda: ${filters.search}`,
+        label: `Búsqueda: ${filters.search}`,
       });
     }
 
     this.addMultiSelectChips(chips, 'platformIds', 'Plataforma');
-    this.addMultiSelectChips(chips, 'genreIds', 'Genero');
+    this.addMultiSelectChips(chips, 'genreIds', 'Género');
 
     if (filters.sort) {
       chips.push({
@@ -219,8 +196,28 @@ export class GameFilter {
     }
   }
 
+  private toFilterGroups(filters: GameFiltersResponse): FilterGroup[] {
+    return [
+      {
+        title: 'Plataforma',
+        key: 'platformIds',
+        options: filters.platforms.map(({ id, label }) => ({ label, value: id })),
+      },
+      {
+        title: 'Género',
+        key: 'genreIds',
+        options: filters.genres.map(({ id, label }) => ({ label, value: id })),
+      },
+      {
+        title: 'Orden',
+        key: 'sort',
+        options: filters.sorts.map(({ value, label }) => ({ label, value })),
+      },
+    ];
+  }
+
   private findOptionLabel(key: FilterKey, value: number | GameSort): string {
-    const group = this.filterGroups.find((filterGroup) => filterGroup.key === key);
+    const group = this.filterGroups().find((filterGroup) => filterGroup.key === key);
     return (
       group?.options.find((option) => option.value === value)?.label ??
       value.toString()

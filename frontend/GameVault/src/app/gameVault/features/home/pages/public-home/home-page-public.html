@@ -8,16 +8,16 @@
         <div class="h-8 w-64 animate-pulse rounded-lg bg-vault-surface"></div>
         <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           @for (card of skeletonCards; track card) {
-            <div class="aspect-[2/3] animate-pulse rounded-xl bg-vault-surface"></div>
+            <div class="aspect-[2/3] animate-pulse rounded-lg bg-vault-surface"></div>
           }
         </div>
       </section>
     } @else if (status() === 'error') {
       <div class="vault-card flex flex-col items-center gap-4 border-vault-danger/25 p-10 text-center">
-        <p class="font-display text-xl font-bold text-vault-text">No pudimos cargar los juegos.</p>
+        <p class="text-xl font-semibold text-vault-text">No pudimos cargar los juegos.</p>
         <p class="text-sm text-vault-muted">Revisa que la API esté levantada y vuelve a intentarlo.</p>
         <button
-          class="rounded-xl border border-vault-border px-4 py-2 text-sm font-semibold text-vault-text transition hover:border-vault-cyan/50 cursor-pointer"
+          class="rounded-md border border-vault-border-strong px-4 py-2 text-sm font-semibold text-vault-text transition hover:border-vault-accent/60 cursor-pointer"
           type="button"
           (click)="retryLoad()"
         >
@@ -29,7 +29,7 @@
         <app-home-game-section
           sectionId="trending"
           title="Tendencias esta semana"
-          subtitle="Descubre los juegos que están llamando la atención de la comunidad."
+          subtitle="Los juegos con más movimiento en IGDB."
           [games]="content().trendingGames"
         />
       }
@@ -40,10 +40,9 @@
     }
 
     <!-- Secciones informativas: se ven siempre -->
-    <app-home-features />
     <app-home-library-preview [games]="content().trendingGames" />
     <app-home-community />
-    <app-home-player-lists [games]="content().discoverGames" />
+    <app-home-player-lists />
     <app-home-cta />
   </div>
 </div>

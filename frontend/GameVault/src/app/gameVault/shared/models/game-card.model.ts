@@ -1,3 +1,33 @@
+/** Familia de plataforma tal como la envía el backend (enum PlatformFamily). */
+export type PlatformFamily =
+  | 'PC'
+  | 'PlayStation'
+  | 'Xbox'
+  | 'Nintendo'
+  | 'Mobile'
+  | 'VR'
+  | 'Other';
+
+/**
+ * Tarjeta de juego tal como llega de la API (GameCardDto).
+ * Es la misma para el catálogo, tendencias, próximos, similares, DLCs y expansiones.
+ */
+export interface GameCardDto {
+  externalId: number;
+  slug: string;
+  name: string;
+  summary: string | null;
+  released: string | null;
+  coverImage: string | null;
+  screenshots: string[];
+  trailerVideo: string | null;
+  rating: number | null;
+  metacritic: number | null;
+  genres: string[];
+  platforms: PlatformFamily[];
+}
+
+/** Tarjeta de juego lista para pintar en la vista (ver shared/mappers/game-card.mapper.ts). */
 export interface GameCard {
   id: string;
   externalId?: number | null;
@@ -12,5 +42,6 @@ export interface GameCard {
   rating: number;
   metacritic: number | null;
   genres: string[];
-  platformLabel: string[];
+  /** Familias sin repetir ("PC", "PlayStation"...). */
+  platforms: PlatformFamily[];
 }

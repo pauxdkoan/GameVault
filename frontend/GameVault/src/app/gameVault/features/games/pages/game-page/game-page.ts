@@ -11,11 +11,8 @@ import {
 import { Subscription, take } from 'rxjs';
 import { GameCardComponent } from '../../../../shared/components/game-card/game-card';
 import { GameCard } from '../../../../shared/models/game-card.model';
-import {
-  GameFilters,
-  GameSummary,
-  GetGamesResponse,
-} from '../../models/games.interfaces';
+import { toGameCards } from '../../../../shared/mappers/game-card.mapper';
+import { GameFilters, GetGamesResponse } from '../../models/games.interfaces';
 import { GameFilter } from '../../components/game-filter/game-filter';
 import { GameService } from '../../services/games.service';
 
@@ -124,9 +121,7 @@ export class GamePage implements OnInit, OnDestroy {
 
   private appendGames(response: GetGamesResponse): void {
     const currentGamesCount = this.games().length;
-    const newGames = (response.games ?? []).map((game, index) =>
-      this.mapApiGame(game, currentGamesCount + index),
-    );
+    const newGames = toGameCards(response.games);
 
     this.games.update((currentGames) => [...currentGames, ...newGames]);
     this.totalGames.set(response.count ?? currentGamesCount + newGames.length);
@@ -158,55 +153,5 @@ export class GamePage implements OnInit, OnDestroy {
     }
 
     return newGamesCount === this.pageSize;
-  }
-
-  private mapApiGame(game: GameSummary, index: number): GameCard {
-    const externalId = game.externalId ?? index + 1;
-    const genres = game.genres ?? [];
-    const platforms = game.platforms ?? [];
-    const rating = game.rating ?? 0;
-    const metacritic = game.metacritic ?? null;
-    const name = game.name ?? 'Juego sin nombre';
-    const slug = game.slug ?? `game-${externalId}`;
-    const summary = game.summary ?? null;
-    const released = game.released ?? null;
-    const screenshotUrls = game.screenshots ?? [];
-    const screenshotUrl = screenshotUrls[0] ?? null;
-    const coverImage = game.coverImage ?? null;
-
-    return {
-      id: externalId.toString(),
-      externalId,
-      name,
-      slug,
-      summary,
-      releaseLabel: this.formatRelease(released),
-      coverImageUrl: coverImage ?? screenshotUrl,
-      screenshotUrl: screenshotUrl,
-      screenshotUrls,
-      trailerVideoUrl: game.trailerVideo ?? null,
-      rating,
-      metacritic,
-      genres: genres.length > 0 ? genres.slice(0, 3) : ['Sin género'],
-      platformLabel: platforms,
-    };
-  }
-
-  private formatRelease(released: Date | string | null): string {
-    if (released === null) {
-      return 'Fecha por confirmar';
-    }
-
-    const releaseDate = new Date(released);
-
-    if (Number.isNaN(releaseDate.getTime())) {
-      return 'Fecha por confirmar';
-    }
-
-    return new Intl.DateTimeFormat('es', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    }).format(releaseDate);
   }
 }

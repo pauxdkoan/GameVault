@@ -9,7 +9,7 @@ import { Component, input } from '@angular/core';
   template: `
     @if (messages().length > 0) {
       <div
-        class="flex gap-3 rounded-xl border border-vault-danger/30 bg-vault-danger/10 p-4 text-sm text-rose-100"
+        class="flex gap-3 rounded-md border border-vault-danger/30 bg-vault-danger/10 p-4 text-sm text-vault-text"
         role="alert"
       >
         <span

@@ -26,20 +26,20 @@ export class VaultButton {
   readonly fullWidth = input(false);
 
   private readonly baseClasses =
-    'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition duration-200 ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-vault-bg ' +
+    'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition duration-150 active:scale-[0.98] ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent focus-visible:ring-offset-2 focus-visible:ring-offset-vault-bg ' +
     'disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer select-none';
 
   private readonly variantClasses: Record<VaultButtonVariant, string> = {
     primary:
-      'bg-vault-gradient text-vault-bg shadow-vault-glow hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0',
+      'bg-vault-accent text-vault-bg hover:bg-vault-accent-soft',
     secondary:
-      'border border-vault-border bg-vault-surface text-vault-text hover:border-vault-cyan/50 hover:bg-vault-surface-hover',
-    ghost: 'text-vault-muted hover:bg-white/5 hover:text-vault-text',
+      'border border-vault-border-strong bg-vault-surface text-vault-text hover:border-vault-muted hover:bg-vault-surface-hover',
+    ghost: 'text-vault-muted hover:bg-vault-surface-hover hover:text-vault-text',
   };
 
   private readonly sizeClasses: Record<VaultButtonSize, string> = {
-    sm: 'h-9 px-3.5 text-xs',
+    sm: 'h-9 px-3.5 text-sm',
     md: 'h-11 px-5 text-sm',
     lg: 'h-12 px-6 text-base',
   };

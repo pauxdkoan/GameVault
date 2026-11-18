@@ -52,5 +52,11 @@ namespace GameVault.Source.Application.Services.Security
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
+
+        public string HashToken(string token)
+        {
+            var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+            return Convert.ToHexString(bytes);
+        }
     }
 }

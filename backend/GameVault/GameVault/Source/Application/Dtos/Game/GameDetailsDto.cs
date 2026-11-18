@@ -1,4 +1,5 @@
 ﻿using GameVault.Source.Application.Dtos.Game.AdditionalDtos;
+using GameVault.Source.Application.Dtos.Library;
 
 namespace GameVault.Source.Application.Dtos.Game
 {
@@ -25,7 +26,7 @@ namespace GameVault.Source.Application.Dtos.Game
 
         public List<string> Genres { get; set; } = [];
 
-        public List<string> Platforms { get; set; } = [];
+        public List<PlatformDto> Platforms { get; set; } = [];
 
 
         //TODO: AGREGAR KEYWORDS y AGERatings
@@ -35,13 +36,13 @@ namespace GameVault.Source.Application.Dtos.Game
 
 
 
-        public List<RelatedGameDto>? Dlcs { get; set; } = [];
+        public List<GameCardDto> Dlcs { get; set; } = [];
 
-        public List<RelatedGameDto>? Expansions { get; set; } = [];
+        public List<GameCardDto> Expansions { get; set; } = [];
 
 
 
-        public List<RelatedGameDto>? ExpandedGames { get; set; } = [];
+        public List<GameCardDto> ExpandedGames { get; set; } = [];
 
 
 
@@ -51,7 +52,7 @@ namespace GameVault.Source.Application.Dtos.Game
 
         public List<InvolvedCompaniesDto> Companies {  get; set; } = [];
 
-        public List<RelatedGameDto>? SimilarGames {  get; set; } = [];
+        public List<GameCardDto> SimilarGames {  get; set; } = [];
 
         public string StoryLine {  get; set; }= string.Empty;
 
@@ -60,6 +61,20 @@ namespace GameVault.Source.Application.Dtos.Game
         public string? ParentGame { get; set; } = string.Empty;
 
         public string? GameType { get; set; } = string.Empty;
+
+
+        // Datos de GameVault (no vienen de IGDB):
+
+        /// <summary>Media de las reseñas de la comunidad (1 a 10). null si no hay reseñas.</summary>
+        public decimal? CommunityRating { get; set; }
+
+        public int ReviewCount { get; set; }
+
+        /// <summary>
+        /// El juego en la biblioteca del usuario que lo pide, para pintar el botón
+        /// "Añadir a mi biblioteca" con el estado correcto. null sin sesión o si no lo tiene.
+        /// </summary>
+        public LibraryEntryDto? MyLibraryEntry { get; set; }
 
     }
 }

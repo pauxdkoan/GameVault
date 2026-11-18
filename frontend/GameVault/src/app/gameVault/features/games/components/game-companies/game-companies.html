@@ -1,18 +1,14 @@
 @if (hasCompanies()) {
-  <section
-    class="rounded-lg border border-white/10 bg-vault-surface p-5 shadow-xl shadow-black/25"
-  >
-    <h2 class="text-sm font-black uppercase text-white">Compañias</h2>
+  <section class="vault-card p-5">
+    <h2 class="text-2xl text-vault-text">Compañías</h2>
 
-    <div class="mt-4 space-y-5">
+    <div class="mt-4 space-y-4">
       @if (developers().length > 0) {
         <div>
-          <p class="text-xs font-semibold text-vault-muted">Developer</p>
-          <div class="mt-2 grid gap-2">
+          <p class="text-sm text-vault-muted">Desarrollador</p>
+          <div class="mt-1">
             @for (company of developers(); track company.name) {
-              <p
-                class="rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-bold leading-6 text-white"
-              >
+              <p class="font-semibold leading-7 text-vault-text">
                 {{ company.name }}
               </p>
             }
@@ -22,12 +18,10 @@
 
       @if (publishers().length > 0) {
         <div>
-          <p class="text-xs font-semibold text-vault-muted">Publisher</p>
-          <div class="mt-2 grid gap-2">
+          <p class="text-sm text-vault-muted">Distribuidora</p>
+          <div class="mt-1">
             @for (company of publishers(); track company.name) {
-              <p
-                class="rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-bold leading-6 text-white"
-              >
+              <p class="font-semibold leading-7 text-vault-text">
                 {{ company.name }}
               </p>
             }
@@ -37,12 +31,10 @@
 
       @if (otherCompanies().length > 0) {
         <div>
-          <p class="text-xs font-semibold text-vault-muted">Otros</p>
-          <div class="mt-2 grid gap-2">
+          <p class="text-sm text-vault-muted">Otros</p>
+          <div class="mt-1">
             @for (company of otherCompanies(); track company.name) {
-              <p
-                class="rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-bold leading-6 text-white"
-              >
+              <p class="font-semibold leading-7 text-vault-text">
                 {{ company.name }}
               </p>
             }

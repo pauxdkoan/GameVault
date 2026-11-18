@@ -1,16 +1,11 @@
-<div class="min-h-screen bg-vault-bg text-zinc-100">
-  <section class="px-4 pb-8 pt-28 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
+<div class="min-h-screen bg-vault-bg text-vault-text">
+  <section class="pb-8 pt-28">
+    <div class="vault-container">
       <div class="grid gap-6">
         <div>
-          <p class="text-sm font-semibold uppercase text-vault-cyan">Catalogo</p>
-          <h1
-            class="mt-4 max-w-3xl text-5xl font-black leading-none text-white sm:text-6xl"
-          >
-            Todos los juegos
-          </h1>
-          <p class="mt-5 max-w-2xl text-base leading-7 text-vault-muted">
-            Explora el catalogo completo con carga continua mientras navegas.
+          <h1 class="max-w-3xl text-6xl text-vault-text sm:text-7xl">Catálogo</h1>
+          <p class="mt-4 max-w-2xl text-lg leading-8 text-vault-muted">
+            Todos los juegos de IGDB. Busca por nombre o filtra por género, plataforma y nota; se cargan más al bajar.
           </p>
         </div>
 
@@ -20,39 +15,34 @@
     </div>
   </section>
 
-  <section class="px-4 pb-20 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
+  <section class="pb-20">
+    <div class="vault-container">
       <div
         class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
       >
         <div>
-          <h2 class="text-2xl font-black uppercase text-white">
-            Juegos disponibles
-          </h2>
-          <p class="mt-1 text-sm text-vault-muted">
+          <p class="text-sm tabular-nums text-vault-muted">
             {{ loadedGamesLabel() }} · {{ totalGamesLabel() }}
           </p>
         </div>
       </div>
 
       @if (isFirstLoad()) {
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+        <div class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
           @for (card of skeletonCards; track card) {
             <div
-              class="aspect-[2/3] animate-pulse rounded-lg bg-white/10"
+              class="aspect-[2/3] animate-pulse rounded-lg bg-vault-surface-hover"
             ></div>
           }
         </div>
       } @else if (status() === "error") {
-        <div
-          class="rounded-lg border border-rose-300/20 bg-rose-300/10 p-8 text-center"
-        >
-          <p class="text-xl font-bold text-white">No pude cargar los juegos.</p>
-          <p class="mt-2 text-sm text-rose-100/70">
-            Revisa que la API este levantada y vuelve a intentar.
+        <div class="vault-card border-vault-danger/40 p-8 text-center">
+          <p class="text-xl font-semibold text-vault-text">No pude cargar los juegos.</p>
+          <p class="mt-2 text-sm text-vault-muted">
+            Revisa que la API esté levantada y vuelve a intentarlo.
           </p>
           <button
-            class="mt-5 rounded-md border border-rose-200/35 px-4 py-2 text-sm font-semibold text-rose-50 transition hover:bg-rose-200/10"
+            class="mt-5 rounded-md border border-vault-border-strong px-4 py-2 text-sm font-semibold text-vault-text transition hover:bg-vault-surface-hover cursor-pointer"
             type="button"
             (click)="retryLoad()"
           >
@@ -60,18 +50,16 @@
           </button>
         </div>
       } @else if (status() === "empty") {
-        <div
-          class="rounded-lg border border-white/10 bg-vault-surface p-10 text-center"
-        >
-          <p class="text-xl font-bold text-white">
-            Todavia no hay juegos para mostrar.
-          </p>
+        <div class="rounded-lg border border-dashed border-vault-border p-10 text-center">
+          <p class="text-xl font-semibold text-vault-text">No hay juegos con estos filtros.</p>
           <p class="mt-2 text-sm text-vault-muted">
-            Cuando la API devuelva resultados apareceran aqui.
+            Prueba con otro nombre o quita algún filtro.
           </p>
         </div>
       } @else {
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+        <!-- Título solo para lectores de pantalla: mantiene el orden h1 > h2 > h3 -->
+        <h2 class="sr-only">Resultados</h2>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
           @for (game of games(); track game.id; let index = $index) {
             <app-game-card
               [game]="game"
@@ -83,26 +71,24 @@
         <div class="mt-10 flex justify-center">
           @if (isLoadingMore()) {
             <div
-              class="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-vault-muted"
+              class="flex items-center gap-3 px-4 py-3 text-sm text-vault-muted" role="status"
             >
               <span
-                class="size-2 animate-pulse rounded-full bg-vault-cyan"
+                class="size-2 animate-pulse rounded-full bg-vault-accent"
               ></span>
-              Cargando mas juegos
+              Cargando más juegos…
             </div>
           } @else if (hasMoreGames()) {
             <button
-              class="rounded-md border border-vault-cyan/35 px-4 py-3 text-sm font-bold text-vault-muted transition hover:bg-vault-cyan/10"
+              class="h-11 rounded-md border border-vault-border-strong px-5 text-sm font-semibold text-vault-text transition hover:border-vault-accent/60 active:scale-[0.98] cursor-pointer"
               type="button"
               (click)="loadNextPage()"
             >
-              Cargar mas
+              Cargar más
             </button>
           } @else {
-            <p
-              class="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-vault-muted"
-            >
-              No hay mas juegos por ahora
+            <p class="px-4 py-3 text-sm text-vault-subtle">
+              Has llegado al final del catálogo
             </p>
           }
         </div>

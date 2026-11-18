@@ -61,14 +61,14 @@ namespace GameVault.Source.Application.Dtos.Igdb
         public List<IgdbCoverDto> Screenshots { get; set; } = [];
 
         [JsonPropertyName("dlcs")]
-        public List<IgdbDlcsDto> Dlcs { get; set; } = [];
+        public List<IgdbRelatedGameDto> Dlcs { get; set; } = [];
 
 
         [JsonPropertyName("expansions")]
-        public List<IgdbExpansionDto> Expansions { get; set; } = [];
+        public List<IgdbRelatedGameDto> Expansions { get; set; } = [];
 
         [JsonPropertyName("expanded_games")]
-        public List<IgdbExpansionDto> ExpandedGames { get; set; } = [];
+        public List<IgdbRelatedGameDto> ExpandedGames { get; set; } = [];
 
         [JsonPropertyName("external_games")]
         public List<IgdbExternalGameDto> ExternalGames { get; set; } = [];
@@ -83,7 +83,7 @@ namespace GameVault.Source.Application.Dtos.Igdb
         public List<IgdbKeywordsDto> Keywords { get; set; } = [];
 
         [JsonPropertyName("similar_games")]
-        public List<IgdbSimilarGamesDto> SimilarGames { get; set; } = [];
+        public List<IgdbRelatedGameDto> SimilarGames { get; set; } = [];
 
         [JsonPropertyName("storyline")]
         public string StoryLine { get; set; }= string.Empty;

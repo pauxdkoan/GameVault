@@ -1,3 +1,5 @@
+using AutoMapper;
+using GameVault.Source.Application.Dtos.User;
 using GameVault.Source.Application.Exceptions;
 using GameVault.Source.Application.Interfaces.Security;
 using GameVault.Source.Domain.Entities;
@@ -11,47 +13,71 @@ using Microsoft.Extensions.Options;
 namespace GameVault.Source.Application.Feature.Auth.Queries.Login
 {
     internal sealed class LoginWithRefreshTokenQueryHandler :
-        IRequestHandler<LoginWithRefreshTokenQuery, Response>
+        IRequestHandler<LoginWithRefreshTokenQuery, LoginResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ITokenProvider _jwtTokenGenerator;
+        private readonly ITokenProvider _tokenProvider;
         private readonly JwtSettings _jwtSettings;
         private readonly GameVaultContext _context;
+        private readonly IMapper _mapper;
 
         public LoginWithRefreshTokenQueryHandler(
             UserManager<ApplicationUser> userManager,
-            ITokenProvider jwtTokenGenerator,
+            ITokenProvider tokenProvider,
             IOptions<JwtSettings> jwtOptions,
-            GameVaultContext gameVaultContext)
+            GameVaultContext gameVaultContext,
+            IMapper mapper)
         {
             _userManager = userManager;
-            _jwtTokenGenerator = jwtTokenGenerator;
+            _tokenProvider = tokenProvider;
             _jwtSettings = jwtOptions.Value;
             _context = gameVaultContext;
+            _mapper = mapper;
         }
 
-        public async Task<Response> Handle(
+        public async Task<LoginResponse> Handle(
             LoginWithRefreshTokenQuery request,
             CancellationToken cancellationToken)
         {
-            RefreshToken? refreshToken = await _context.RefreshTokens
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(r => r.TokenHash == request.RefreshToken, cancellationToken);
+            var tokenHash = _tokenProvider.HashToken(request.RefreshToken);
 
-            if (refreshToken is null || refreshToken.ExpiresAt < DateTime.UtcNow)
+            RefreshToken? currentToken = await _context.RefreshTokens
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.TokenHash == tokenHash, cancellationToken);
+
+            // Caducado, revocado o de un usuario desactivado: hay que volver a iniciar sesión.
+            if (currentToken is null || !currentToken.IsActive || !currentToken.User.IsActive)
             {
-                throw new ApiException("The refresh token has expired", StatusCodes.Status401Unauthorized);
+                throw new ApiException(
+                    "La sesión ha caducado. Inicia sesión de nuevo.",
+                    StatusCodes.Status401Unauthorized);
             }
 
-            var roles = await _userManager.GetRolesAsync(refreshToken.User);
-            var accessToken = _jwtTokenGenerator.GenerateToken(refreshToken.User, roles);
+            // Rotación: el token usado queda revocado y se emite uno nuevo.
+            var plainRefreshToken = _tokenProvider.GenerateRefreshToken();
+            var newToken = new RefreshToken
+            {
+                Id = Guid.NewGuid(),
+                TokenHash = _tokenProvider.HashToken(plainRefreshToken),
+                UserId = currentToken.UserId,
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays),
+            };
 
-            refreshToken.TokenHash = _jwtTokenGenerator.GenerateRefreshToken();
-            refreshToken.ExpiresAt = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
+            currentToken.RevokedAt = DateTime.UtcNow;
+            currentToken.ReplacedByTokenHash = newToken.TokenHash;
+            _context.RefreshTokens.Add(newToken);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response(accessToken, refreshToken.TokenHash);
+            var roles = await _userManager.GetRolesAsync(currentToken.User);
+            var accessToken = _tokenProvider.GenerateToken(currentToken.User, roles);
+
+            return new LoginResponse(
+                accessToken,
+                plainRefreshToken,
+                DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
+                _mapper.Map<UserDto>(currentToken.User));
         }
     }
 }

@@ -2,47 +2,55 @@ using GameVault.Source.Application.Dtos.Game;
 using GameVault.Source.Application.Dtos.Game.AdditionalDtos;
 using GameVault.Source.Application.Dtos.Igdb;
 using GameVault.Source.Application.Dtos.Igdb.AdttionalDtos;
-using GameVault.Source.Application.Interfaces.Igdb;
-using System;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace GameVault.Source.Application.Mappings
 {
+    /// <summary>
+    /// Convierte las respuestas de IGDB en los DTOs que devuelve la API.
+    /// </summary>
     internal static class GameMapper
     {
-      
-       
+        private const string CoverSize = "cover_big_2x";
+        private const string ScreenshotSize = "screenshot_huge";
 
-        public static GameSummaryDto GameSummary(IgdbGameDto game)
+        /// <summary>Tarjeta para listados (catálogo, tendencias, próximos).</summary>
+        public static GameCardDto GameCard(IgdbGameDto game)
         {
-            var screenshots = GetScreenshotUrls(game);
             var videos = GetVideoUrls(game);
 
-            return new GameSummaryDto
+            return new GameCardDto
             {
-                ShortSummary= GetShortSummary(game),
                 ExternalId = game.Id,
                 Slug = game.Slug,
                 Name = game.Name,
                 Summary = game.Summary,
                 Released = ToDateOnly(game.FirstReleaseDate),
+                CoverImage = GetImageUrl(game.Cover, CoverSize),
                 Screenshots = GetScreenshotUrls(game).Take(3).ToList(),
-                CoverImage = GetImageUrl(game.Cover, "cover_big_2x"),
+                TrailerVideo = GetTrailerVideoUrl(videos),
                 Rating = ToFivePointRating(game.TotalRating ?? game.Rating),
                 Metacritic = ToWholeRating(game.AggregatedRating),
-                TrailerVideo = GetTrailerVideoUrl(videos),
                 Genres = GetGenreNames(game.Genres),
+                Platforms = PlatformFamilyResolver.ToFamilies(game.Platforms),
+            };
+        }
 
-                PlatformsBadges = game.Platforms
-                .Select(x=> GetPlatformSummary(x.Name))
-                .Where(x=>!string.IsNullOrWhiteSpace(x))
-                .Distinct()
-                .ToList(),
-
-                Themes = game.Themes.Select(x => x.Name).ToList(),
-
-
+        /// <summary>
+        /// Tarjeta para juegos relacionados (similares, DLCs, expansiones).
+        /// IGDB devuelve menos datos de ellos, así que no hay resumen ni capturas.
+        /// </summary>
+        public static GameCardDto RelatedGameCard(IgdbRelatedGameDto game)
+        {
+            return new GameCardDto
+            {
+                ExternalId = game.Id,
+                Slug = game.Slug,
+                Name = game.Name,
+                Released = ToDateOnly(game.FirstReleaseDate),
+                CoverImage = GetImageUrl(game.Cover, CoverSize),
+                Rating = ToFivePointRating(game.TotalRating),
+                Genres = GetGenreNames(game.Genres),
+                Platforms = PlatformFamilyResolver.ToFamilies(game.Platforms),
             };
         }
 
@@ -56,45 +64,21 @@ namespace GameVault.Source.Application.Mappings
                 Name = game.Name,
                 Released = ToDateOnly(game.FirstReleaseDate),
 
-                CoverImage = GetImageUrl(game.Cover, "cover_big_2x"),
+                CoverImage = GetImageUrl(game.Cover, CoverSize),
                 Rating = ToFivePointRating(game.TotalRating ?? game.Rating),
                 Metacritic = ToWholeRating(game.AggregatedRating),
 
                 Genres = GetGenreNames(game.Genres),
-                Platforms = GetPlatformNames(game.Platforms),
+                Platforms = PlatformFamilyResolver.ToPlatforms(game.Platforms),
 
                 Videos = GetVideoUrls(game),
                 Screenshots = GetScreenshotUrls(game),
-                Dlcs = game.Dlcs.Select(x => new RelatedGameDto
-                {
-                    ExternalId = x.Id,
-                    CoverImage = GetImageUrl(x.Cover, "cover_big_2x"),
-                    Genres = GetGenreNames(x.Genres),
-                    Name = x.Name,
-                    Platforms = GetPlatformNames(x.Platforms),
-                    Raiting = ToFivePointRating(x.TotalRating)
 
-                }).ToList(),
-                Expansions = game.Expansions.Select(x => new RelatedGameDto
-                {
-                    ExternalId = x.Id,
-                    CoverImage = GetImageUrl(x.Cover, "cover_big_2x"),
-                    Genres = GetGenreNames(x.Genres),
-                    Name = x.Name,
-                    Platforms = GetPlatformNames(x.Platforms),
-                    Raiting = ToFivePointRating(x.TotalRating)
+                Dlcs = ToRelatedCards(game.Dlcs),
+                Expansions = ToRelatedCards(game.Expansions),
+                ExpandedGames = ToRelatedCards(game.ExpandedGames),
+                SimilarGames = ToRelatedCards(game.SimilarGames),
 
-                }).ToList(),
-                ExpandedGames = game.ExpandedGames.Select(x => new RelatedGameDto
-                {
-                    ExternalId = x.Id,
-                    CoverImage = GetImageUrl(x.Cover, "cover_big_2x"),
-                    Genres = GetGenreNames(x.Genres),
-                    Name = x.Name,
-                    Platforms = GetPlatformNames(x.Platforms),
-                    Raiting = ToFivePointRating(x.TotalRating)
-
-                }).ToList(),
                 GameModes = game.GameModes.Select(x => x.Name).ToList(),
                 Companies = game.InvolvedCompanies.Select(x => new InvolvedCompaniesDto
                 {
@@ -102,17 +86,6 @@ namespace GameVault.Source.Application.Mappings
                     IsDeveloper = x.Developer,
                     IsPublisher = x.Publisher,
                     LogoImage = x.CompanyDto?.Logo?.ImageId,
-
-                }).ToList(),
-                SimilarGames = game.SimilarGames.Select(x => new RelatedGameDto
-                {
-                    ExternalId = x.Id,
-                    CoverImage = GetImageUrl(x.Cover, "cover_big_2x"),
-                    Genres = GetGenreNames(x.Genres),
-                    Name = x.Name,
-                    Platforms = GetPlatformNames(x.Platforms),
-                    Raiting = ToFivePointRating(x.TotalRating)
-
                 }).ToList(),
                 StoryLine = game.StoryLine,
                 WebSites = game.Websites.Select(x => new WebSiteDto
@@ -120,35 +93,27 @@ namespace GameVault.Source.Application.Mappings
                     Name = x.Url,
                     Url = x.Url,
                 }).ToList(),
-                GameType = game?.GameType?.Type,
+                GameType = game.GameType?.Type,
                 Themes = game.Themes.Select(x => x.Name).ToList(),
-                ParentGame = game?.ParentGame?.Name
-
+                ParentGame = game.ParentGame?.Name
 
                 //TODO: MAPEAR LAS TIENDAS...
-
             };
         }
 
-
-      
-        private static string GetShortSummary(IgdbGameDto game) 
+        private static List<GameCardDto> ToRelatedCards(List<IgdbRelatedGameDto>? games)
         {
-            if (game.Summary == null) 
-            { return null; 
-            
-            }
-
-            var index = game.Summary.IndexOf('.');
-            
-            if(index == -1)
+            if (games is null)
             {
-                return game.Summary;
+                return [];
             }
-            return game.Summary.Substring(0, index);
 
-            
+            return games
+                .Where(game => game.Id > 0 && !string.IsNullOrWhiteSpace(game.Name))
+                .Select(RelatedGameCard)
+                .ToList();
         }
+
         private static DateOnly? ToDateOnly(long? unixSeconds)
         {
             if (unixSeconds is null)
@@ -162,24 +127,15 @@ namespace GameVault.Source.Application.Mappings
 
         private static List<string> GetScreenshotUrls(IgdbGameDto game)
         {
-            var screenshots = new List<string>();
-
             if (game.Screenshots is null)
             {
-                return screenshots;
+                return [];
             }
 
-            foreach (var screenshot in game.Screenshots)
-            {
-                var imageUrl = GetImageUrl(screenshot, "screenshot_huge");
-
-                if (!string.IsNullOrWhiteSpace(imageUrl))
-                {
-                    screenshots.Add(imageUrl);
-                }
-            }
-
-            return screenshots;
+            return game.Screenshots
+                .Select(screenshot => GetImageUrl(screenshot, ScreenshotSize))
+                .OfType<string>()
+                .ToList();
         }
 
         private static List<GameVideoDto> GetVideoUrls(IgdbGameDto game)
@@ -211,7 +167,7 @@ namespace GameVault.Source.Application.Mappings
             return trailer?.Url;
         }
 
-        private static List<string> GetGenreNames(List<IgdbGenreDto> genres)
+        private static List<string> GetGenreNames(List<IgdbGenreDto>? genres)
         {
             if (genres is null)
             {
@@ -220,56 +176,6 @@ namespace GameVault.Source.Application.Mappings
 
             return genres
                 .Select(genre => genre.Name)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .ToList();
-        }
-
-
-        private static string? GetPlatformSummary(string name)
-        {
-            if (name.Contains("Windows", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("PC", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Linux", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Mac", StringComparison.OrdinalIgnoreCase))
-                return "PC";
-
-            if (name.Contains("PlayStation", StringComparison.OrdinalIgnoreCase))
-                return "PlayStation";
-
-            if (name.Contains("Xbox", StringComparison.OrdinalIgnoreCase))
-                return "Xbox";
-
-            if (name.Contains("Nintendo", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Switch", StringComparison.OrdinalIgnoreCase))
-                return "Nintendo";
-
-            if (name.Contains("Android", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("iOS", StringComparison.OrdinalIgnoreCase))
-                return "Mobile";
-
-            if (name.Contains("VR", StringComparison.OrdinalIgnoreCase) ||
-                name.Contains("Oculus", StringComparison.OrdinalIgnoreCase)||
-                name.Contains("Quest", StringComparison.OrdinalIgnoreCase))
-
-                return "VR";
-
-
-
-            return null;
-
-
-
-        }
-
-        private static List<string> GetPlatformNames(List<IgdbPlatformDto> platforms)
-        {
-            if (platforms is null)
-            {
-                return [];
-            }
-
-            return platforms
-                .Select(platform => platform.Name)
                 .Where(name => !string.IsNullOrWhiteSpace(name))
                 .ToList();
         }

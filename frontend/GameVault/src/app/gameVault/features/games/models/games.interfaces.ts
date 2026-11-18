@@ -1,3 +1,6 @@
+import { GameCardDto, PlatformFamily } from '../../../shared/models/game-card.model';
+import { LibraryEntry } from '../../library/models/library.models';
+
 export type GameSort = 'Popular' | 'Rating' | 'ReleaseDate';
 
 export interface GameFilters {
@@ -7,42 +10,18 @@ export interface GameFilters {
   sort?: GameSort;
 }
 
-export interface GetGamesRequest extends GameFilters {
+export interface PageRequest {
   page: number;
   pageSize: number;
 }
 
-export interface SearchGamesRequest {
-  search: string;
-  page: number;
-  pageSize: number;
-}
-
-export interface GetGameDetailsRequest {
-  id: number;
-}
+export interface GetGamesRequest extends GameFilters, PageRequest {}
 
 export interface GetGamesResponse {
   count: number;
   page: number;
   pageSize: number;
-  games: GameSummary[];
-}
-
-export interface GameSummary {
-  externalId: number;
-  shortSummary?: string | null;
-  summary?: string | null;
-  slug: string;
-  name: string;
-  trailerVideo: string | null;
-  released: Date | string | null;
-  screenshots: string[];
-  coverImage?: string | null;
-  rating: number;
-  metacritic?: number | null;
-  genres: string[];
-  platforms: string[];
+  games: GameCardDto[];
 }
 
 export interface GameDetailsResponse {
@@ -52,25 +31,29 @@ export interface GameDetailsResponse {
   name: string;
   released: Date | string | null;
   coverImage: string | null;
-  rating: number;
+  rating: number | null;
   metacritic?: number | null;
   themes: string[];
   genres: string[];
-  platforms: string[];
+  platforms: Platform[];
   videos: Video[];
   screenshots: string[];
-  dlcs: Dlc[];
-  expansions: Dlc[];
-  expandedGames: Dlc[];
+  dlcs: GameCardDto[];
+  expansions: GameCardDto[];
+  expandedGames: GameCardDto[];
   stores: StoreLink[];
   gameModes: string[];
   companies: Company[];
-  similarGames: Dlc[];
+  similarGames: GameCardDto[];
   storyLine: string | null;
   webSites: WebSite[];
   gameType: string | null;
   parentGame?: string | null;
-  gameParent?: string | null;
+  /** Nota media de las reseñas de GameVault (1-10), o null si no hay. */
+  communityRating: number | null;
+  reviewCount: number;
+  /** El juego en mi biblioteca (solo con sesión), o null. */
+  myLibraryEntry: LibraryEntry | null;
 }
 
 export interface Company {
@@ -80,13 +63,27 @@ export interface Company {
   isPublisher: boolean;
 }
 
-export interface Dlc {
-  externalId: number;
+/** Plataforma concreta del detalle ("PlayStation 5") y su familia. */
+export interface Platform {
   name: string;
-  coverImage: string | null;
-  raiting: number | null;
-  platforms: string[];
-  genres: string[];
+  family: PlatformFamily;
+}
+
+/** Respuesta de GET /api/games/filters. */
+export interface GameFiltersResponse {
+  platforms: FilterOption[];
+  genres: FilterOption[];
+  sorts: SortOption[];
+}
+
+export interface FilterOption {
+  id: number;
+  label: string;
+}
+
+export interface SortOption {
+  value: GameSort;
+  label: string;
 }
 
 export interface Video {

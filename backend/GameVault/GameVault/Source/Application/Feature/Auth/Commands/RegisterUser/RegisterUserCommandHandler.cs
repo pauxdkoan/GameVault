@@ -67,6 +67,7 @@ namespace GameVault.Source.Application.Feature.Auth.Commands.RegisterUser
                 UserName = request.UserName,
                 IsActive = true,
                 EmailConfirmed = true,
+                CreatedAt = DateTime.UtcNow,
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);

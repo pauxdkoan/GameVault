@@ -43,6 +43,4 @@ export class PublicFooterComponent {
     },
   ];
 
-  /** Páginas legales todavía no creadas: se muestran como texto. */
-  protected readonly legalItems = ['Términos', 'Privacidad', 'Cookies'];
 }

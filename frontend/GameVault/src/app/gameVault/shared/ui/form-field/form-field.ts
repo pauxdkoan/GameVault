@@ -14,6 +14,8 @@ import { Component, input } from '@angular/core';
  */
 @Component({
   selector: 'app-form-field',
+  // block: sin esto el componente es "inline" y el space-y del formulario no separa los campos.
+  host: { class: 'block' },
   template: `
     <div class="flex flex-col gap-2">
       <div class="flex items-center justify-between gap-3">

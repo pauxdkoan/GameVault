@@ -34,19 +34,19 @@ namespace GameVault.Source.Infrastructure.ExternalServices.Igdb
             "age_ratings.rating_category.rating," +
             "age_ratings.rating_cover_url," +
 
-            "dlcs.name," +
+            "dlcs.name,dlcs.slug,dlcs.first_release_date," +
             "dlcs.cover.image_id," +
             "dlcs.genres.name," +
             "dlcs.total_rating," +
             "dlcs.platforms.name," +
 
-            "similar_games.name," +
+            "similar_games.name,similar_games.slug,similar_games.first_release_date," +
             "similar_games.cover.image_id," +
             "similar_games.genres.name," +
             "similar_games.total_rating," +
             "similar_games.platforms.name," +
 
-            "expansions.name," +
+            "expansions.name,expansions.slug,expansions.first_release_date," +
             "expansions.cover.image_id," +
             "expansions.genres.name," +
             "expansions.total_rating," +
@@ -60,7 +60,7 @@ namespace GameVault.Source.Infrastructure.ExternalServices.Igdb
             "expanded_games.genres.name," +
             "expanded_games.total_rating," +
             "expanded_games.platforms.name," +
-            "expanded_games.name";
+            "expanded_games.name,expanded_games.slug,expanded_games.first_release_date";
 
         public static IgdbPageQuery BuildGamesPage(
             string? search,

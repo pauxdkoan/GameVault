@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  computed,
   HostListener,
   inject,
   input,
@@ -11,8 +12,11 @@ import { NgClass } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { BrandLogo } from '../../ui/brand-logo/brand-logo';
+import { AuthSessionService } from '../../../core/services/auth-session.service';
+import { AuthService } from '../../../features/auth/services/auth.service';
 import { VaultButton } from '../../ui/button/vault-button';
 import { filter } from 'rxjs';
+import { Icon } from '../../ui/icon/icon';
 
 interface HeaderNavItem {
   label: string;
@@ -29,7 +33,7 @@ interface ExploreMenuItem {
 
 @Component({
   selector: 'app-public-header',
-  imports: [NgClass, RouterLink, BrandLogo, VaultButton],
+  imports: [Icon, NgClass, RouterLink, BrandLogo, VaultButton],
   templateUrl: './public-header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,9 +42,21 @@ export class PublicHeaderComponent {
 
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
+  protected readonly session = inject(AuthSessionService);
 
   protected readonly isMenuOpen = signal(false);
   protected readonly isExploreOpen = signal(false);
+  protected readonly isUserMenuOpen = signal(false);
+  protected readonly userMenuId = 'public-user-menu';
+
+  /** Opciones del menú de usuario (escritorio y móvil). "Mi perfil" depende del userName de la sesión. */
+  protected readonly userMenuItems = computed(() => [
+    { label: 'Mi biblioteca', route: '/gamevault/library' },
+    { label: 'Mis listas', route: '/gamevault/lists' },
+    { label: 'Mi perfil', route: `/gamevault/u/${this.session.user()?.userName ?? ''}` },
+    { label: 'Ajustes', route: '/gamevault/settings' },
+  ]);
   protected readonly isScrolled = signal(false);
   protected readonly mobileMenuId = 'public-mobile-menu';
   protected readonly exploreMenuId = 'public-explore-menu';
@@ -122,9 +138,22 @@ export class PublicHeaderComponent {
     this.isExploreOpen.set(false);
   }
 
+  protected toggleUserMenu(): void {
+    this.isUserMenuOpen.update((isOpen) => !isOpen);
+    this.isExploreOpen.set(false);
+  }
+
   protected closeHeaderMenus(): void {
     this.closeMenu();
     this.closeExploreMenu();
+    this.isUserMenuOpen.set(false);
+  }
+
+  protected logout(): void {
+    this.closeHeaderMenus();
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/gamevault/home']);
+    });
   }
 
   protected shouldUseSolidHeader(): boolean {
@@ -132,13 +161,16 @@ export class PublicHeaderComponent {
       !this.transparentMode() ||
       this.isScrolled() ||
       this.isMenuOpen() ||
-      this.isExploreOpen()
+      this.isExploreOpen() ||
+      this.isUserMenuOpen()
     );
   }
 
   protected headerSurfaceClasses(): string {
     return this.shouldUseSolidHeader()
-      ? 'border-vault-border/70 bg-vault-bg/80 backdrop-blur-xl'
-      : 'border-transparent bg-transparent';
+      ? 'border-vault-border bg-vault-bg/95'
+      : // Encima de imágenes (portada del perfil, héroe): una sombra oscura detrás
+        // del menú para que el texto siempre se lea.
+        'border-transparent bg-gradient-to-b from-vault-bg/90 via-vault-bg/50 to-transparent';
   }
 }

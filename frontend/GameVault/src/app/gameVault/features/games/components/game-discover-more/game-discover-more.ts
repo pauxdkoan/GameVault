@@ -10,8 +10,9 @@ import {
 import { GameCardComponent } from '../../../../shared/components/game-card/game-card';
 import { GameCardPreview } from '../../../../shared/components/game-card-preview/game-card-preview';
 import { calculateGameCardPreviewPosition } from '../../../../shared/components/game-card-preview/game-card-preview-position';
-import { GameCard } from '../../../../shared/models/game-card.model';
-import { Dlc } from '../../models/games.interfaces';
+import { GameCard, GameCardDto } from '../../../../shared/models/game-card.model';
+import { toGameCard } from '../../../../shared/mappers/game-card.mapper';
+import { ensureSwiperRegistered } from '../../../../shared/utils/swiper';
 
 interface DiscoveryCarousel {
   title: string;
@@ -33,17 +34,21 @@ interface ActiveGamePreview {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GameDiscoverMoreComponent implements OnDestroy {
-  readonly similarGames = input<Dlc[]>([]);
-  readonly dlcs = input<Dlc[]>([]);
-  readonly expansions = input<Dlc[]>([]);
-  readonly expandedGames = input<Dlc[]>([]);
+  constructor() {
+    ensureSwiperRegistered();
+  }
+
+  readonly similarGames = input<GameCardDto[]>([]);
+  readonly dlcs = input<GameCardDto[]>([]);
+  readonly expansions = input<GameCardDto[]>([]);
+  readonly expandedGames = input<GameCardDto[]>([]);
   readonly activePreview = signal<ActiveGamePreview | null>(null);
 
   protected readonly sections = computed<DiscoveryCarousel[]>(() =>
     [
       {
         title: 'Juegos similares',
-        subtitle: 'Mas juegos que conectan con esta experiencia',
+        subtitle: 'Más juegos que conectan con esta experiencia',
         games: this.mapRelatedGames(this.similarGames(), 'Juego similar'),
       },
       {
@@ -62,43 +67,25 @@ export class GameDiscoverMoreComponent implements OnDestroy {
     ].filter((section) => section.games.length > 0),
   );
 
-  private mapRelatedGames(games: Dlc[], fallbackContext: string): GameCard[] {
-    return games
-      .filter((game) => game.externalId && game.name?.trim())
-      .map((game) => ({
-        id: game.externalId.toString(),
-        externalId: game.externalId,
-        name: game.name,
-        slug: this.slugify(game.name),
-        summary: this.relatedSummary(game, fallbackContext),
-        releaseLabel: fallbackContext,
-        coverImageUrl: game.coverImage,
-        screenshotUrl: game.coverImage,
-        screenshotUrls: game.coverImage ? [game.coverImage] : [],
-        trailerVideoUrl: null,
-        rating: game.raiting ?? 0,
-        metacritic: null,
-        genres: game.genres?.length ? game.genres.slice(0, 3) : ['Sin genero'],
-        platformLabel: game.platforms ?? [],
-      }));
+  /**
+   * Usa el mapper compartido y solo cambia el resumen: IGDB no envía
+   * resumen de los juegos relacionados, así que se describe con géneros y plataformas.
+   */
+  private mapRelatedGames(games: GameCardDto[], context: string): GameCard[] {
+    return games.map((game) => ({
+      ...toGameCard(game),
+      summary: this.relatedSummary(game, context),
+    }));
   }
 
-  private relatedSummary(game: Dlc, fallbackContext: string): string {
+  private relatedSummary(game: GameCardDto, context: string): string {
     const genres = game.genres?.filter(Boolean).slice(0, 2).join(', ');
     const platforms = game.platforms?.filter(Boolean).slice(0, 2).join(', ');
     const details = [genres, platforms].filter(Boolean).join(' · ');
 
     return details
-      ? `${fallbackContext} con datos de ${details}.`
-      : `${fallbackContext} relacionado con este juego.`;
-  }
-
-  private slugify(value: string): string {
-    return value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      ? `${context} con datos de ${details}.`
+      : `${context} relacionado con este juego.`;
   }
 
   private closePreviewTimeout: ReturnType<typeof setTimeout> | null = null;

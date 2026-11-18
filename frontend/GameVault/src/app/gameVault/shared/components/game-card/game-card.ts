@@ -7,6 +7,7 @@ import {
   GameCardPreviewSide,
   calculateGameCardPreviewPosition,
 } from '../game-card-preview/game-card-preview-position';
+import { igdbRatingLabel } from '../../utils/rating';
 
 type GameCardPreviewMode = 'internal' | 'external' | 'none';
 
@@ -34,9 +35,8 @@ export class GameCardComponent implements OnDestroy {
 
   protected readonly isCompact = computed(() => this.variant() === 'compact');
 
-  protected readonly ratingLabel = computed(() =>
-    this.game().rating > 0 ? this.game().rating.toFixed(1) : 'S/R',
-  );
+  /** Nota de IGDB mostrada sobre 10 (ver shared/utils/rating.ts). */
+  protected readonly ratingLabel = computed(() => igdbRatingLabel(this.game().rating));
 
   ngOnDestroy(): void {
     this.cancelClosePreview();

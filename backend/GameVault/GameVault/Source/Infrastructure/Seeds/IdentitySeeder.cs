@@ -9,11 +9,11 @@ namespace GameVault.Source.Infrastructure.Seeds
     public class IdentitySeeder
     {
      
-        public static async Task SeedAsync( UserManager<ApplicationUser> userManager,RoleManager<IdentityRole<Guid>> roleManager)
+        public static async Task SeedAsync( UserManager<ApplicationUser> userManager,RoleManager<IdentityRole<Guid>> roleManager, IConfiguration configuration)
         {
 
             await SeedRolesAsync(roleManager);
-            await SeedAdminAsync(userManager);
+            await SeedAdminAsync(userManager, configuration);
         }
         private static async Task SeedRolesAsync(RoleManager<IdentityRole<Guid>> roleManager)
         {
@@ -42,7 +42,7 @@ namespace GameVault.Source.Infrastructure.Seeds
 
         }
 
-        private static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager)
+        private static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             ApplicationUser defaultAdmin = new()
             {
@@ -58,9 +58,15 @@ namespace GameVault.Source.Infrastructure.Seeds
 
             var existingAdmin =  await userManager.FindByEmailAsync(defaultAdmin.Email);
             if (existingAdmin != null) return;
-            
-            var result=await userManager.CreateAsync(defaultAdmin, "Paulo123!");
 
+
+            var adminPassword = configuration["SeedSettings:AdminPassword"];
+            if (string.IsNullOrWhiteSpace(adminPassword))
+            {
+                return;
+            }
+
+            var result = await userManager.CreateAsync(defaultAdmin, adminPassword);
             if (!result.Succeeded)
             {
                 var errors = string.Join(
