@@ -1,0 +1,15 @@
+<!-- Ficha: un solo panel con filas separadas por líneas (sin cajas dentro de cajas) -->
+<section class="vault-card p-5">
+  <h2 class="text-2xl text-vault-text">Ficha del juego</h2>
+  <dl class="mt-3 divide-y divide-vault-border">
+    @for (fact of quickFacts(); track fact.label) {
+      <div class="flex items-center justify-between gap-4 py-3">
+        <dt class="flex items-center gap-2.5 text-sm text-vault-muted">
+          <app-icon class="size-4 text-vault-subtle" [name]="fact.icon" aria-hidden="true" />
+          {{ fact.label }}
+        </dt>
+        <dd class="truncate text-right font-semibold tabular-nums text-vault-text">{{ fact.value }}</dd>
+      </div>
+    }
+  </dl>
+</section>

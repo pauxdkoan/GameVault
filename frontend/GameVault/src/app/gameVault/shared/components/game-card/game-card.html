@@ -1,0 +1,63 @@
+<article
+  class="group relative h-full cursor-pointer outline-none"
+  tabindex="0"
+  (mouseenter)="openPreview($event)"
+  (mouseleave)="closePreview()"
+  (focusin)="openPreview($event)"
+  (focusout)="closePreview()"
+>
+  <!-- Portada: la protagonista. El nombre va debajo para no tapar el arte. -->
+  <div
+    class="relative aspect-[2/3] overflow-hidden rounded-lg border border-vault-border bg-vault-surface transition duration-200 group-hover:-translate-y-1 group-hover:border-vault-accent group-focus-visible:border-vault-accent group-focus-visible:ring-2 group-focus-visible:ring-vault-accent group-active:scale-[0.98]"
+  >
+    @if (game().coverImageUrl && !hasImageError()) {
+      <img
+        class="h-full w-full object-cover"
+        [src]="game().coverImageUrl"
+        [alt]="game().name"
+        loading="lazy"
+        (error)="markImageAsFailed()"
+      />
+    } @else {
+      <div class="grid h-full place-items-center bg-vault-surface-hover p-4 text-center">
+        <span class="font-display text-5xl font-black uppercase text-vault-subtle">
+          {{ game().name.charAt(0) }}
+        </span>
+      </div>
+    }
+
+    <!-- Nota sobre 10: chip oscuro y sólido para no competir con la portada -->
+    <div
+      class="absolute right-1.5 top-1.5 rounded-md bg-vault-bg/90 px-1.5 py-0.5 font-display text-sm font-extrabold tabular-nums text-vault-accent"
+      [attr.aria-label]="'Nota IGDB ' + ratingLabel() + ' sobre 10'"
+    >
+      {{ ratingLabel() }}
+    </div>
+  </div>
+
+  <div class="mt-2 px-0.5">
+    <h3
+      class="font-semibold leading-snug text-vault-text transition group-hover:text-vault-accent"
+      [class.line-clamp-2]="true"
+      [class.text-sm]="isCompact()"
+      [class.text-base]="!isCompact()"
+    >
+      {{ game().name }}
+    </h3>
+    <p class="mt-0.5 line-clamp-1 text-sm text-vault-subtle">
+      {{ game().releaseLabel }}
+    </p>
+  </div>
+  @if (activePreviewPosition(); as previewPosition) {
+    <div
+      class="fixed z-[100]"
+      [style.top.px]="previewPosition.top"
+      [style.left.px]="previewPosition.left"
+      [style.width.px]="previewWidth()"
+      (mouseenter)="cancelClosePreview()"
+      (mouseleave)="closePreview()"
+    >
+      <app-game-card-preview [game]="game()" [variant]="variant()" />
+    </div>
+  }
+</article>

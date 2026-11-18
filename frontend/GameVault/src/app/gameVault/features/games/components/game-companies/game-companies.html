@@ -1,0 +1,46 @@
+@if (hasCompanies()) {
+  <section class="vault-card p-5">
+    <h2 class="text-2xl text-vault-text">Compañías</h2>
+
+    <div class="mt-4 space-y-4">
+      @if (developers().length > 0) {
+        <div>
+          <p class="text-sm text-vault-muted">Desarrollador</p>
+          <div class="mt-1">
+            @for (company of developers(); track company.name) {
+              <p class="font-semibold leading-7 text-vault-text">
+                {{ company.name }}
+              </p>
+            }
+          </div>
+        </div>
+      }
+
+      @if (publishers().length > 0) {
+        <div>
+          <p class="text-sm text-vault-muted">Distribuidora</p>
+          <div class="mt-1">
+            @for (company of publishers(); track company.name) {
+              <p class="font-semibold leading-7 text-vault-text">
+                {{ company.name }}
+              </p>
+            }
+          </div>
+        </div>
+      }
+
+      @if (otherCompanies().length > 0) {
+        <div>
+          <p class="text-sm text-vault-muted">Otros</p>
+          <div class="mt-1">
+            @for (company of otherCompanies(); track company.name) {
+              <p class="font-semibold leading-7 text-vault-text">
+                {{ company.name }}
+              </p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+}

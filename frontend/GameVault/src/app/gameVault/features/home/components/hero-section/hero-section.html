@@ -1,0 +1,41 @@
+<section id="top" class="relative isolate overflow-hidden pb-16 pt-28 sm:pt-32 lg:pb-24">
+  <!-- Fondo: una captura del juego destacado, oscurecida. El color de la portada lo pone el juego. -->
+  @if (backgroundImage(); as image) {
+    <img
+      class="absolute inset-0 -z-20 h-full w-full object-cover opacity-30"
+      [src]="image"
+      alt=""
+      aria-hidden="true"
+    />
+  }
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-vault-bg/70 via-vault-bg/85 to-vault-bg" aria-hidden="true"></div>
+
+  <div class="vault-container grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
+    <!-- Texto -->
+    <div class="min-w-0">
+      <h1 class="max-w-3xl text-6xl text-vault-text sm:text-7xl lg:text-8xl">
+        Lleva la cuenta de todo lo que juegas
+      </h1>
+
+      <p class="mt-6 max-w-xl text-lg leading-8 text-vault-muted">
+        Busca entre miles de juegos de IGDB, apunta lo que estás jugando y lee qué opinan otros jugadores antes de
+        empezar el siguiente.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a vaultButton size="lg" [routerLink]="['/gamevault/games']">
+          Explorar juegos <span aria-hidden="true">→</span>
+        </a>
+        <!-- Con sesión no tiene sentido invitar a registrarse: se va directo a la biblioteca -->
+        @if (session.isLoggedIn()) {
+          <a vaultButton size="lg" variant="secondary" routerLink="/gamevault/library">Ir a mi biblioteca</a>
+        } @else {
+          <a vaultButton size="lg" variant="secondary" routerLink="/auth/register">Crear cuenta</a>
+        }
+      </div>
+    </div>
+
+    <!-- Juego del momento -->
+    <app-home-hero-carousel class="block min-w-0" [slides]="slides()" [loading]="loading()" />
+  </div>
+</section>

@@ -1,0 +1,47 @@
+<div class="min-h-screen bg-vault-bg pb-20 pt-28">
+  <div class="vault-container space-y-8">
+    <app-page-header
+      title="Mis listas"
+      subtitle="Agrupa juegos como quieras: favoritos de la infancia, pendientes para el verano, joyas escondidas."
+    >
+      @if (!formOpen()) {
+        <button vaultButton type="button" (click)="formOpen.set(true)">Nueva lista</button>
+      }
+    </app-page-header>
+
+    @if (formOpen()) {
+      <div class="max-w-xl">
+        <app-list-form (saved)="onCreated($event)" (cancelled)="closeForm()" />
+      </div>
+    }
+
+    @if (error()) {
+      <div class="rounded-lg border border-vault-danger/30 bg-vault-danger/10 px-4 py-3 text-sm text-vault-danger" role="alert">
+        {{ error() }}
+        <button class="ml-2 font-semibold underline cursor-pointer" type="button" (click)="load()">Reintentar</button>
+      </div>
+    }
+
+    @if (isLoading()) {
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+        @for (placeholder of [1, 2, 3]; track placeholder) {
+          <div class="h-60 animate-pulse rounded-xl bg-vault-surface"></div>
+        }
+      </div>
+    } @else {
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        @for (list of lists(); track list.id) {
+          <app-list-card [list]="list" [showOwner]="false" />
+        } @empty {
+          @if (!error() && !formOpen()) {
+            <div class="col-span-full rounded-xl border border-dashed border-vault-border px-6 py-14 text-center">
+              <p class="text-xl font-semibold text-vault-text">Aún no tienes listas</p>
+              <p class="mt-2 text-sm text-vault-muted">Crea la primera y ve añadiendo juegos desde su ficha.</p>
+              <button class="mt-5" vaultButton type="button" (click)="formOpen.set(true)">Crear mi primera lista</button>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</div>

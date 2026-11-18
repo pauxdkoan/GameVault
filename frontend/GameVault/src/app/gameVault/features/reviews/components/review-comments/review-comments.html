@@ -1,0 +1,52 @@
+<div class="mt-4 space-y-3 border-t border-vault-border pt-4">
+  @if (comments(); as list) {
+    @for (comment of list; track comment.id) {
+      <div class="flex gap-3">
+        <app-user-avatar [name]="comment.author.displayName" [avatarUrl]="comment.author.avatarUrl" [size]="30" />
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-sm">
+              <span class="font-semibold text-vault-text">{{ comment.author.displayName }}</span>
+              <span class="text-vault-subtle"> · {{ timeAgo(comment.createdAt) }}</span>
+            </p>
+            @if (comment.isMine) {
+              <button class="text-sm text-vault-muted transition hover:text-vault-danger cursor-pointer" type="button" (click)="remove(comment)">
+                Borrar
+              </button>
+            }
+          </div>
+          <p class="mt-1 whitespace-pre-line break-words text-sm text-vault-muted">{{ comment.content }}</p>
+        </div>
+      </div>
+    } @empty {
+      <p class="text-sm text-vault-subtle">Nadie ha comentado todavía.</p>
+    }
+  } @else {
+    <p class="text-sm text-vault-subtle">Cargando comentarios...</p>
+  }
+
+  @if (session.isLoggedIn()) {
+    <form class="flex items-end gap-2" (submit)="send($event)">
+      <label class="sr-only" [attr.for]="'comment-' + reviewId()">Escribe un comentario</label>
+      <textarea
+        class="vault-input h-11 min-h-11 flex-1 resize-y py-2.5"
+        placeholder="Escribe un comentario..."
+        [id]="'comment-' + reviewId()"
+        [maxLength]="maxComment"
+        [value]="draft()"
+        (input)="setDraft($event)"
+      ></textarea>
+      <button
+        class="h-11 rounded-md bg-vault-accent px-4 text-sm font-semibold text-vault-bg transition hover:bg-vault-accent-soft cursor-pointer disabled:opacity-50"
+        type="submit"
+        [disabled]="isSending() || !draft().trim()"
+      >
+        Enviar
+      </button>
+    </form>
+  }
+
+  @if (error()) {
+    <p class="text-xs text-vault-danger" role="alert">{{ error() }}</p>
+  }
+</div>

@@ -1,0 +1,72 @@
+<div class="min-h-screen bg-vault-bg pb-20 pt-28">
+  <div class="vault-container space-y-8">
+    <app-page-header
+      title="Mi biblioteca"
+      subtitle="Lo que juegas, lo que tienes pendiente y lo que ya terminaste. Pulsa Editar en un juego para cambiar su estado, el progreso o tu nota."
+    >
+      <a vaultButton variant="secondary" routerLink="/gamevault/games">Buscar juegos</a>
+    </app-page-header>
+
+    <!-- Pestañas por estado -->
+    <!-- En móvil la fila se desliza; el borde derecho se desvanece para que se note -->
+    <nav class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(to_right,black_85%,transparent)] sm:mx-0 sm:px-0 sm:[mask-image:none]" aria-label="Filtrar por estado">
+      <button
+        class="h-10 shrink-0 rounded-md border px-4 text-sm font-semibold transition active:scale-[0.98] cursor-pointer"
+        [class]="selectedStatus() === null ? 'border-vault-accent bg-vault-accent/10 text-vault-text' : 'border-vault-border text-vault-muted hover:border-vault-border-strong hover:text-vault-text'"
+        type="button"
+        [attr.aria-pressed]="selectedStatus() === null"
+        (click)="selectStatus(null)"
+      >
+        Todos <span class="ml-1 tabular-nums text-vault-subtle">{{ libraryTotal() }}</span>
+      </button>
+      @for (status of statuses; track status.value) {
+        <button
+          class="flex h-10 shrink-0 items-center gap-2 rounded-md border px-4 text-sm font-semibold transition active:scale-[0.98] cursor-pointer"
+          [class]="selectedStatus() === status.value ? 'border-vault-accent bg-vault-accent/10 text-vault-text' : 'border-vault-border text-vault-muted hover:border-vault-border-strong hover:text-vault-text'"
+          type="button"
+          [attr.aria-pressed]="selectedStatus() === status.value"
+          (click)="selectStatus(status.value)"
+        >
+          <span class="size-2 rounded-full" [class]="status.dotClass" aria-hidden="true"></span>
+          {{ status.label }}
+          <span class="tabular-nums text-vault-subtle">{{ counts()[status.value] ?? 0 }}</span>
+        </button>
+      }
+    </nav>
+
+    @if (error()) {
+      <div class="rounded-lg border border-vault-danger/30 bg-vault-danger/10 px-4 py-3 text-sm text-vault-danger" role="alert">
+        {{ error() }}
+        <button class="ml-2 font-semibold underline cursor-pointer" type="button" (click)="load(1)">Reintentar</button>
+      </div>
+    }
+
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      @for (entry of entries(); track entry.game.externalId) {
+        <app-library-entry-card [entry]="entry" (saved)="refresh()" (removed)="refresh()" />
+      }
+    </div>
+
+    @if (isLoading()) {
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-hidden="true">
+        @for (placeholder of [1, 2, 3]; track placeholder) {
+          <div class="h-40 animate-pulse rounded-xl bg-vault-surface"></div>
+        }
+      </div>
+    } @else if (entries().length === 0 && !error()) {
+      <div class="rounded-xl border border-dashed border-vault-border px-6 py-14 text-center">
+        @if (selectedStatus() === null) {
+          <p class="text-xl font-semibold text-vault-text">Tu biblioteca está vacía</p>
+          <p class="mt-2 text-sm text-vault-muted">Abre cualquier juego y pulsa "Añadir a mi biblioteca".</p>
+          <a class="mt-5" vaultButton routerLink="/gamevault/games">Explorar el catálogo</a>
+        } @else {
+          <p class="text-sm text-vault-muted">No tienes juegos con este estado.</p>
+        }
+      </div>
+    } @else if (hasMore()) {
+      <div class="text-center">
+        <button vaultButton variant="secondary" type="button" (click)="load(page() + 1)">Cargar más</button>
+      </div>
+    }
+  </div>
+</div>

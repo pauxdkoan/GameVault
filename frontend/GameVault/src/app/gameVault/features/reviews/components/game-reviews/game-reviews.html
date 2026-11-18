@@ -1,0 +1,67 @@
+<section class="space-y-5" aria-labelledby="reviews-title">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h2 id="reviews-title" class="text-3xl text-vault-text sm:text-4xl">Reseñas</h2>
+      <p class="mt-1 text-sm text-vault-muted">Lo que opina la comunidad de GameVault.</p>
+    </div>
+
+    @if (averageRating() !== null) {
+      <div class="flex items-center gap-3">
+        <span class="font-display text-5xl font-extrabold leading-none tabular-nums text-vault-accent">{{ averageRating() }}</span>
+        <div>
+          <app-rating-stars [value]="averageRating()!" [size]="16" />
+          <p class="text-sm text-vault-subtle">
+            media sobre 10 · {{ reviewCount() }} {{ reviewCount() === 1 ? 'reseña' : 'reseñas' }}
+          </p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Mi reseña / escribir una -->
+  @if (!session.isLoggedIn()) {
+    <div class="vault-card flex flex-wrap items-center justify-between gap-3 p-5">
+      <p class="text-sm text-vault-muted">Inicia sesión para escribir tu reseña de {{ gameName() || 'este juego' }}.</p>
+      <a vaultButton variant="secondary" size="sm" routerLink="/auth/login">Iniciar sesión</a>
+    </div>
+  } @else if (formOpen()) {
+    <app-review-form
+      [externalId]="externalId()"
+      [review]="myReview()"
+      (saved)="onSaved()"
+      (cancelled)="formOpen.set(false)"
+    />
+  } @else if (myReview()) {
+    <app-review-card [review]="myReview()!" (edit)="formOpen.set(true)" (deleted)="onDeleted()" />
+  } @else if (!isLoading()) {
+    <div class="vault-card flex flex-wrap items-center justify-between gap-3 p-5">
+      <p class="text-sm text-vault-muted">¿Lo has jugado? Cuéntale a la comunidad qué te pareció.</p>
+      <button vaultButton size="sm" type="button" (click)="formOpen.set(true)">Escribir reseña</button>
+    </div>
+  }
+
+  @if (error()) {
+    <p class="rounded-lg border border-vault-danger/30 bg-vault-danger/10 px-4 py-3 text-sm text-vault-danger" role="alert">
+      {{ error() }}
+    </p>
+  }
+
+  <!-- Reseñas del resto -->
+  @for (review of reviews(); track review.id) {
+    <app-review-card [review]="review" />
+  } @empty {
+    @if (!isLoading() && !myReview() && !error()) {
+      <p class="rounded-lg border border-dashed border-vault-border px-5 py-8 text-center text-sm text-vault-subtle">
+        Todavía no hay reseñas de este juego.
+      </p>
+    }
+  }
+
+  @if (isLoading()) {
+    <p class="text-center text-sm text-vault-subtle">Cargando reseñas...</p>
+  } @else if (hasMore()) {
+    <div class="text-center">
+      <button vaultButton variant="secondary" size="sm" type="button" (click)="load(page() + 1)">Cargar más</button>
+    </div>
+  }
+</section>

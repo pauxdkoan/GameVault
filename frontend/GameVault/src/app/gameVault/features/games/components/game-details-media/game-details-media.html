@@ -1,0 +1,236 @@
+<section id="media" class="scroll-mt-32">
+  <h2 class="text-3xl text-vault-text sm:text-4xl">Capturas y vídeos</h2>
+
+  @if (hasMedia()) {
+    @if (visibleScreenshots().length > 0) {
+      <div class="mt-6">
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <h3 class="text-sm font-semibold text-vault-muted">Capturas <span class="tabular-nums">({{ visibleScreenshots().length }})</span></h3>
+          <div class="flex gap-2">
+          <button
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
+            type="button"
+            aria-label="Ver capturas anteriores"
+            [disabled]="!canScrollImagesPrevious()"
+            (click)="scrollRow(imageScroller, -1, 'images')"
+          >
+            <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" />
+          </button>
+          <button
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
+            type="button"
+            aria-label="Ver capturas siguientes"
+            [disabled]="!canScrollImagesNext()"
+            (click)="scrollRow(imageScroller, 1, 'images')"
+          >
+            <app-icon name="chevron-right" class="size-4" [strokeWidth]="2.5" />
+          </button>
+          </div>
+        </div>
+        <swiper-container
+          #imageScroller
+          class="block pb-2"
+          slides-per-view="auto"
+          space-between="10"
+          free-mode="true"
+          grab-cursor="true"
+          speed="450"
+          (swiperinit)="updateScrollControls(imageScroller, 'images')"
+          (swiperslidechange)="updateScrollControls(imageScroller, 'images')"
+          (swipertouchend)="updateScrollControls(imageScroller, 'images')"
+        >
+          @for (
+            screenshot of visibleScreenshots();
+            track screenshot;
+            let index = $index
+          ) {
+            <swiper-slide class="w-48 sm:w-56 lg:w-64">
+              <button
+                class="group relative aspect-video w-full overflow-hidden rounded-md border border-vault-border bg-vault-surface transition hover:border-vault-accent/60 active:scale-[0.98]"
+                type="button"
+                (click)="openImageViewer(index)"
+              >
+                <img
+                  class="h-full w-full object-cover"
+                  [src]="screenshot"
+                  [alt]="'Captura de ' + gameName()"
+                  loading="lazy"
+                />
+              </button>
+            </swiper-slide>
+          }
+        </swiper-container>
+      </div>
+    }
+
+    @if (visibleVideos().length > 0) {
+      <div class="mt-8">
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <h3 class="text-sm font-semibold text-vault-muted">Vídeos <span class="tabular-nums">({{ visibleVideos().length }})</span></h3>
+          <div class="flex gap-2">
+          <button
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
+            type="button"
+            aria-label="Ver videos anteriores"
+            [disabled]="!canScrollVideosPrevious()"
+            (click)="scrollRow(videoScroller, -1, 'videos')"
+          >
+            <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" />
+          </button>
+          <button
+            class="grid size-10 place-items-center rounded-md border border-vault-border-strong text-vault-text transition hover:border-vault-accent/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-vault-border-strong cursor-pointer"
+            type="button"
+            aria-label="Ver videos siguientes"
+            [disabled]="!canScrollVideosNext()"
+            (click)="scrollRow(videoScroller, 1, 'videos')"
+          >
+            <app-icon name="chevron-right" class="size-4" [strokeWidth]="2.5" />
+          </button>
+          </div>
+        </div>
+        <swiper-container
+          #videoScroller
+          class="block pb-2"
+          slides-per-view="auto"
+          space-between="10"
+          free-mode="true"
+          grab-cursor="true"
+          speed="450"
+          (swiperinit)="updateScrollControls(videoScroller, 'videos')"
+          (swiperslidechange)="updateScrollControls(videoScroller, 'videos')"
+          (swipertouchend)="updateScrollControls(videoScroller, 'videos')"
+        >
+          @for (video of visibleVideos(); track video.url || video.embedUrl) {
+            <swiper-slide class="w-48 sm:w-56 lg:w-64">
+              <button
+                class="group relative aspect-video w-full overflow-hidden rounded-md border border-vault-border bg-vault-surface transition hover:border-vault-accent/60 active:scale-[0.98]"
+                type="button"
+                (click)="openVideoViewer(video)"
+              >
+                <img
+                  class="h-full w-full object-cover opacity-80 transition group-hover:opacity-100"
+                  [src]="video.thumbnailUrl"
+                  [alt]="video.name || 'Video'"
+                  loading="lazy"
+                />
+                <span class="absolute inset-0 bg-black/35"></span>
+                <span
+                  class="absolute inset-0 grid place-items-center text-vault-text"
+                  aria-hidden="true"
+                >
+                  <span
+                    class="grid size-11 place-items-center rounded-full bg-vault-accent text-vault-bg"
+                  >
+                    <app-icon name="play" class="size-5" />
+                  </span>
+                </span>
+                <span
+                  class="absolute bottom-2 left-2 right-2 line-clamp-1 text-left text-sm font-semibold text-vault-text"
+                >
+                  {{ video.name || "Trailer" }}
+                </span>
+              </button>
+            </swiper-slide>
+          }
+        </swiper-container>
+      </div>
+    }
+  } @else {
+    <div
+      class="mt-6 rounded-lg border border-dashed border-vault-border p-8 text-center text-sm text-vault-muted"
+    >
+      Este juego todavía no tiene capturas ni vídeos en IGDB.
+    </div>
+  }
+</section>
+
+@if (selectedImage(); as image) {
+  <div
+    class="fixed inset-0 z-[80] grid place-items-center bg-vault-bg/95 px-4 py-8"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Visor de capturas"
+  >
+    <button
+      class="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
+      type="button"
+      aria-label="Cerrar imagen"
+      (click)="closeImageViewer()"
+    >
+      <app-icon name="x" class="size-5" />
+    </button>
+
+    <button
+      class="absolute left-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
+      type="button"
+      aria-label="Imagen anterior"
+      (click)="showPreviousImage()"
+    >
+      <app-icon name="chevron-left" class="size-4" [strokeWidth]="2.5" />
+    </button>
+
+    <img
+      class="max-h-[78vh] w-full max-w-6xl rounded-lg object-contain"
+      [src]="image"
+      [alt]="'Captura de ' + gameName() + ' ampliada'"
+    />
+
+    <button
+      class="absolute right-4 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
+      type="button"
+      aria-label="Imagen siguiente"
+      (click)="showNextImage()"
+    >
+      <app-icon name="chevron-right" class="size-4" [strokeWidth]="2.5" />
+    </button>
+
+    <p class="absolute bottom-6 text-sm font-semibold tabular-nums text-vault-muted">
+      {{ selectedImageCounter() }}
+    </p>
+  </div>
+}
+
+@if (selectedVideo(); as video) {
+  <div
+    class="fixed inset-0 z-[80] grid place-items-center bg-vault-bg/95 px-4 py-8"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Reproductor de video"
+  >
+    <button
+      class="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-vault-surface-hover text-xl text-vault-text transition hover:bg-vault-border-strong cursor-pointer"
+      type="button"
+      aria-label="Cerrar video"
+      (click)="closeVideoViewer()"
+    >
+      <app-icon name="x" class="size-5" />
+    </button>
+
+    <div class="w-full max-w-5xl">
+      <div
+        class="relative aspect-video overflow-hidden rounded-lg border border-vault-border bg-black"
+      >
+        @if (selectedVideoEmbedUrl(); as embedUrl) {
+          <iframe
+            class="h-full w-full"
+            [src]="embedUrl"
+            [title]="video.name || gameName() + ' video'"
+            allow="
+              accelerometer;
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              gyroscope;
+              picture-in-picture;
+              web-share;
+            "
+            allowfullscreen
+          ></iframe>
+        }
+      </div>
+      <p class="mt-4 text-center text-sm font-semibold tabular-nums text-vault-muted">
+        {{ video.name || "Video" }}
+      </p>
+    </div>
+  </div>
+}

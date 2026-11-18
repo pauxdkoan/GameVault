@@ -1,0 +1,30 @@
+<section id="lists" class="scroll-mt-24">
+  <app-section-header
+    title="Listas creadas por jugadores"
+    subtitle="Colecciones públicas de otros jugadores."
+  />
+
+  @if (status() === 'loading') {
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+      @for (placeholder of [1, 2, 3]; track placeholder) {
+        <div class="h-60 animate-pulse rounded-xl bg-vault-surface"></div>
+      }
+    </div>
+  } @else if (status() === 'error') {
+    <p class="mt-8 rounded-xl border border-vault-border px-5 py-8 text-center text-sm text-vault-subtle">
+      No pude cargar las listas ahora mismo.
+    </p>
+  } @else {
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      @for (list of lists(); track list.id) {
+        <app-list-card [list]="list" />
+      } @empty {
+        <div class="col-span-full rounded-xl border border-dashed border-vault-border px-6 py-12 text-center">
+          <p class="text-lg font-semibold text-vault-text">Todavía no hay listas públicas</p>
+          <p class="mt-2 text-sm text-vault-muted">Crea la primera: tus favoritos, tus pendientes, lo que quieras.</p>
+          <a class="mt-5" vaultButton variant="secondary" routerLink="/gamevault/lists" [queryParams]="{ nueva: 1 }">Crear una lista</a>
+        </div>
+      }
+    </div>
+  }
+</section>

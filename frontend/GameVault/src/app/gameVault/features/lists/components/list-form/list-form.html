@@ -1,0 +1,45 @@
+<form class="vault-card space-y-4 p-5" (submit)="submit($event)" novalidate>
+  <h2 class="text-lg font-semibold text-vault-text">{{ listId() ? 'Editar lista' : 'Nueva lista' }}</h2>
+
+  <label class="block">
+    <span class="text-sm font-medium text-vault-muted">Nombre</span>
+    <input
+      class="vault-input mt-1.5"
+      type="text"
+      placeholder="Ej: RPGs para el verano"
+      [attr.maxlength]="maxName"
+      [value]="name()"
+      (input)="name.set(textValue($event))"
+    />
+  </label>
+
+  <label class="block">
+    <span class="flex justify-between text-sm font-medium text-vault-muted">
+      Descripción <span class="text-xs text-vault-subtle">{{ description().length }}/{{ maxDescription }}</span>
+    </span>
+    <textarea
+      class="vault-input mt-1.5 min-h-24 resize-y"
+      placeholder="¿De qué va esta lista? (opcional)"
+      [attr.maxlength]="maxDescription"
+      [value]="description()"
+      (input)="description.set(textValue($event))"
+    ></textarea>
+  </label>
+
+  <label class="flex items-center gap-3 text-sm text-vault-muted">
+    <input class="size-4 accent-vault-accent" type="checkbox" [checked]="isPublic()" (change)="isPublic.set($any($event.target).checked)" />
+    Pública: cualquiera puede verla en tu perfil y en el inicio.
+  </label>
+
+  @if (submitted() && validationError()) {
+    <p class="text-sm text-vault-danger" role="alert">{{ validationError() }}</p>
+  }
+  @for (message of errors(); track message) {
+    <p class="text-sm text-vault-danger" role="alert">{{ message }}</p>
+  }
+
+  <div class="flex gap-2">
+    <button vaultButton size="sm" type="submit" [disabled]="isSaving()">{{ isSaving() ? 'Guardando...' : listId() ? 'Guardar cambios' : 'Crear lista' }}</button>
+    <button vaultButton variant="ghost" size="sm" type="button" (click)="cancelled.emit()">Cancelar</button>
+  </div>
+</form>

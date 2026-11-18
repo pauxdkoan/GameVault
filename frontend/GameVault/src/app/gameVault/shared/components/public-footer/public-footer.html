@@ -1,0 +1,37 @@
+<footer class="border-t border-vault-border bg-vault-bg-soft">
+  <div class="vault-container grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
+    <div>
+      <app-brand-logo />
+      <p class="mt-4 max-w-xs text-sm leading-6 text-vault-muted">
+        La plataforma para descubrir, organizar y compartir tu vida como jugador.
+      </p>
+    </div>
+
+    @for (column of columns; track column.title) {
+      <nav [attr.aria-label]="column.title">
+        <h2 class="text-lg tracking-wider text-vault-text">{{ column.title }}</h2>
+        <ul class="mt-4 space-y-3 text-sm">
+          @for (link of column.links; track link.label) {
+            <li>
+              <a
+                class="text-vault-muted transition hover:text-vault-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent rounded-md"
+                [routerLink]="[link.route]"
+                [fragment]="link.fragment"
+              >
+                {{ link.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+    }
+
+  </div>
+
+  <div class="vault-container">
+    <div class="flex flex-col gap-2 border-t border-vault-border py-6 text-sm text-vault-subtle sm:flex-row sm:items-center sm:justify-between">
+      <p>© {{ currentYear }} GameVault · Proyecto de portafolio.</p>
+      <p>Datos e imágenes de videojuegos proporcionados por IGDB.</p>
+    </div>
+  </div>
+</footer>

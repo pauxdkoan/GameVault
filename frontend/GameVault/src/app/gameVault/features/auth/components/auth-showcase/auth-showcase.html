@@ -1,0 +1,40 @@
+<div class="showcase relative h-full overflow-hidden rounded-xl border border-vault-border bg-vault-bg-soft">
+  <!-- Mural de portadas -->
+  <div class="showcase-wall" aria-hidden="true">
+    @for (column of columns(); track $index; let columnIndex = $index) {
+      <div
+        class="showcase-column"
+        [class.showcase-column--reverse]="columnIndex % 2 === 1"
+      >
+        <!-- La lista se repite dos veces para que el desplazamiento sea infinito -->
+        @for (copy of [0, 1]; track copy) {
+          @if (hasCovers()) {
+            @for (game of column; track game.id) {
+              <img
+                class="showcase-cover"
+                [src]="game.cover"
+                [alt]="''"
+                loading="lazy"
+              />
+            }
+          } @else {
+            @for (item of placeholders; track item) {
+              <div class="showcase-cover showcase-cover--placeholder"></div>
+            }
+          }
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Oscurece la parte de abajo para que el texto se lea bien -->
+  <div class="showcase-fade" aria-hidden="true"></div>
+
+  <!-- Mensaje -->
+  <div class="absolute inset-x-0 bottom-0 p-8 xl:p-12">
+    <p class="max-w-md font-display text-5xl font-extrabold uppercase leading-[0.95] text-vault-text xl:text-6xl">
+      Todo lo que juegas, en una estantería
+    </p>
+    <p class="mt-4 max-w-md text-vault-muted">Biblioteca, reseñas y listas con las portadas de IGDB.</p>
+  </div>
+</div>

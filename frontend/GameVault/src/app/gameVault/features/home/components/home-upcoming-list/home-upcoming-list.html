@@ -1,0 +1,39 @@
+<section id="upcoming" class="scroll-mt-24">
+  <app-section-header title="Próximos lanzamientos" subtitle="Lo que sale en las próximas semanas." />
+
+  <ol class="mt-8 border-t border-vault-border">
+    @for (game of rows(); track game.id) {
+      <li class="border-b border-vault-border">
+        <a
+          class="group grid grid-cols-[4.5rem_3.5rem_minmax(0,1fr)_auto] items-center gap-4 py-4 transition hover:bg-vault-surface sm:grid-cols-[8rem_4rem_minmax(0,1fr)_auto] sm:gap-6 sm:px-3"
+          [routerLink]="['/gamevault/gamesdetails', game.id]"
+        >
+          <time class="font-display text-xl font-extrabold uppercase leading-tight text-vault-accent sm:text-2xl">
+            {{ game.releaseLabel }}
+          </time>
+
+          <span class="block aspect-[2/3] overflow-hidden rounded-md border border-vault-border bg-vault-surface">
+            @if (game.coverImageUrl) {
+              <img class="h-full w-full object-cover" [src]="game.coverImageUrl" [alt]="game.name" loading="lazy" />
+            } @else {
+              <span class="grid h-full place-items-center font-display text-xl font-black uppercase text-vault-subtle">
+                {{ game.name.charAt(0) }}
+              </span>
+            }
+          </span>
+
+          <span class="min-w-0">
+            <span class="block truncate text-lg font-semibold text-vault-text transition group-hover:text-vault-accent">
+              {{ game.name }}
+            </span>
+            @if (game.genres.length > 0) {
+              <span class="block truncate text-sm text-vault-muted">{{ game.genres.slice(0, 2).join(' · ') }}</span>
+            }
+          </span>
+
+          <app-icon name="arrow-right" class="size-5 text-vault-subtle transition group-hover:translate-x-1 group-hover:text-vault-accent" />
+        </a>
+      </li>
+    }
+  </ol>
+</section>

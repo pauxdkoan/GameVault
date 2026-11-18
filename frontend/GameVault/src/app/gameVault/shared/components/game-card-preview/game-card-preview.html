@@ -1,0 +1,131 @@
+<div
+  class="vault-popover overflow-hidden rounded-xl"
+>
+  <div class="relative aspect-video overflow-hidden bg-black">
+    @if (hasPreviewMedia() && !previewImageFailed()) {
+      <swiper-container
+        class="block h-full w-full min-w-0"
+        slides-per-view="1"
+        speed="500"
+        grab-cursor="true"
+        [pagination]="previewSlideCount() > 1"
+        [navigation]="previewSlideCount() > 1"
+        style="
+          --swiper-theme-color: #c6f135;
+          --swiper-navigation-size: 1rem;
+          --swiper-pagination-bullet-size: 0.42rem;
+        "
+      >
+        @if (trailerEmbedUrl(); as embedUrl) {
+          <swiper-slide>
+            <iframe
+              class="h-full w-full"
+              [src]="embedUrl"
+              [title]="game().name + ' trailer'"
+              allow="autoplay; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </swiper-slide>
+        }
+
+        @for (imageUrl of previewImages(); track imageUrl) {
+          <swiper-slide>
+            <img
+              class="h-full w-full object-cover"
+              [src]="imageUrl"
+              [alt]="game().name"
+              loading="lazy"
+              (error)="markPreviewImageAsFailed()"
+            />
+          </swiper-slide>
+        }
+      </swiper-container>
+    } @else {
+      <div class="grid h-full place-items-center bg-vault-surface-hover">
+        <span class="font-display text-5xl font-black uppercase text-vault-subtle">
+          {{ game().name.charAt(0) }}
+        </span>
+      </div>
+    }
+
+    
+  </div>
+
+  <div class="space-y-3 p-3">
+    <div class="flex items-start gap-3">
+      <div
+        class="grid shrink-0 place-items-center rounded-md border border-vault-border-strong bg-vault-bg text-center"
+        [class.size-11]="isCompact()"
+        [class.size-12]="!isCompact()"
+        [attr.aria-label]="'Nota IGDB ' + ratingLabel() + ' sobre 10'"
+      >
+        <span
+          class="font-display font-extrabold leading-none tabular-nums text-vault-accent"
+          [class.text-xs]="isCompact()"
+          [class.text-sm]="!isCompact()"
+        >
+          {{ ratingLabel() }}
+        </span>
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <h4
+          class="line-clamp-2 font-bold leading-snug text-vault-text"
+          [class.text-sm]="isCompact()"
+          [class.text-base]="!isCompact()"
+        >
+          {{ game().name }}
+        </h4>
+
+        <div class="mt-2 flex flex-wrap gap-2">
+          @for (genre of genreBadges(); track genre) {
+            <span
+              class="max-w-28 truncate rounded-md border border-vault-border px-2 py-0.5 text-xs font-semibold text-vault-muted"
+              [title]="genre"
+            >
+              {{ genre }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <p
+      class="line-clamp-3 text-sm text-vault-muted"
+      [class.leading-5]="isCompact()"
+      [class.leading-5]="!isCompact()"
+    >
+      {{ summaryPreview() }}
+    </p>
+
+    <div
+      class="flex items-center justify-between gap-3 border-t border-vault-border pt-3"
+    >
+      <div class="flex min-w-0 items-center gap-2">
+        @for (family of platformBadges(); track family) {
+          <app-platform-badge [family]="family" />
+        } @empty {
+          <span class="text-xs text-vault-subtle">Plataforma por confirmar</span>
+        }
+
+        @if (extraPlatformCount() > 0) {
+          <span
+            class="grid size-8 shrink-0 place-items-center rounded-md border border-vault-border text-xs font-bold text-vault-muted"
+            [title]="'+' + extraPlatformCount() + ' plataformas'"
+          >
+            +{{ extraPlatformCount() }}
+          </span>
+        }
+      </div>
+
+      <a
+        class="inline-flex shrink-0 items-center justify-center gap-1 rounded-md text-sm font-bold text-vault-accent transition hover:text-vault-accent-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vault-accent"
+        [routerLink]="['/gamevault/gamesdetails', game().id]"
+        [attr.aria-label]="'Ver detalles de ' + game().name"
+      >
+        Detalles
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</div>

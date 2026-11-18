@@ -156,6 +156,9 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExternalId")
+                        .IsUnique();
+
                     b.ToTable("Game", (string)null);
                 });
 
@@ -190,14 +193,16 @@ namespace GameVault.Source.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -225,7 +230,8 @@ namespace GameVault.Source.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<int>("Position")
                         .HasColumnType("int");
@@ -237,7 +243,8 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("GameListId");
+                    b.HasIndex("GameListId", "GameId")
+                        .IsUnique();
 
                     b.ToTable("GameListItems", (string)null);
                 });
@@ -282,6 +289,9 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExternalId")
+                        .IsUnique();
+
                     b.ToTable("Genres", (string)null);
                 });
 
@@ -310,7 +320,55 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ExternalId")
+                        .IsUnique();
+
                     b.ToTable("Platforms", (string)null);
+                });
+
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("GameVault.Source.Domain.Entities.Review", b =>
@@ -327,6 +385,7 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -343,7 +402,41 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("ApplicationUserId", "GameId")
+                        .IsUnique();
+
+                    b.ToTable("Reviews", (string)null);
+                });
+
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.ReviewComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -352,9 +445,27 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("ReviewId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("ReviewComments", (string)null);
+                });
+
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.ReviewLike", b =>
+                {
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ReviewId", "ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("ReviewLikes", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.Source.Domain.Entities.UserGame", b =>
@@ -385,7 +496,8 @@ namespace GameVault.Source.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PrivateNotes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("ProgressPercentage")
                         .HasColumnType("int");
@@ -401,9 +513,10 @@ namespace GameVault.Source.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("GameId");
+
+                    b.HasIndex("ApplicationUserId", "GameId")
+                        .IsUnique();
 
                     b.ToTable("UserGames", (string)null);
                 });
@@ -580,7 +693,7 @@ namespace GameVault.Source.Infrastructure.Migrations
                     b.HasOne("GameVault.Source.Domain.Entities.GameList", "GameList")
                         .WithMany("Items")
                         .HasForeignKey("GameListId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
@@ -607,6 +720,17 @@ namespace GameVault.Source.Infrastructure.Migrations
                     b.Navigation("Platform");
                 });
 
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("GameVault.Source.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GameVault.Source.Domain.Entities.Review", b =>
                 {
                     b.HasOne("GameVault.Source.Domain.Entities.ApplicationUser", "ApplicationUser")
@@ -624,6 +748,44 @@ namespace GameVault.Source.Infrastructure.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.ReviewComment", b =>
+                {
+                    b.HasOne("GameVault.Source.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GameVault.Source.Domain.Entities.Review", "Review")
+                        .WithMany("Comments")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.ReviewLike", b =>
+                {
+                    b.HasOne("GameVault.Source.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GameVault.Source.Domain.Entities.Review", "Review")
+                        .WithMany("Likes")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("GameVault.Source.Domain.Entities.UserGame", b =>
@@ -700,6 +862,8 @@ namespace GameVault.Source.Infrastructure.Migrations
                 {
                     b.Navigation("GameList");
 
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("Reviews");
 
                     b.Navigation("UserGames");
@@ -731,6 +895,13 @@ namespace GameVault.Source.Infrastructure.Migrations
             modelBuilder.Entity("GameVault.Source.Domain.Entities.Platform", b =>
                 {
                     b.Navigation("GamePlatforms");
+                });
+
+            modelBuilder.Entity("GameVault.Source.Domain.Entities.Review", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }

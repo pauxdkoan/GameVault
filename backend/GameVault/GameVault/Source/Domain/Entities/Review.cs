@@ -27,5 +27,12 @@ namespace GameVault.Source.Domain.Entities
         public Guid GameId { get; set; }
 
         public Game Game { get; set; } = null!;
+
+
+        // Ref 1-N ReviewComment
+        public ICollection<ReviewComment> Comments { get; set; } = [];
+
+        // Ref 1-N ReviewLike
+        public ICollection<ReviewLike> Likes { get; set; } = [];
     }
 }

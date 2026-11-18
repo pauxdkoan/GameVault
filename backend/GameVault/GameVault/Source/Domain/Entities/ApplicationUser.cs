@@ -13,6 +13,7 @@ namespace GameVault.Source.Domain.Entities
         public bool IsActive { get; set; } = true;
         public DateTime? CreatedAt { get; set; }
 
+        
         //Navigations
 
         //Ref: 1-N UserGame
@@ -22,5 +23,8 @@ namespace GameVault.Source.Domain.Entities
         public ICollection<Review> Reviews { get; set; } = [];
         //Ref: 1-N GameList
         public ICollection<GameList> GameList { get; set; } = [];
+
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
+
     }
 }

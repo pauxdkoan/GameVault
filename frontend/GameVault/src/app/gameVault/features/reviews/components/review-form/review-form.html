@@ -1,0 +1,61 @@
+<form class="vault-card space-y-4 p-5" (submit)="submit($event)" novalidate>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h3 class="text-lg font-semibold text-vault-text">
+      {{ review() ? 'Editar mi reseña' : 'Escribe tu reseña' }}
+    </h3>
+    <div class="flex items-center gap-3">
+      <app-rating-stars [value]="rating()" [editable]="true" [size]="26" (valueChange)="rating.set($event)" />
+      <span class="w-12 text-sm font-semibold text-vault-muted">{{ rating() ? rating() + '/10' : '—' }}</span>
+    </div>
+  </div>
+
+  <div>
+    <label class="sr-only" for="review-title">Título (opcional)</label>
+    <input
+      id="review-title"
+      class="vault-input"
+      type="text"
+      placeholder="Título (opcional)"
+      [maxLength]="maxTitle"
+      [value]="title()"
+      (input)="title.set(textValue($event))"
+    />
+  </div>
+
+  <div>
+    <label class="sr-only" for="review-content">Tu reseña</label>
+    <textarea
+      id="review-content"
+      class="vault-input h-36 resize-y py-3 leading-6"
+      placeholder="¿Qué te pareció el juego?"
+      [value]="content()"
+      [attr.aria-invalid]="submitted() && !content().trim()"
+      (input)="content.set(textValue($event))"
+    ></textarea>
+    <p class="mt-1 text-right text-xs text-vault-subtle">{{ content().length }}/{{ maxContent }}</p>
+  </div>
+
+  <label class="flex w-fit items-center gap-2 text-sm text-vault-muted cursor-pointer">
+    <input
+      class="size-4 accent-vault-accent"
+      type="checkbox"
+      [checked]="containsSpoilers()"
+      (change)="containsSpoilers.set($any($event.target).checked)"
+    />
+    Contiene spoilers
+  </label>
+
+  @if (submitted() && validationError()) {
+    <p class="text-sm text-vault-danger" role="alert">{{ validationError() }}</p>
+  }
+  @for (error of errors(); track error) {
+    <p class="text-sm text-vault-danger" role="alert">{{ error }}</p>
+  }
+
+  <div class="flex justify-end gap-2">
+    <button vaultButton variant="ghost" size="sm" type="button" (click)="cancelled.emit()">Cancelar</button>
+    <button vaultButton size="sm" type="submit" [disabled]="isSaving()">
+      {{ isSaving() ? 'Guardando...' : review() ? 'Guardar cambios' : 'Publicar reseña' }}
+    </button>
+  </div>
+</form>

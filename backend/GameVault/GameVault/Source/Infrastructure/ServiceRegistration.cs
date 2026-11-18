@@ -1,9 +1,12 @@
-﻿using GameVault.Source.Domain.Entities;
+using GameVault.Source.Application.Interfaces.Igdb;
+using GameVault.Source.Domain.Entities;
 using GameVault.Source.Domain.Settings;
 using GameVault.Source.Infrastructure.Contexts;
+using GameVault.Source.Infrastructure.ExternalServices.Igdb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -11,45 +14,30 @@ namespace GameVault.Source.Infrastructure
 {
     public static class ServiceRegistration
     {
-
-        public static void AddPersistenceInfrastucture( this IServiceCollection services, IConfiguration configuration)
+        public static void AddPersistenceInfrastucture(this IServiceCollection services, IConfiguration configuration)
         {
-            #region Context
             ConfigureContex(services, configuration);
-            #endregion
-
-            #region Identity
             ConfigureIdentity(services);
-
-            #endregion
-
-            #region JWT
             ConfigureJwt(services, configuration);
-            #endregion
-
+            GenericConfigurations(services, configuration);
+            ExternalServices(services);
         }
-
-
 
         private static void ConfigureContex(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<GameVaultContext>(opt =>
             {
                 opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    m=>m.MigrationsAssembly(typeof(GameVaultContext).Assembly.FullName));
-
+                    m => m.MigrationsAssembly(typeof(GameVaultContext).Assembly.FullName));
             });
         }
+
         private static void ConfigureIdentity(IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(opt =>
             {
                 opt.Password.RequiredLength = 8;
-                opt.Password.RequireDigit = true;
-                opt.Password.RequireUppercase = true;
-                opt.Password.RequireLowercase = true;
-                opt.Password.RequireNonAlphanumeric = true;
-
+      
             })
             .AddEntityFrameworkStores<GameVaultContext>()
             .AddDefaultTokenProviders();
@@ -61,7 +49,7 @@ namespace GameVault.Source.Infrastructure
 
             var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
-            if(jwtSettings is null)
+            if (jwtSettings is null)
             {
                 throw new InvalidOperationException("JwtSettings no está configurado.");
             }
@@ -70,7 +58,6 @@ namespace GameVault.Source.Infrastructure
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
             })
             .AddJwtBearer(opt =>
             {
@@ -87,13 +74,53 @@ namespace GameVault.Source.Infrastructure
 
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-
-
                 };
             });
-
         }
 
+        private static void GenericConfigurations(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOptions<IgdbSettings>()
+                .Bind(configuration.GetSection(IgdbSettings.SectionName))
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.BaseUrl),
+                    "IgdbSettings:BaseUrl no está configurado.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.TokenUrl),
+                    "IgdbSettings:TokenUrl no está configurado.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.ClientId),
+                    "IgdbSettings:ClientId no está configurado.")
+                .Validate(settings => !string.IsNullOrWhiteSpace(settings.ClientSecret),
+                    "IgdbSettings:ClientSecret no está configurado.")
+                .ValidateOnStart();
+        }
 
+        private static void ExternalServices(IServiceCollection services)
+        {
+            services.AddMemoryCache();
+
+            services.AddHttpClient<IIgdbAccessTokenProvider, IgdbAccessTokenProvider>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(15);
+            });
+
+            services.AddHttpClient<IgdbRequestClient>((serviceProvider, client) =>
+            {
+                var settings = serviceProvider
+                    .GetRequiredService<IOptions<IgdbSettings>>().Value;
+
+                client.BaseAddress = ToBaseAddress(settings.BaseUrl);
+                client.Timeout = TimeSpan.FromSeconds(15);
+            });
+
+            services.AddScoped<IIgdbApiClient, IgdbApiClient>();
+        }
+
+        private static Uri ToBaseAddress(string baseUrl)
+        {
+            var normalizedUrl = baseUrl.EndsWith('/')
+                ? baseUrl
+                : $"{baseUrl}/";
+
+            return new Uri(normalizedUrl);
+        }
     }
 }

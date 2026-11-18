@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-vault-bg text-vault-text">
+  <section class="pb-8 pt-28">
+    <div class="vault-container">
+      <div class="grid gap-6">
+        <div>
+          <h1 class="max-w-3xl text-6xl text-vault-text sm:text-7xl">Catálogo</h1>
+          <p class="mt-4 max-w-2xl text-lg leading-8 text-vault-muted">
+            Todos los juegos de IGDB. Busca por nombre o filtra por género, plataforma y nota; se cargan más al bajar.
+          </p>
+        </div>
+
+        <!-- Filtros -->
+        <app-game-filter (filtersChange)="onFiltersChange($event)" />
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-20">
+    <div class="vault-container">
+      <div
+        class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <div>
+          <p class="text-sm tabular-nums text-vault-muted">
+            {{ loadedGamesLabel() }} · {{ totalGamesLabel() }}
+          </p>
+        </div>
+      </div>
+
+      @if (isFirstLoad()) {
+        <div class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+          @for (card of skeletonCards; track card) {
+            <div
+              class="aspect-[2/3] animate-pulse rounded-lg bg-vault-surface-hover"
+            ></div>
+          }
+        </div>
+      } @else if (status() === "error") {
+        <div class="vault-card border-vault-danger/40 p-8 text-center">
+          <p class="text-xl font-semibold text-vault-text">No pude cargar los juegos.</p>
+          <p class="mt-2 text-sm text-vault-muted">
+            Revisa que la API esté levantada y vuelve a intentarlo.
+          </p>
+          <button
+            class="mt-5 rounded-md border border-vault-border-strong px-4 py-2 text-sm font-semibold text-vault-text transition hover:bg-vault-surface-hover cursor-pointer"
+            type="button"
+            (click)="retryLoad()"
+          >
+            Reintentar
+          </button>
+        </div>
+      } @else if (status() === "empty") {
+        <div class="rounded-lg border border-dashed border-vault-border p-10 text-center">
+          <p class="text-xl font-semibold text-vault-text">No hay juegos con estos filtros.</p>
+          <p class="mt-2 text-sm text-vault-muted">
+            Prueba con otro nombre o quita algún filtro.
+          </p>
+        </div>
+      } @else {
+        <!-- Título solo para lectores de pantalla: mantiene el orden h1 > h2 > h3 -->
+        <h2 class="sr-only">Resultados</h2>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+          @for (game of games(); track game.id; let index = $index) {
+            <app-game-card
+              [game]="game"
+              [previewSide]="(index + 1) % 6 === 0 ? 'left' : 'right'"
+            />
+          }
+        </div>
+
+        <div class="mt-10 flex justify-center">
+          @if (isLoadingMore()) {
+            <div
+              class="flex items-center gap-3 px-4 py-3 text-sm text-vault-muted" role="status"
+            >
+              <span
+                class="size-2 animate-pulse rounded-full bg-vault-accent"
+              ></span>
+              Cargando más juegos…
+            </div>
+          } @else if (hasMoreGames()) {
+            <button
+              class="h-11 rounded-md border border-vault-border-strong px-5 text-sm font-semibold text-vault-text transition hover:border-vault-accent/60 active:scale-[0.98] cursor-pointer"
+              type="button"
+              (click)="loadNextPage()"
+            >
+              Cargar más
+            </button>
+          } @else {
+            <p class="px-4 py-3 text-sm text-vault-subtle">
+              Has llegado al final del catálogo
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </section>
+</div>

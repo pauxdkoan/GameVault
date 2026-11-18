@@ -1,0 +1,66 @@
+<div class="relative inline-block">
+  <button
+    class="inline-flex h-11 items-center gap-2.5 rounded-md px-5 text-sm font-semibold transition active:scale-[0.98] cursor-pointer disabled:opacity-60"
+    [class]="entry()
+      ? 'border border-vault-border-strong bg-vault-bg/70 text-vault-text hover:border-vault-accent/60'
+      : 'bg-vault-accent text-vault-bg hover:bg-vault-accent-soft'"
+    type="button"
+    aria-haspopup="menu"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-controls]="menuId"
+    [disabled]="isSaving()"
+    (click)="toggle()"
+  >
+    @if (entry(); as current) {
+      <span class="size-2.5 rounded-full" [class]="statusDotClass(current.status)" aria-hidden="true"></span>
+      {{ statusLabel(current.status) }}
+    } @else {
+      <app-icon name="plus" class="size-4" [strokeWidth]="2.5" />
+      {{ isSaving() ? 'Guardando...' : 'Añadir a mi biblioteca' }}
+    }
+    <app-icon name="chevron-down" class="size-4 transition" [class.rotate-180]="isOpen()" />
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="vault-popover absolute left-0 z-40 mt-2 w-60 rounded-xl p-1.5"
+      role="menu"
+      [id]="menuId"
+    >
+      @for (status of statuses; track status.value) {
+        <button
+          class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition hover:bg-vault-surface-hover cursor-pointer"
+          [class.text-vault-text]="entry()?.status === status.value"
+          [class.font-semibold]="entry()?.status === status.value"
+          [class.text-vault-muted]="entry()?.status !== status.value"
+          type="button"
+          role="menuitemradio"
+          [attr.aria-checked]="entry()?.status === status.value"
+          (click)="choose(status.value)"
+        >
+          <span class="size-2.5 rounded-full" [class]="status.dotClass" aria-hidden="true"></span>
+          {{ status.label }}
+          @if (entry()?.status === status.value) {
+            <app-icon name="check" class="ml-auto size-4 text-vault-accent" [strokeWidth]="2.5" />
+          }
+        </button>
+      }
+
+      @if (entry()) {
+        <div class="my-1 border-t border-vault-border"></div>
+        <button
+          class="w-full rounded-lg px-3 py-2 text-left text-sm text-vault-danger transition hover:bg-vault-danger/10 cursor-pointer"
+          type="button"
+          role="menuitem"
+          (click)="remove()"
+        >
+          Quitar de mi biblioteca
+        </button>
+      }
+    </div>
+  }
+
+  @if (error()) {
+    <p class="mt-2 text-xs text-vault-danger" role="alert">{{ error() }}</p>
+  }
+</div>

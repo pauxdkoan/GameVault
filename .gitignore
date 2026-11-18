@@ -1,0 +1,18 @@
+# Visual Studio
+backend/GameVault/.vs/
+
+# .NET build files
+backend/GameVault/GameVault/bin/
+backend/GameVault/GameVault/obj/
+backend/GameVault/GameVault.Tests/bin/
+backend/GameVault/GameVault.Tests/obj/
+
+# Documentos privados (no se publican)
+*.user
+frontend/GameVault/docs/
+
+# Herramientas de IA y restos locales
+frontend/GameVault/.agents/
+frontend/GameVault/skills-lock.json
+frontend/GameVault/src.md5
+frontend/GameVault/.vscode/
