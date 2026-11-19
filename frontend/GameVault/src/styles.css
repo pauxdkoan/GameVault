@@ -199,10 +199,15 @@ figcaption {
   color: var(--color-vault-bg);
 }
 
-/* Anillo de foco por defecto para todo lo que no tenga uno propio */
-:focus-visible {
-  outline: 2px solid var(--color-vault-accent);
-  outline-offset: 2px;
+/* Anillo de foco por defecto para todo lo que no tenga uno propio.
+   Va dentro de @layer base para que las clases de Tailwind (outline-none,
+   focus-visible:ring-...) puedan anularlo. Fuera de la capa ganaba siempre
+   y pintaba líneas verdes dentro de inputs que ya tienen su propio foco. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-vault-accent);
+    outline-offset: 2px;
+  }
 }
 
 .public-page-shell {

@@ -26,9 +26,10 @@ export class HomeDataService {
         upcomingGames: toGameCards(upcoming.games),
       })),
       catchError((error) => {
-        console.error('Error cargando el home', error);
+        // Log de pruebas desactivado para producción:
+        // console.error('Error cargando el home', error);
         return throwError(
-          () => new Error('No se pudo cargar el contenido del home.'),
+          () => new Error('Ocurrió un error inesperado. Inténtalo de nuevo en unos minutos.'),
         );
       }),
     );

@@ -10,7 +10,7 @@
         </div>
 
         <!-- Filtros -->
-        <app-game-filter (filtersChange)="onFiltersChange($event)" />
+        <app-game-filter [initialSearch]="urlSearch()" (filtersChange)="onFiltersChange($event)" />
       </div>
     </div>
   </section>
@@ -37,9 +37,9 @@
         </div>
       } @else if (status() === "error") {
         <div class="vault-card border-vault-danger/40 p-8 text-center">
-          <p class="text-xl font-semibold text-vault-text">No pude cargar los juegos.</p>
+          <p class="text-xl font-semibold text-vault-text">No pudimos cargar los juegos.</p>
           <p class="mt-2 text-sm text-vault-muted">
-            Revisa que la API esté levantada y vuelve a intentarlo.
+            Ocurrió un error inesperado. Inténtalo de nuevo en unos minutos.
           </p>
           <button
             class="mt-5 rounded-md border border-vault-border-strong px-4 py-2 text-sm font-semibold text-vault-text transition hover:bg-vault-surface-hover cursor-pointer"
@@ -51,7 +51,7 @@
         </div>
       } @else if (status() === "empty") {
         <div class="rounded-lg border border-dashed border-vault-border p-10 text-center">
-          <p class="text-xl font-semibold text-vault-text">No hay juegos con estos filtros.</p>
+          <p class="text-xl font-semibold text-vault-text">No se encontraron juegos.</p>
           <p class="mt-2 text-sm text-vault-muted">
             Prueba con otro nombre o quita algún filtro.
           </p>

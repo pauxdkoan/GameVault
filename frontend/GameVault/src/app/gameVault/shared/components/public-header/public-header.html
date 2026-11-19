@@ -70,19 +70,8 @@
 
     <!-- Acciones de escritorio -->
     <div class="hidden items-center gap-2 md:flex">
-      <!-- Buscador visual: se activará cuando exista la búsqueda global -->
-      <label
-        class="hidden h-9 w-52 items-center gap-2 rounded-md border border-vault-border bg-vault-surface px-3 text-sm text-vault-subtle lg:flex"
-      >
-        <app-icon name="search" class="size-4 shrink-0" />
-        <input
-          class="w-full bg-transparent text-vault-text outline-none placeholder:text-vault-subtle disabled:cursor-not-allowed"
-          type="search"
-          placeholder="Buscar juegos"
-          aria-label="Buscar juegos"
-          disabled
-        />
-      </label>
+      <!-- Buscador en vivo: sugerencias mientras se escribe (desde 2 letras) -->
+      <app-game-search class="hidden w-56 lg:block xl:w-64" />
       @if (session.isLoggedIn()) {
         <!-- Menú de usuario -->
         <div class="relative">
@@ -162,6 +151,7 @@
       class="border-t border-vault-border bg-vault-bg px-4 py-4 md:hidden"
       [id]="mobileMenuId"
     >
+      <app-game-search class="mb-4 block" (navigated)="closeHeaderMenus()" />
       <nav class="grid gap-1 text-sm" aria-label="Navegación móvil">
         <a class="rounded-md px-4 py-3 font-medium text-vault-text hover:bg-vault-surface-hover" routerLink="/gamevault/home" (click)="closeHeaderMenus()">Inicio</a>
         @for (item of navItems; track item.label) {

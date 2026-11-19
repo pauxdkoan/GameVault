@@ -36,6 +36,13 @@ export function toApiError(error: HttpErrorResponse): ApiError {
     return new ApiError(0, [CONNECTION_ERROR]);
   }
 
+  // Errores del servidor (500, 502, 503...): su texto es técnico (por ejemplo
+  // "No fue posible autenticar con IGDB"), así que al usuario solo se le
+  // muestra el mensaje genérico, como haría una app en producción.
+  if (error.status >= 500) {
+    return new ApiError(error.status, [GENERIC_ERROR]);
+  }
+
   const body = error.error;
   const validationMessages = Object.values(body?.errors ?? {})
     .flat()

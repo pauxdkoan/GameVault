@@ -2,9 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
+  input,
   output,
   signal,
+  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of } from 'rxjs';
@@ -44,7 +47,8 @@ interface FilterChip {
 })
 export class GameFilter {
   readonly filtersChange = output<GameFilters>();
-
+  /** Búsqueda que llega desde la URL (?search=), p. ej. desde el buscador del header. */
+  readonly initialSearch = input<string | undefined>(undefined);
 
   protected readonly search = signal('');
   protected readonly activeFilters = signal<GameFilters>({ sort: 'Popular' });
@@ -65,6 +69,18 @@ export class GameFilter {
       ),
     { initialValue: [] as FilterGroup[] },
   );
+
+  constructor() {
+    // Si la página recibe ?search= en la URL, la caja y el chip lo reflejan
+    // (la página es quien vuelve a cargar los juegos).
+    effect(() => {
+      const search = this.initialSearch()?.trim() || undefined;
+      untracked(() => {
+        this.search.set(search ?? '');
+        this.activeFilters.update((filters) => ({ ...filters, search }));
+      });
+    });
+  }
 
   protected onSearchInput(event: Event): void {
     const input = event.target as HTMLInputElement;

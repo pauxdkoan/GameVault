@@ -107,7 +107,7 @@ export class GameDetailsPage implements OnInit {
     this.errorMessage.set(null);
 
     if (!gameId) {
-      this.errorMessage.set('Ocurrió un error al cargar los detalles del juego...');
+      this.errorMessage.set('Este juego no existe o el enlace no es válido. Te llevamos al catálogo.');
       setTimeout(() => {
         this.status.set('error');
         this.router.navigate(['/gamevault/games']);

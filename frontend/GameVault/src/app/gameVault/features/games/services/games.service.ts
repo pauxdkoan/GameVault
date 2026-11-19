@@ -57,6 +57,23 @@ export class GameService {
     );
   }
 
+  /**
+   * GET /api/games/search: búsqueda por nombre.
+   * La usan el buscador en vivo del header (6 sugerencias) y el catálogo
+   * cuando hay texto en la caja (páginas de 20).
+   * Se cachea por texto y página: al repetir una búsqueda no se pide otra vez.
+   */
+  searchGames(query: string, pageSize = 6, page = 1): Observable<GetGamesResponse> {
+    const params = new HttpParams()
+      .set('query', query)
+      .set('page', page)
+      .set('pageSize', pageSize);
+
+    return this.getCached(`search?${params.toString()}`, () =>
+      this.http.get<GetGamesResponse>(`${API_URL}/search`, { params }),
+    );
+  }
+
   /** GET /api/games/{id}: ficha completa. No se cachea para tener datos frescos. */
   getGameDetails(id: number): Observable<GameDetailsResponse> {
     return this.http.get<GameDetailsResponse>(`${API_URL}/${id}`);

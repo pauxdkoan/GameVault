@@ -1,0 +1,101 @@
+<label
+  class="flex h-9 w-full items-center gap-2 rounded-md border border-vault-border bg-vault-surface px-3 text-sm text-vault-subtle transition focus-within:border-vault-accent focus-within:text-vault-text"
+>
+  <app-icon name="search" class="size-4" />
+  <input
+    class="w-full min-w-0 bg-transparent text-vault-text outline-none placeholder:text-vault-subtle [&::-webkit-search-cancel-button]:hidden"
+    type="search"
+    autocomplete="off"
+    spellcheck="false"
+    role="combobox"
+    aria-autocomplete="list"
+    [attr.aria-label]="placeholder()"
+    [attr.aria-expanded]="showPanel()"
+    [attr.aria-controls]="listboxId"
+    [attr.aria-activedescendant]="activeIndex() >= 0 ? optionId(activeIndex()) : null"
+    [placeholder]="placeholder()"
+    [value]="query()"
+    (input)="onInput($event)"
+    (focus)="isOpen.set(true)"
+    (keydown)="onKeydown($event)"
+  />
+</label>
+
+@if (showPanel()) {
+  <div
+    class="vault-popover absolute right-0 z-50 mt-2 w-full overflow-hidden sm:min-w-96 rounded-xl p-1.5"
+  >
+    @switch (state().status) {
+      @case ("error") {
+        <p class="px-3 py-6 text-center text-sm text-vault-muted" role="status">
+          Ocurrió un error inesperado. Inténtalo de nuevo.
+        </p>
+      }
+      @case ("done") {
+        @if (results().length === 0) {
+          <p class="px-3 py-6 text-center text-sm text-vault-muted" role="status">
+            Sin resultados para «{{ query().trim() }}».
+          </p>
+        }
+      }
+      @default {
+        @if (results().length === 0) {
+          <ul class="grid gap-1" aria-hidden="true">
+            @for (row of [1, 2, 3]; track row) {
+              <li class="flex items-center gap-3 px-2 py-1.5">
+                <span class="h-12 w-9 animate-pulse rounded-sm bg-vault-surface-hover"></span>
+                <span class="h-3 w-40 animate-pulse rounded-sm bg-vault-surface-hover"></span>
+              </li>
+            }
+          </ul>
+        }
+      }
+    }
+
+    @if (results().length > 0) {
+      <ul class="grid gap-0.5" role="listbox" [id]="listboxId" aria-label="Sugerencias de juegos">
+        @for (game of results(); track game.id; let index = $index) {
+          <li
+            class="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 transition"
+            role="option"
+            [id]="optionId(index)"
+            [attr.aria-selected]="activeIndex() === index"
+            [class.bg-vault-surface-hover]="activeIndex() === index"
+            (mouseenter)="activeIndex.set(index)"
+            (mousedown)="$event.preventDefault()"
+            (click)="openGame(game)"
+          >
+            <span class="h-12 w-9 shrink-0 overflow-hidden rounded-sm bg-vault-surface-hover">
+              @if (game.coverUrl) {
+                <img class="h-full w-full object-cover" [src]="game.coverUrl" alt="" loading="lazy" />
+              }
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-sm font-semibold text-vault-text">{{ game.name }}</span>
+              <span class="block text-xs text-vault-muted">{{ game.year }}</span>
+            </span>
+            <span
+              class="shrink-0 rounded-sm border border-vault-border px-1.5 py-0.5 text-xs font-bold tabular-nums"
+              [class.text-vault-accent]="game.rating !== 'S/N'"
+              [class.text-vault-subtle]="game.rating === 'S/N'"
+            >
+              {{ game.rating }}
+            </span>
+          </li>
+        }
+      </ul>
+    }
+
+    @if (state().status !== "error") {
+      <button
+        class="mt-1 flex w-full items-center justify-between gap-2 rounded-md border-t border-vault-border px-3 py-2.5 text-left text-sm font-semibold text-vault-muted transition hover:bg-vault-surface-hover hover:text-vault-text cursor-pointer"
+        type="button"
+        (mousedown)="$event.preventDefault()"
+        (click)="openAllResults()"
+      >
+        <span class="truncate">Ver todos los resultados de «{{ query().trim() }}»</span>
+        <app-icon name="arrow-right" class="size-4" />
+      </button>
+    }
+  </div>
+}

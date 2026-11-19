@@ -3,12 +3,13 @@ import {
   Component,
   HostListener,
   OnDestroy,
-  OnInit,
   computed,
   inject,
   signal,
 } from '@angular/core';
-import { Subscription, take } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { distinctUntilChanged, map, Subscription, take } from 'rxjs';
 import { GameCardComponent } from '../../../../shared/components/game-card/game-card';
 import { GameCard } from '../../../../shared/models/game-card.model';
 import { toGameCards } from '../../../../shared/mappers/game-card.mapper';
@@ -24,14 +25,17 @@ type GamePageStatus = 'loading' | 'ready' | 'empty' | 'error';
   templateUrl: './game-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GamePage implements OnInit, OnDestroy {
+export class GamePage implements OnDestroy {
   private readonly gameService = inject(GameService);
+  private readonly route = inject(ActivatedRoute);
   private readonly pageSize = 20;
   private readonly nextPage = signal(1);
   private gamesSubscription?: Subscription;
 
   protected readonly games = signal<GameCard[]>([]);
   protected readonly activeFilters = signal<GameFilters>({ sort: 'Popular' });
+  /** Texto de ?search= en la URL (lo usa el "Ver todos los resultados" del header). */
+  protected readonly urlSearch = signal<string | undefined>(undefined);
   protected readonly status = signal<GamePageStatus>('loading');
   protected readonly isLoading = signal(false);
   protected readonly hasMoreGames = signal(true);
@@ -59,8 +63,18 @@ export class GamePage implements OnInit, OnDestroy {
       : 'Catalogo de juegos',
   );
 
-  ngOnInit(): void {
-    this.loadNextPage();
+  constructor() {
+    // La primera carga y cada cambio de ?search= pasan por aquí.
+    this.route.queryParamMap
+      .pipe(
+        map((params) => params.get('search')?.trim() || undefined),
+        distinctUntilChanged(),
+        takeUntilDestroyed(),
+      )
+      .subscribe((search) => {
+        this.urlSearch.set(search);
+        this.onFiltersChange({ ...this.activeFilters(), search });
+      });
   }
 
   ngOnDestroy(): void {
@@ -103,17 +117,28 @@ export class GamePage implements OnInit, OnDestroy {
     this.isLoading.set(true);
     const filters = this.activeFilters();
 
-    this.gamesSubscription = this.gameService
-      .getGames({
-        page: this.nextPage(),
-        pageSize: this.pageSize,
-        ...filters,
-      })
+    // Con texto en la caja se usa el mismo endpoint que el buscador del header
+    // (GET /api/games/search). GET /api/games con "search" fallaba porque IGDB
+    // no permite combinar "search" con "sort". La búsqueda va solo por nombre.
+    const request$ = filters.search
+      ? this.gameService.searchGames(filters.search, this.pageSize, this.nextPage())
+      : this.gameService.getGames({
+          page: this.nextPage(),
+          pageSize: this.pageSize,
+          ...filters,
+        });
+
+    this.gamesSubscription = request$
       .pipe(take(1))
       .subscribe({
         next: (response) => this.appendGames(response),
         error: () => {
-          this.status.set(this.games().length > 0 ? 'ready' : 'error');
+          // Si falla una búsqueda por nombre se muestra "No se encontraron juegos".
+          if (this.games().length > 0) {
+            this.status.set('ready');
+          } else {
+            this.status.set(filters.search ? 'empty' : 'error');
+          }
           this.isLoading.set(false);
         },
       });

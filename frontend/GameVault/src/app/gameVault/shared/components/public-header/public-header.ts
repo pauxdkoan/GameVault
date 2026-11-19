@@ -17,6 +17,7 @@ import { AuthService } from '../../../features/auth/services/auth.service';
 import { VaultButton } from '../../ui/button/vault-button';
 import { filter } from 'rxjs';
 import { Icon } from '../../ui/icon/icon';
+import { GameSearch } from '../../../features/games/components/game-search/game-search';
 
 interface HeaderNavItem {
   label: string;
@@ -33,7 +34,7 @@ interface ExploreMenuItem {
 
 @Component({
   selector: 'app-public-header',
-  imports: [Icon, NgClass, RouterLink, BrandLogo, VaultButton],
+  imports: [Icon, NgClass, RouterLink, BrandLogo, VaultButton, GameSearch],
   templateUrl: './public-header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
