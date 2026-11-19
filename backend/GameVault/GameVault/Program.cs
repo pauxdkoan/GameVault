@@ -91,4 +91,5 @@ app.MapControllers();
 
 
 await app.Services.SeedIdentityAsync();
+await app.Services.SeedDemoDataAsync();
 await app.RunAsync();

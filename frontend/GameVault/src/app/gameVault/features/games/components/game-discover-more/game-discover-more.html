@@ -10,11 +10,15 @@
             </p>
           </div>
 
+          <!-- init="false": se inicia desde el componente cuando ya existen las diapositivas (ver .ts) -->
           <swiper-container
+            #carousel
+            init="false"
             class="block pb-4"
             slides-per-view="auto"
             space-between="12"
             free-mode="true"
+            [attr.loop]="section.games.length >= minGamesForLoop ? 'true' : null"
             grab-cursor="true"
             speed="450"
           >

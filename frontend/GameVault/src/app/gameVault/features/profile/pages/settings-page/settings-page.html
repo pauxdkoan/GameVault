@@ -9,7 +9,7 @@
     <form class="vault-card space-y-5 p-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="flex items-center gap-4">
         <app-user-avatar [name]="form.controls.displayName.value || '?'" [avatarUrl]="form.controls.avatarUrl.valid ? form.controls.avatarUrl.value : null" [size]="64" />
-        <p class="text-sm text-vault-muted">Vista previa del avatar. Si no pones una imagen se usan tus iniciales.</p>
+        <p class="text-sm text-vault-muted">Tu avatar se crea con las iniciales de tu nombre visible.</p>
       </div>
 
       <app-form-field label="Nombre visible" inputId="displayName" [error]="fieldError('displayName')">
@@ -24,6 +24,11 @@
         <input id="country" class="vault-input" type="text" formControlName="country" maxlength="60" />
       </app-form-field>
 
+      <!--
+        Desactivado por ahora (avatar y portada por URL). Los controles siguen en el
+        formulario, así que al guardar se mantiene lo que ya tuviera el usuario.
+        Para volver a mostrarlos, quita este comentario.
+
       <app-form-field label="URL del avatar" inputId="avatarUrl" [error]="fieldError('avatarUrl')" hint="Enlace a una imagen (https://...).">
         <input id="avatarUrl" class="vault-input" type="url" formControlName="avatarUrl" placeholder="https://" />
       </app-form-field>
@@ -31,6 +36,7 @@
       <app-form-field label="URL de la portada" inputId="bannerUrl" [error]="fieldError('bannerUrl')" hint="Imagen ancha que aparece arriba en tu perfil.">
         <input id="bannerUrl" class="vault-input" type="url" formControlName="bannerUrl" placeholder="https://" />
       </app-form-field>
+      -->
 
       @for (message of errors(); track message) {
         <p class="text-sm text-vault-danger" role="alert">{{ message }}</p>

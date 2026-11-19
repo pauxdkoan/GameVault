@@ -2,10 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
   OnDestroy,
+  afterRenderEffect,
   computed,
   input,
   signal,
+  viewChildren,
 } from '@angular/core';
 import { GameCardComponent } from '../../../../shared/components/game-card/game-card';
 import { GameCardPreview } from '../../../../shared/components/game-card-preview/game-card-preview';
@@ -13,6 +16,12 @@ import { calculateGameCardPreviewPosition } from '../../../../shared/components/
 import { GameCard, GameCardDto } from '../../../../shared/models/game-card.model';
 import { toGameCard } from '../../../../shared/mappers/game-card.mapper';
 import { ensureSwiperRegistered } from '../../../../shared/utils/swiper';
+
+/** Lo mínimo que usamos del elemento <swiper-container>. */
+interface SwiperElement extends HTMLElement {
+  swiper?: unknown;
+  initialize(): void;
+}
 
 interface DiscoveryCarousel {
   title: string;
@@ -34,8 +43,29 @@ interface ActiveGamePreview {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GameDiscoverMoreComponent implements OnDestroy {
+  /**
+   * Carrusel infinito (loop) cuando hay juegos suficientes. Con menos, Swiper
+   * no tiene diapositivas para dar la vuelta y solo avisaría en consola.
+   */
+  protected readonly minGamesForLoop = 6;
+
+  /** Los <swiper-container> de la plantilla (#carousel). */
+  private readonly carousels = viewChildren<ElementRef<SwiperElement>>('carousel');
+
   constructor() {
     ensureSwiperRegistered();
+
+    // Angular conecta <swiper-container> al DOM antes de crear sus
+    // <swiper-slide>. Si Swiper arranca solo (lo normal), arranca con 0
+    // diapositivas y desactiva el loop. Por eso la plantilla usa init="false"
+    // y aquí se inicia cada carrusel cuando ya está pintado con sus juegos.
+    afterRenderEffect(() => {
+      for (const carousel of this.carousels()) {
+        if (!carousel.nativeElement.swiper) {
+          carousel.nativeElement.initialize();
+        }
+      }
+    });
   }
 
   readonly similarGames = input<GameCardDto[]>([]);
