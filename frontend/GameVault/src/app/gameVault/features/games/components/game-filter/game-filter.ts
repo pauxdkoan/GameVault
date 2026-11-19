@@ -190,7 +190,11 @@ export class GameFilter {
     if (filters.sort) {
       chips.push({
         key: 'sort',
-        label: `Orden: ${this.findOptionLabel('sort', filters.sort)}`,
+        // Con búsqueda IGDB ordena por relevancia (no admite "sort" junto a
+        // "search"), así que el chip lo dice en vez de mostrar un orden que no se aplica.
+        label: filters.search
+          ? 'Orden: Relevancia'
+          : `Orden: ${this.findOptionLabel('sort', filters.sort)}`,
         value: filters.sort,
       });
     }

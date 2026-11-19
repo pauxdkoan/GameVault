@@ -73,7 +73,13 @@ namespace GameVault.Source.Infrastructure.ExternalServices.Igdb
             var offset = GetOffset(page, pageSize);
             var searchClause = BuildSearchClause(search);
             var filters = BuildGamesFilters(search, genreIds, platformIds, sort);
-            var sortClause = BuildSortClause(sort);
+            // IGDB no permite combinar "search" con "sort": si se envían juntos
+            // rechaza la consulta. Con texto de búsqueda IGDB ya ordena por
+            // relevancia, así que el orden solo se aplica cuando no se busca.
+            // Los filtros (género, plataforma) sí se combinan con "search".
+            var sortClause = string.IsNullOrWhiteSpace(search)
+                ? BuildSortClause(sort)
+                : string.Empty;
 
             var resultsQuery =
                 $"{searchClause}" +
@@ -160,6 +166,35 @@ namespace GameVault.Source.Infrastructure.ExternalServices.Igdb
                 $"offset {offset};";
 
             return new IgdbPageQuery(resultsQuery, filters);
+        }
+
+        /// <summary>
+        /// Juegos más populares AHORA según IGDB (endpoint popularity_primitives).
+        /// popularity_type 1 = visitas a la ficha en IGDB: sube con lo que la gente
+        /// está mirando estos días (por eso GTA VI aparece arriba aunque no haya salido).
+        /// </summary>
+        public static string BuildPopularityQuery(int popularityType, int limit)
+        {
+            return $"fields game_id,value; where popularity_type = {popularityType}; sort value desc; limit {limit};";
+        }
+
+        /// <summary>
+        /// De una lista de ids, devuelve solo los que cumplen los filtros de calidad
+        /// del catálogo (juego principal, con portada y sin contenido adulto).
+        /// </summary>
+        public static string BuildValidGameIdsQuery(IReadOnlyCollection<int> ids)
+        {
+            return
+                $"fields id; " +
+                $"where id = ({string.Join(",", ids)}) " +
+                $"& version_parent = null & cover != null & themes != (42); " +
+                $"limit {ids.Count};";
+        }
+
+        /// <summary>Datos de tarjeta de varios juegos a la vez (IGDB no los devuelve en el orden pedido).</summary>
+        public static string BuildGamesByIdsQuery(IReadOnlyCollection<int> ids)
+        {
+            return $"{GameFields}; where id = ({string.Join(",", ids)}); limit {ids.Count};";
         }
 
         public static string BuildGameDetailPageById(long id)

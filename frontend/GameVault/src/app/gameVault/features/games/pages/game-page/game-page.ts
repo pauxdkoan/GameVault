@@ -117,18 +117,14 @@ export class GamePage implements OnDestroy {
     this.isLoading.set(true);
     const filters = this.activeFilters();
 
-    // Con texto en la caja se usa el mismo endpoint que el buscador del header
-    // (GET /api/games/search). GET /api/games con "search" fallaba porque IGDB
-    // no permite combinar "search" con "sort". La búsqueda va solo por nombre.
-    const request$ = filters.search
-      ? this.gameService.searchGames(filters.search, this.pageSize, this.nextPage())
-      : this.gameService.getGames({
-          page: this.nextPage(),
-          pageSize: this.pageSize,
-          ...filters,
-        });
-
-    this.gamesSubscription = request$
+    // GET /api/games con búsqueda + géneros + plataformas combinados.
+    // La búsqueda solo se envía al pulsar "Buscar" o Enter (ver game-filter.ts).
+    this.gamesSubscription = this.gameService
+      .getGames({
+        page: this.nextPage(),
+        pageSize: this.pageSize,
+        ...filters,
+      })
       .pipe(take(1))
       .subscribe({
         next: (response) => this.appendGames(response),

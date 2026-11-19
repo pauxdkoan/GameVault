@@ -59,8 +59,7 @@ export class GameService {
 
   /**
    * GET /api/games/search: búsqueda por nombre.
-   * La usan el buscador en vivo del header (6 sugerencias) y el catálogo
-   * cuando hay texto en la caja (páginas de 20).
+   * La usa el buscador en vivo del header (6 sugerencias).
    * Se cachea por texto y página: al repetir una búsqueda no se pide otra vez.
    */
   searchGames(query: string, pageSize = 6, page = 1): Observable<GetGamesResponse> {
